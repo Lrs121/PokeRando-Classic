@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PokeRando</string>
+    <string name="rom_header">Rom Info:</string>
+    <string name="rom_name">Fire Red (U) 1.0</string>
+    <string name="rom_code">BPRE</string>
+    <string name="supported">Unsupported</string>
+
 </resources>
