@@ -57,11 +57,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/txtRomName" />
 
             <TextView
-                android:id="@+id/txtFilePath"
-                android:layout_width="158dp"
-                android:layout_height="0dp"
+                android:id="@+id/txtFileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Downloads/FireRed.gba"
+                android:text="@string/file_name"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/imgBoxArt"
                 app:layout_constraintStart_toEndOf="@+id/txtRomHeader"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -72,8 +73,6 @@
                 android:layout_height="100dp"
                 android:layout_margin="8dp"
                 android:contentDescription="@string/rom_name"
-                android:scaleType="fitCenter"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/blue" />
@@ -82,11 +81,451 @@
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imgBoxArt" />
+
+            <TextView
+                android:id="@+id/txtGeneralHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/general_setting_header"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swRace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/race_mode"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtGeneralHeader" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swBreakingMoves"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/game_breaking"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/swRace"
+                app:layout_constraintTop_toBottomOf="@id/txtGeneralHeader" />
+
+            <androidx.constraintlayout.widget.Group
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="swLimitPoke,btnLimitPoke" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swLimitPoke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/limit_pokemon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/swRace" />
+
+            <Button
+                android:id="@+id/btnLimitPoke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/limit_pokemon_select"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/swLimitPoke"
+                app:layout_constraintTop_toBottomOf="@id/swRace" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnLimitPoke" />
+
+            <TextView
+                android:id="@+id/txtPokeBase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/base_stats_header"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+            <RadioGroup
+                android:id="@+id/rbgpBaseStats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtPokeBase">
+
+                <RadioButton
+                    android:id="@+id/rbBaseUnchange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/unchanged" />
+
+                <RadioButton
+                    android:id="@+id/rbBaseShuffle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/shuffle" />
+
+                <RadioButton
+                    android:id="@+id/rbBaseRandom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/random" />
+            </RadioGroup>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swBaseExpCurve"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/exp_curves"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/rbgpBaseStats"
+                app:layout_constraintTop_toBottomOf="@+id/txtPokeBase" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swBaseFollowEvo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/follow_evo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/rbgpBaseStats"
+                app:layout_constraintTop_toBottomOf="@+id/swBaseExpCurve" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swBaseUpExpCurve"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/up_base_stats"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/rbgpBaseStats"
+                app:layout_constraintTop_toBottomOf="@+id/swBaseFollowEvo" />
+
+            <View
+                android:id="@+id/div3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rbgpBaseStats" />
+
+            <TextView
+                android:id="@+id/txtPokeAbility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/abilities_header"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/div3" />
+
+            <RadioGroup
+                android:id="@+id/rgPokeAbility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtPokeAbility">
+
+                <RadioButton
+                    android:id="@+id/rbAbilityUnchange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/unchanged" />
+
+                <RadioButton
+                    android:id="@+id/rbAbilityRandom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/random" />
+            </RadioGroup>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swAbilityWG"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/wonder_guard"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/rgPokeAbility"
+                app:layout_constraintTop_toBottomOf="@id/txtPokeAbility" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swAbilityFollowEvo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/follow_evo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/rgPokeAbility"
+                app:layout_constraintTop_toBottomOf="@id/swAbilityWG" />
+
+            <TextView
+                android:id="@+id/txtAbilityBan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/banned_abilities"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rgPokeAbility" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swAbilityTrapping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/trap_abilities"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtAbilityBan" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swAbilityNegative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/neg_abilities"
+                app:layout_constraintTop_toBottomOf="@id/txtAbilityBan"
+                app:layout_constraintStart_toEndOf="@id/swAbilityTrapping"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <View
+                android:id="@+id/div4"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/swAbilityTrapping" />
+
+            <TextView
+                android:id="@+id/txtPokeTypes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/poke_types_header"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/div4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <RadioGroup
+                android:id="@+id/rgPokeTypes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/txtPokeTypes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/rbTypeUnchange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/unchanged" />
+                <RadioButton
+                    android:id="@+id/rbTypeRandFollowEvo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/random_follow"
+                    />
+                <RadioButton
+                    android:id="@+id/rbTypeRandComplete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/random_complete"/>
+            </RadioGroup>
+
+            <View
+                android:id="@+id/div5"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rgPokeTypes" />
+
+            <TextView
+                android:id="@+id/txtPokeEvo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/pokemon_evos_header"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/div5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <RadioGroup
+                android:id="@+id/rgPokeEvoRand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/txtPokeEvo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <RadioButton
+                    android:id="@+id/rbPokeEvoUnchange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/unchanged"/>
+                <RadioButton
+                    android:id="@+id/rbPokeEvoRandom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/random"/>
+            </RadioGroup>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swEvoStrength"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/similar_strength"
+                app:layout_constraintTop_toBottomOf="@+id/rgPokeEvoRand"
+                app:layout_constraintStart_toStartOf="parent"
+
+                />
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swEvoType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/same_type_evo"
+                app:layout_constraintTop_toBottomOf="@id/rgPokeEvoRand"
+                app:layout_constraintStart_toEndOf="@id/swEvoStrength"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swEvoLimitStage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/three_stage_limit"
+                app:layout_constraintTop_toBottomOf="@id/swEvoType"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swEvoForceChange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/force_evo_change"
+                app:layout_constraintTop_toBottomOf="@id/swEvoType"
+                app:layout_constraintStart_toEndOf="@id/swEvoLimitStage"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swEvoChangeImpossible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/impossible_evos"
+                app:layout_constraintTop_toBottomOf="@id/swEvoLimitStage"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/swEvoEasy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minHeight="48dp"
+                android:text="@string/make_evo_easy"
+                app:layout_constraintTop_toBottomOf="@id/swEvoForceChange"
+                app:layout_constraintStart_toEndOf="@id/swEvoChangeImpossible"
+                />
+
+            <View
+                android:id="@+id/div6"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/swEvoEasy" />
+
+            <TextView
+                android:id="@+id/txtStarterPoke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/starter_poke_header"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/div6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
