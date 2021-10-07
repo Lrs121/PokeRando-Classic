@@ -12,7 +12,7 @@
     <string name="game_breaking">Game Breaking Moves</string>
     <string name="limit_pokemon">Limit Pokemon</string>
     <string name="limit_pokemon_select">Select Pokemon</string>
-    
+
     <string name="base_stats_header">Base Statistics:</string>
     <string name="unchanged">Unchanged</string>
     <string name="shuffle">Shuffle</string>
@@ -20,7 +20,7 @@
     <string name="exp_curves">Standardize EXP Curve</string>
     <string name="follow_evo">Follow Evolutions</string>
     <string name="up_base_stats">Update Base Stats</string>
-    
+
     <string name="abilities_header">Pokemon Abilities:</string>
     <string name="wonder_guard">Allow Wonder Guard</string>
     <string name="banned_abilities">Banned Abilities</string>
@@ -39,10 +39,11 @@
     <string name="make_evo_easy">Make Evos Easy</string>
 
     <string name="starter_poke_header">Starter Pokemon:</string>
-    <string name="random_starter_held_items">Random Starter Items</string>
+    <string name="custom">Custom</string>
+    <string name="random_held_items">Random Held Item</string>
     <string name="random_starter_two_evo">Random (Poke w/ 2 Evo)</string>
     <string name="ban_bad_items">Ban Bad Items</string>
-    
+
     <string name="move_data_header">Move Data:</string>
     <string name="random_move_pwr">Random Move Power</string>
     <string name="random_move_acc">Random Move Accuracy</string>
@@ -51,7 +52,7 @@
     <string name="random_move_cat">Random Move Category</string>
     <string name="move_update">Update Moves</string>
     <string name="move_update_legacy">Update Legacy</string>
-    
+
     <string name="poke_moveset_header">Pokemon Movesets:</string>
     <string name="random_pref_same_type">Random (Pref Same Type)</string>
     <string name="metronome_only">Metronome Only Mode</string>
@@ -74,7 +75,7 @@
     <string name="wild_poke_header">Wild Pokemon</string>
     <string name="area_mapping">Area 1-to-1 Mapping</string>
     <string name="global_mapping">Global 1-to-1 Mapping</string>
-    <string name="add_rule_header">Additional Rule</string>
+    <string name="add_rule_header">Additional Rules:</string>
     <string name="none">None</string>
     <string name="similar_strength">Similar Strength</string>
     <string name="catch_em_all">Catch`Em All Mode</string>
@@ -121,5 +122,8 @@
     <string name="fastest_text">Fastest Text</string>
     <string name="start_nation_dex">Start w/ National Dex</string>
     <string name="random_catch_tut">Random Catch Tutorial</string>
+    <string name="title_activity_main_tabbed">MainActivityTabbed</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 
 </resources>
