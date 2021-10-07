@@ -1,8 +1,125 @@
 <resources>
-    <string name="app_name">PokeRando</string>
+    <string name="app_name">Poke Rando Classic</string>
+
     <string name="rom_header">Rom Info:</string>
     <string name="rom_name">Fire Red (U) 1.0</string>
     <string name="rom_code">BPRE</string>
     <string name="supported">Unsupported</string>
+    <string name="file_name">Red.gb</string>
+
+    <string name="general_setting_header">General Options:</string>
+    <string name="race_mode">Race Mode</string>
+    <string name="game_breaking">Game Breaking Moves</string>
+    <string name="limit_pokemon">Limit Pokemon</string>
+    <string name="limit_pokemon_select">Select Pokemon</string>
+    
+    <string name="base_stats_header">Base Statistics:</string>
+    <string name="unchanged">Unchanged</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="random">Random</string>
+    <string name="exp_curves">Standardize EXP Curve</string>
+    <string name="follow_evo">Follow Evolutions</string>
+    <string name="up_base_stats">Update Base Stats</string>
+    
+    <string name="abilities_header">Pokemon Abilities:</string>
+    <string name="wonder_guard">Allow Wonder Guard</string>
+    <string name="banned_abilities">Banned Abilities</string>
+    <string name="trap_abilities">Trapping Abilities</string>
+    <string name="neg_abilities">Negative Abilities</string>
+
+    <string name="poke_types_header">Pokemon Types:</string>
+    <string name="random_follow">Random (Follow Evolutions)</string>
+    <string name="random_complete">Random (Completely)</string>
+
+    <string name="pokemon_evos_header">Pokemon Evolutions:</string>
+    <string name="same_type_evo">Same Typing</string>
+    <string name="three_stage_limit">Limit Evos to 3 Stages</string>
+    <string name="force_evo_change">Force Change</string>
+    <string name="impossible_evos">Change Impossible Evo</string>
+    <string name="make_evo_easy">Make Evos Easy</string>
+
+    <string name="starter_poke_header">Starter Pokemon:</string>
+    <string name="random_starter_held_items">Random Starter Items</string>
+    <string name="random_starter_two_evo">Random (Poke w/ 2 Evo)</string>
+    <string name="ban_bad_items">Ban Bad Items</string>
+    
+    <string name="move_data_header">Move Data:</string>
+    <string name="random_move_pwr">Random Move Power</string>
+    <string name="random_move_acc">Random Move Accuracy</string>
+    <string name="random_move_pp">Random Move PP</string>
+    <string name="random_move_type">Random Move Types</string>
+    <string name="random_move_cat">Random Move Category</string>
+    <string name="move_update">Update Moves</string>
+    <string name="move_update_legacy">Update Legacy</string>
+    
+    <string name="poke_moveset_header">Pokemon Movesets:</string>
+    <string name="random_pref_same_type">Random (Pref Same Type)</string>
+    <string name="metronome_only">Metronome Only Mode</string>
+    <string name="poke_start_four_move">All Poke Start w/ 4 Moves</string>
+    <string name="damage_move_reorder">Reorder Damaging Moves</string>
+    <string name="force_perct_good_move">Percentage Good Damaging Moves</string>
+
+    <string name="trainer_poke_header">Trainers Pokemon:</string>
+    <string name="rando_type_theme">Type Themed</string>
+    <string name="rival_carries_starter">Rival Keeps Starter</string>
+    <string name="similar_strength_poke">Similar Strength Pokemon</string>
+    <string name="trainer_use_legendary">Allow Trainer Have Legendary</string>
+    <string name="early_wonder_guard">Early Wonder Guard</string>
+    <string name="weight_type_by_num">Weight type by # of Poke</string>
+    <string name="random_trainer_name">Random Trainer Names</string>
+    <string name="random_trainer_class">Random Trainer Class</string>
+    <string name="force_full_evo">Force Full Evo @ Level</string>
+    <string name="perct_level_modify">Percentage Level Modifier</string>
+
+    <string name="wild_poke_header">Wild Pokemon</string>
+    <string name="area_mapping">Area 1-to-1 Mapping</string>
+    <string name="global_mapping">Global 1-to-1 Mapping</string>
+    <string name="add_rule_header">Additional Rule</string>
+    <string name="none">None</string>
+    <string name="similar_strength">Similar Strength</string>
+    <string name="catch_em_all">Catch`Em All Mode</string>
+    <string name="type_theme_ares">Type Themed Areas</string>
+    <string name="time_base_enct">Time Based Encounter</string>
+    <string name="wild_legendary">Allow Wild Legendary</string>
+    <string name="min_catch_rate">Set Min Catch Rate</string>
+
+    <string name="static_poke_header">Static Pokemon</string>
+    <string name="random_same_type">"Random (Legend-Legend&amp;Normal-Normal)"</string>
+
+    <string name="tm_hm_header">TMs &amp; HMs</string>
+    <string name="tm_header">TM Moves</string>
+    <string name="tmhm_compat">TM/HM Compatibility</string>
+    <string name="lvlup_move_sanity">Levelup Move Sanity</string>
+    <string name="field_move_tm">Keep Field Move</string>
+    <string name="full_compat">Full Compatibility</string>
+
+    <string name="move_tutor_header">Move Tutors</string>
+    <string name="tutor_moves_header">Tutor\'s Moves</string>
+    <string name="tutor_compat">Move Tutor Compatibility</string>
+
+    <string name="ingame_trade_header">In-Game Trades</string>
+    <string name="random_recv_poke">Random Given Pokemon Only</string>
+    <string name="random_req_recv_poke">Random Requested &amp; Given Poke</string>
+    <string name="random_nickname">Random Nicknames</string>
+    <string name="random_ots">Random OTs</string>
+    <string name="random_ivs">Random IVs</string>
+    <string name="random_item">Random Trade Item</string>
+
+    <string name="field_item_header">Field Items</string>
+
+    <string name="misc_tweak_header">Misc. Tweaks</string>
+    <string name="bw_patch">B/W EXP Patch</string>
+    <string name="run_indoors">Run Indoors</string>
+    <string name="update_type_effect">Update Type Effective</string>
+    <string name="ban_lucky_egg">Ban Lucky Egg</string>
+    <string name="nerf_xacc">Nerf X-Accuracy</string>
+    <string name="random_pc_potion">Random PC Potion</string>
+    <string name="random_hidden_hallow">Random Hidden Hallows</string>
+    <string name="crit_rate_fix">"Fix" Crit Rate</string>
+    <string name="allow_pika_evo">Allow Pikachu Evo</string>
+    <string name="lower_case_poke">Lower Case Poke Names</string>
+    <string name="fastest_text">Fastest Text</string>
+    <string name="start_nation_dex">Start w/ National Dex</string>
+    <string name="random_catch_tut">Random Catch Tutorial</string>
 
 </resources>
