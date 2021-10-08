@@ -172,7 +172,7 @@
                 android:id="@+id/rbgpBaseStats"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_margin="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtPokeBase">
 
@@ -180,21 +180,18 @@
                     android:id="@+id/rbBaseUnchange"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/unchanged" />
 
                 <RadioButton
                     android:id="@+id/rbBaseShuffle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/shuffle" />
 
                 <RadioButton
                     android:id="@+id/rbBaseRandom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/random" />
             </RadioGroup>
 
@@ -240,7 +237,7 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rbgpBaseStats" />
+                app:layout_constraintTop_toBottomOf="@id/swBaseUpExpCurve" />
 
             <TextView
                 android:id="@+id/txtPokeAbility"
@@ -258,7 +255,7 @@
                 android:id="@+id/rgPokeAbility"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_margin="8dp"
                 android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtPokeAbility">
@@ -267,14 +264,12 @@
                     android:id="@+id/rbAbilityUnchange"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/unchanged" />
 
                 <RadioButton
                     android:id="@+id/rbAbilityRandom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/random" />
             </RadioGroup>
 
@@ -310,7 +305,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rgPokeAbility" />
+                app:layout_constraintTop_toBottomOf="@id/swAbilityFollowEvo" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/swAbilityTrapping"
@@ -360,6 +355,7 @@
                 android:id="@+id/rgPokeTypes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -369,21 +365,18 @@
                     android:id="@+id/rbTypeUnchange"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/unchanged" />
 
                 <RadioButton
                     android:id="@+id/rbTypeRandFollowEvo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/random_follow" />
 
                 <RadioButton
                     android:id="@+id/rbTypeRandComplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/random_complete" />
             </RadioGroup>
 
@@ -412,6 +405,7 @@
 
             <RadioGroup
                 android:id="@+id/rgPokeEvoRand"
+                android:layout_margin="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -423,14 +417,13 @@
                     android:id="@+id/rbPokeEvoUnchange"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/unchanged" />
 
                 <RadioButton
                     android:id="@+id/rbPokeEvoRandom"
+                    android:layout_marginStart="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/random" />
             </RadioGroup>
 
@@ -525,6 +518,7 @@
                 android:id="@+id/rgStarterPoke"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txtStarterPoke">
 
@@ -532,21 +526,18 @@
                     android:id="@+id/rbStarterUnchanged"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/unchanged" />
 
                 <RadioButton
                     android:id="@+id/rbStarterCustom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/custom" />
 
                 <Spinner
                     android:id="@+id/spStarterFirst"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:minHeight="48dp"
                     />
 
@@ -554,28 +545,24 @@
                     android:id="@+id/spStarterSecond"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:minHeight="48dp" />
 
                 <Spinner
                     android:id="@+id/spStarterThird"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:minHeight="48dp" />
 
                 <RadioButton
                     android:id="@+id/rbStarterCompleteRand"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/random_complete" />
 
                 <RadioButton
                     android:id="@+id/rbStarterStarter2Evo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/random_starter_two_evo" />
             </RadioGroup>
 
@@ -693,6 +680,7 @@
                 android:id="@+id/rgMoveSets"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txtMoveSets">
@@ -701,28 +689,24 @@
                     android:id="@+id/rbMoveSetUnchanged"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/unchanged" />
 
                 <RadioButton
                     android:id="@+id/rbMoveSetRandSameType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/random_pref_same_type" />
 
                 <RadioButton
                     android:id="@+id/rbMoveSetCompRand"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/random_complete" />
 
                 <RadioButton
                     android:id="@+id/rbMoveSetMetronome"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:text="@string/metronome_only" />
             </RadioGroup>
 
@@ -799,27 +783,25 @@
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:id="@+id/rgTrainerRand"
                 app:layout_constraintTop_toBottomOf="@id/txtTrainerHeader"
                 app:layout_constraintStart_toStartOf="parent"
                 >
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:id="@+id/rbTrainerUnchanged"
                     android:text="@string/unchanged"
                     />
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:id="@+id/rbTrainerRandom"
                     android:text="@string/random"/>
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:id="@+id/rbTrainerThemed"
                     android:text="@string/rando_type_theme"/>
 
@@ -862,7 +844,7 @@
                 android:minHeight="48dp"
                 android:id="@+id/swTrainerUseLegend"
                 android:text="@string/trainer_use_legendary"
-                app:layout_constraintTop_toBottomOf="@id/rgTrainerRand"
+                app:layout_constraintTop_toBottomOf="@id/swTrainerWeightTypes"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
@@ -971,6 +953,7 @@
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:id="@+id/rgWildsRandSetting"
                 app:layout_constraintTop_toBottomOf="@id/txtWildsPokeHeader"
                 app:layout_constraintStart_toStartOf="parent"
@@ -979,28 +962,24 @@
                 <RadioButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:id="@+id/rbWildsUnchanged"
                     android:text="@string/unchanged"
                     />
                 <RadioButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:id="@+id/rbWildsRandom"
                     android:text="@string/random"
                     />
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:id="@+id/rbWildsAreaMap"
                     android:text="@string/area_mapping"
                     />
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:id="@+id/rbWildsGlobal"
                     android:text="@string/global_mapping"
                     />
@@ -1008,10 +987,11 @@
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:id="@+id/rgWildsAddRules"
                 app:layout_constraintTop_toBottomOf="@id/txtWildsPokeHeader"
                 app:layout_constraintStart_toEndOf="@id/rgWildsRandSetting"
-                >
+                app:layout_constraintEnd_toEndOf="parent">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1023,28 +1003,24 @@
                 <RadioButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:id="@+id/rbWildsAddNone"
                     android:text="@string/none"
                     />
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:id="@+id/rbWildsAddSimilar"
                     android:text="@string/similar_strength"
                     />
                 <RadioButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:id="@+id/rbWildsAddCatchAll"
                     android:text="@string/catch_em_all"
                     />
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:id="@+id/rbWildsAddTheme"
                     android:text="@string/type_theme_ares"
                     />

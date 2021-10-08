@@ -35,7 +35,7 @@
     <string name="same_type_evo">Same Typing</string>
     <string name="three_stage_limit">Limit Evos to 3 Stages</string>
     <string name="force_evo_change">Force Change</string>
-    <string name="impossible_evos">Change Impossible Evo</string>
+    <string name="impossible_evos">Edit Impossible Evo</string>
     <string name="make_evo_easy">Make Evos Easy</string>
 
     <string name="starter_poke_header">Starter Pokemon:</string>
