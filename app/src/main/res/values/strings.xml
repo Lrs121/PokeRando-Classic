@@ -92,6 +92,7 @@
     <string name="tmhm_compat">TM/HM Compatibility</string>
     <string name="lvlup_move_sanity">Levelup Move Sanity</string>
     <string name="field_move_tm">Keep Field Move</string>
+    <string name="hm_compat">Full HM Compatibility</string>
     <string name="full_compat">Full Compatibility</string>
 
     <string name="move_tutor_header">Move Tutors</string>
