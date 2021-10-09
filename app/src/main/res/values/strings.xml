@@ -126,5 +126,7 @@
     <string name="title_activity_main_tabbed">MainActivityTabbed</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+    <string name="create_random_rom">Randomize</string>
+    <string name="open_file">Open File</string>
 
 </resources>
