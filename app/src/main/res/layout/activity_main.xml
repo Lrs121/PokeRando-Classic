@@ -25,17 +25,17 @@
 
 
             <ImageButton
-                android:id="@+id/imageButton4"
+                android:id="@+id/imgbLoadRom"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="2dp"
                 app:srcCompat="@android:drawable/ic_menu_edit"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/imgbSaveFile"
+                app:layout_constraintEnd_toStartOf="@id/imgbSaveRom"
                 android:contentDescription="@string/open_file"/>
 
             <ImageButton
-                android:id="@+id/imgbSaveFile"
+                android:id="@+id/imgbSaveRom"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="2dp"

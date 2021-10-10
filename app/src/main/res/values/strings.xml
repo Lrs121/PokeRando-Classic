@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Poke Rando Classic</string>
+    <string name="app_name">PokeRando Classic</string>
 
     <string name="rom_header">Rom Info:</string>
     <string name="rom_name">Fire Red (U) 1.0</string>
