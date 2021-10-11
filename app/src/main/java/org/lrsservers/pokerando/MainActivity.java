@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private final int SAVE_ROM = 10, LOAD_ROM = 15;
     private ImageButton ibLoadRom, ibSaveRom;
 
-    private final ActivityPermissionRequest permissionRequest = new ActivityPermissionRequest.Builder(this)
+/*    private final ActivityPermissionRequest permissionRequest = new ActivityPermissionRequest.Builder(this)
             .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
             .withCallback(new PermissionCallback() {
                 @Override
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     SimpleStorageHelper.redirectToSystemSettings(JavaActivity.this);
                 }
             })
-            .build();
+            .build();*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
                     simpleStorageHelper.requestStorageAccess();
                 }
-                simpleStorageHelper.
+//                simpleStorageHelper.
             }
         });
 
