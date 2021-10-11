@@ -1,27 +1,49 @@
 package org.lrsservers.pokerando;
 
-import static android.widget.Toast.LENGTH_SHORT;
-
 import android.Manifest;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.anggrayudi.storage.SimpleStorageHelper;
+import com.anggrayudi.storage.permission.ActivityPermissionRequest;
+import com.anggrayudi.storage.permission.PermissionCallback;
+import com.anggrayudi.storage.permission.PermissionReport;
+import com.anggrayudi.storage.permission.PermissionResult;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
-    private int STORAGE_PERMISSION_CODE = 35;
+    private SimpleStorageHelper simpleStorageHelper = new SimpleStorageHelper(this);
+    private final int SAVE_ROM = 10, LOAD_ROM = 15;
     private ImageButton ibLoadRom, ibSaveRom;
 
+    private final ActivityPermissionRequest permissionRequest = new ActivityPermissionRequest.Builder(this)
+            .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+            .withCallback(new PermissionCallback() {
+                @Override
+                public void onPermissionsChecked(@NotNull PermissionResult result, boolean fromSystemDialog) {
+                    String grantStatus = result.getAreAllPermissionsGranted() ? "granted" : "denied";
+                    Toast.makeText(getBaseContext(), "Storage permissions are " + grantStatus, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onShouldRedirectToSystemSettings(@NotNull List<PermissionReport> blockedPermissions) {
+                    SimpleStorageHelper.redirectToSystemSettings(JavaActivity.this);
+                }
+            })
+            .build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,54 +53,50 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ibSaveRom = findViewById(R.id.imgbSaveRom);
-        ibLoadRom = findViewById(R.id.imgbLoadRom);
-
-        ibSaveRom.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.R)
+        ibLoadRom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(MainActivity.this, "perm req", LENGTH_SHORT).show();
-                    requestStoragePermission();
+                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                    simpleStorageHelper.requestStorageAccess();
                 }
+                simpleStorageHelper.openFolderPicker();
             }
         });
 
-        ibLoadRom.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.R)
+        ibSaveRom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                    requestStoragePermission();
+                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                    simpleStorageHelper.requestStorageAccess();
                 }
+                simpleStorageHelper.
             }
         });
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
-    private void requestStoragePermission(){
-//        Toast.makeText(MainActivity.this, "start req", LENGTH_SHORT).show();
-        if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)){
-//            Toast.makeText(MainActivity.this, "show reason Dialog", LENGTH_SHORT).show();
-            new AlertDialog.Builder(MainActivity.this).setTitle("Permissions Needed").setMessage("Storage access needed inorder to load and save Rom files.").setPositiveButton("Grant ", (dialog, which) -> {
-//                Toast.makeText(MainActivity.this, "requesting permission", LENGTH_SHORT).show();
-                ActivityCompat.requestPermissions(MainActivity.this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, STORAGE_PERMISSION_CODE);
-            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(MainActivity.this, "close dialog", LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-            }).create().show();
-        } else {
-//            Toast.makeText(MainActivity.this, "no dialog, req perm", LENGTH_SHORT).show();
-            ActivityCompat.requestPermissions(MainActivity.this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, STORAGE_PERMISSION_CODE);
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        simpleStorageHelper.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
 
-        }
-//        Toast.makeText(MainActivity.this, "exit req", LENGTH_SHORT).show();
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        simpleStorageHelper.onRestoreInstanceState(savedInstanceState);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        simpleStorageHelper.getStorage().onActivityResult(requestCode,resultCode,data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        simpleStorageHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 }
