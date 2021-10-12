@@ -7,31 +7,82 @@
 - going file by file is slow but worth it
 - read copyright at top of parent code, provides idea of usage
 - SysConstants.java is not needed
-- files in config/* and patches/* are now stored in res/raw folder 
+- files in config/* and patches/* are now stored in res/raw folder
     - use android calls instead
     - refactor parent code to adapt to change
-- fill todo section    
-    
+- fill todo section
+
 ## TODO
 
 ### Packages and Classes to "import"
-[] constants
-    [] GBConstants
-    [] Gen1Constants
-    [] Gen2Constants
-    [] Gen3Constants
-    [] Gen4Constants
-    [] Gen5Constants
-    [*] GlobalConstants
+
+- [*] constants
+    - [*] GBConstants
+    - [] Gen1Constants
+    - [] Gen2Constants
+    - [] Gen3Constants
+    - [] Gen4Constants
+    - [] Gen5Constants
+    - [*] GlobalConstants
 [] exceptions
-    [] InvalidSupplementFilesException
-    [] RandomizationException
-    [] RandomizerIOException
-[] gui - Read files but likely not needed
-[] newnds
-    [] CRC16
-    [] NARCArchive
-    [] NDSFile
-    [] NDSRom
-    [] NDSY9Entry
-[] pokemon
+    - [] InvalidSupplementFilesException
+    - [] RandomizationException
+    - [] RandomizerIOException
+- [] gui - Read files but likely not needed
+    - many files in here
+- [] newnds
+    - [] CRC16
+    - [] NARCArchive
+    - [] NDSFile
+    - [] NDSRom
+    - [] NDSY9Entry
+- [] pokemon
+    - [] Encounter
+    - [] EncounterSet
+    - [] Evolution
+    - [] EvolutionType
+    - [] ExpCurve
+    - [] GenRestrictions
+    - [] IngameTrade
+    - [] ItemList
+    - [] Move
+    - [] MoveCategory
+    - [] MoveLearnt
+    - [] Pokemon
+    - [] Trainer
+    - [] TrainerPokemon
+    - [] Type
+- [] romhandlers
+    - [] AbstractDSRomHandler
+    - [] AbstractGBCRomHandler
+    - [] AbstractGBRomHandler
+    - [] AbstractRomHandler
+    - [] Gen1RomHandler
+    - [] Gen2RomHandler
+    - [] Gen3RomHandler
+    - [] Gen4RomHandler
+    - [] Gen5RomHandler
+    - [] RomHandler
+- [] CustomNamesSet
+- [] FileFunctions
+- [] GFXFunctions
+- [] MiscTweak
+- [] Randomizer
+- [] RandomSource
+- [] RomFunctions
+- [] Settings
+- [] SettingsUpdaters
+- [] SysConstants
+- [] Utils
+- [] compressors
+    - [] DSDecmp
+    - [] Gen1Decmp
+    - [] Gen2Decmp
+- [] cuecompressors
+    - [] BLZCoder
+- [] pptxt
+    - [] PPTxtHandler
+- [] thenewpoketext
+    - [] PokeTextData
+    - [] TextToPoke
+    - [] UnicodeParser
