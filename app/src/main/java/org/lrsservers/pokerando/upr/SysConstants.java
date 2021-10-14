@@ -25,14 +25,16 @@ package org.lrsservers.pokerando.upr;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import android.content.Context;
+import android.content.res.AssetManager;
+
+import org.lrsservers.pokerando.MainActivity;
+
 import java.io.File;
 
 public class SysConstants {
 
-    public static final String AUTOUPDATE_URL = "http://pokehacks.dabomstew.com/randomizer/autoupdate/";
-    public static final String WEBSITE_URL = "http://pokehacks.dabomstew.com/randomizer/";
-    public static final int UPDATE_VERSION = 1721;
-    public static final String ROOT_PATH = getRootPath();
+    public static final String ROOT_PATH = "/data/data/org.lrsservers.org/";
     public static final String LINE_SEP = System.getProperty("line.separator");
     public static final String customNamesFile = "customnames.rncn";
 
@@ -40,14 +42,5 @@ public class SysConstants {
     public static final String tnamesFile = "trainernames.txt";
     public static final String tclassesFile = "trainerclasses.txt";
     public static final String nnamesFile = "nicknames.txt";
-
-    private static String getRootPath() {
-        try {
-            File fh = Utils.getExecutionLocation().getParentFile();
-            return fh.getAbsolutePath() + File.separator;
-        } catch (Exception e) {
-            return "./";
-        }
-    }
 
 }

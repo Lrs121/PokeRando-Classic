@@ -145,7 +145,7 @@ public class CustomNamesSet {
         pokemonNicknames.addAll(names);
     }
 
-    public static CustomNamesSet importOldNames() throws FileNotFoundException {
+    public CustomNamesSet importOldNames() throws FileNotFoundException {
         CustomNamesSet cns = new CustomNamesSet();
 
         // Trainer Names

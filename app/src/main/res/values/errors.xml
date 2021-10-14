@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="invalid_rom">invalid rom</string>
+    <string name="rom_too_short">Rom too short</string>
+    <string name="zip_file_selected">Zip file selected</string>
+    <string name="rar_file_selected">rar file selected</string>
+    <string name="ips_file_selected">ips file selected</string>
+    <string name="unknown_file">unknown file selected</string>
+</resources>

@@ -45,6 +45,7 @@ public class PPTxtHandler {
             pokeToTextPattern = makePattern(pokeToText.keySet());
             textToPokePattern = makePattern(textToPoke.keySet());
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

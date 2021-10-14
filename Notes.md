@@ -18,71 +18,71 @@
 
 - [*] constants
     - [*] GBConstants
-    - [] Gen1Constants
-    - [] Gen2Constants
-    - [] Gen3Constants
-    - [] Gen4Constants
-    - [] Gen5Constants
+    - [*] Gen1Constants
+    - [*] Gen2Constants
+    - [*] Gen3Constants
+    - [*] Gen4Constants
+    - [*] Gen5Constants
     - [*] GlobalConstants
-[] exceptions
-    - [] InvalidSupplementFilesException
-    - [] RandomizationException
-    - [] RandomizerIOException
+- [*] exceptions
+    - [*] InvalidSupplementFilesException
+    - [*] RandomizationException
+    - [*] RandomizerIOException
 - [] gui - Read files but likely not needed
     - many files in here
-- [] newnds
-    - [] CRC16
-    - [] NARCArchive
-    - [] NDSFile
-    - [] NDSRom
-    - [] NDSY9Entry
-- [] pokemon
-    - [] Encounter
-    - [] EncounterSet
-    - [] Evolution
-    - [] EvolutionType
-    - [] ExpCurve
-    - [] GenRestrictions
-    - [] IngameTrade
-    - [] ItemList
-    - [] Move
-    - [] MoveCategory
-    - [] MoveLearnt
-    - [] Pokemon
-    - [] Trainer
-    - [] TrainerPokemon
-    - [] Type
-- [] romhandlers
-    - [] AbstractDSRomHandler
-    - [] AbstractGBCRomHandler
-    - [] AbstractGBRomHandler
-    - [] AbstractRomHandler
-    - [] Gen1RomHandler
-    - [] Gen2RomHandler
-    - [] Gen3RomHandler
-    - [] Gen4RomHandler
-    - [] Gen5RomHandler
-    - [] RomHandler
-- [] CustomNamesSet
-- [] FileFunctions
-- [] GFXFunctions
-- [] MiscTweak
-- [] Randomizer
-- [] RandomSource
-- [] RomFunctions
-- [] Settings
-- [] SettingsUpdaters
-- [] SysConstants
-- [] Utils
-- [] compressors
-    - [] DSDecmp
-    - [] Gen1Decmp
-    - [] Gen2Decmp
-- [] cuecompressors
-    - [] BLZCoder
-- [] pptxt
-    - [] PPTxtHandler
-- [] thenewpoketext
-    - [] PokeTextData
-    - [] TextToPoke
-    - [] UnicodeParser
+- [*] newnds
+    - [*] CRC16
+    - [*] NARCArchive
+    - [*] NDSFile
+    - [*] NDSRom
+    - [*] NDSY9Entry
+- [*] pokemon
+    - [*] Encounter
+    - [*] EncounterSet
+    - [*] Evolution
+    - [*] EvolutionType
+    - [*] ExpCurve
+    - [*] GenRestrictions
+    - [*] IngameTrade
+    - [*] ItemList
+    - [*] Move
+    - [*] MoveCategory
+    - [*] MoveLearnt
+    - [*] Pokemon
+    - [*] Trainer
+    - [*] TrainerPokemon
+    - [*] Type
+- [*] romhandlers
+    - [*] AbstractDSRomHandler
+    - [*] AbstractGBCRomHandler
+    - [*] AbstractGBRomHandler
+    - [*] AbstractRomHandler
+    - [*] Gen1RomHandler
+    - [*] Gen2RomHandler
+    - [*] Gen3RomHandler
+    - [*] Gen4RomHandler
+    - [*] Gen5RomHandler
+    - [*] RomHandler
+- [*] CustomNamesSet
+- [*] FileFunctions
+- [*] GFXFunctions
+- [*] MiscTweak
+- [*] Randomizer
+- [*] RandomSource
+- [*] RomFunctions
+- [*] Settings
+- [*] SettingsUpdaters
+- [*] SysConstants
+- [*] Utils
+- [*] compressors
+    - [*] DSDecmp
+    - [*] Gen1Decmp
+    - [*] Gen2Decmp
+- [*] cuecompressors
+    - [*] BLZCoder
+- [*] pptxt
+    - [*] PPTxtHandler
+- [*] thenewpoketext
+    - [*] PokeTextData
+    - [*] TextToPoke
+    - [*] UnicodeParser

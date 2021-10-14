@@ -23,6 +23,12 @@ package org.lrsservers.pokerando.upr;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import android.content.res.AssetManager;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.lrsservers.pokerando.MainActivity;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -38,7 +44,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.zip.CRC32;
 
-public class FileFunctions {
+public class FileFunctions extends AppCompatActivity {
 
     public static File fixFilename(File original, String defaultExtension) {
         return fixFilename(original, defaultExtension, null);
@@ -67,12 +73,12 @@ public class FileFunctions {
         return new File(original.getAbsolutePath().replace(original.getName(), "") + filename);
     }
 
-    private static List<String> overrideFiles = Arrays.asList(new String[] { SysConstants.customNamesFile,
-            SysConstants.tclassesFile, SysConstants.tnamesFile, SysConstants.nnamesFile });
+    private static final List<String> overrideFiles = Arrays.asList(SysConstants.customNamesFile,
+            SysConstants.tclassesFile, SysConstants.tnamesFile, SysConstants.nnamesFile);
 
     public static boolean configExists(String filename) {
         if (overrideFiles.contains(filename)) {
-            File fh = new File(SysConstants.ROOT_PATH + filename);
+            File fh = new File(SysConstants.ROOT_PATH + "config/" + filename);
             if (fh.exists() && fh.canRead()) {
                 return true;
             }
@@ -81,21 +87,12 @@ public class FileFunctions {
                 return true;
             }
         }
-        return FileFunctions.class.getResource("/com/dabomstew/pkrandom/config/" + filename) != null;
+        return FileFunctions.class.getResource(SysConstants.ROOT_PATH + "config/" + filename) != null;
     }
 
     public static InputStream openConfig(String filename) throws FileNotFoundException {
-        if (overrideFiles.contains(filename)) {
-            File fh = new File(SysConstants.ROOT_PATH + filename);
-            if (fh.exists() && fh.canRead()) {
-                return new FileInputStream(fh);
-            }
-            fh = new File("./" + filename);
-            if (fh.exists() && fh.canRead()) {
-                return new FileInputStream(fh);
-            }
-        }
-        return FileFunctions.class.getResourceAsStream("/com/dabomstew/pkrandom/config/" + filename);
+        return AssetManager.AssetInputStream.class.getResourceAsStream("config/" + filename);
+
     }
 
     public static CustomNamesSet getCustomNames() throws IOException {

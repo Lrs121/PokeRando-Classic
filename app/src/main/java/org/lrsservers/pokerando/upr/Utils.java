@@ -31,10 +31,10 @@ import org.lrsservers.pokerando.upr.exceptions.InvalidSupplementFilesException;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.util.zip.CRC32;
 
@@ -73,20 +73,7 @@ public class Utils {
         }
     }
 
-    // RomHandlers implicitly rely on these - call this before creating settings
-    // etc.
-    public static void testForRequiredConfigs() throws FileNotFoundException {
-        String[] required = new String[]{"gameboy_jap.tbl", "rby_english.tbl", "rby_freger.tbl", "rby_espita.tbl",
-                "green_translation.tbl", "gsc_english.tbl", "gsc_freger.tbl", "gsc_espita.tbl", "gba_english.tbl",
-                "gba_jap.tbl", "Generation4.tbl", "Generation5.tbl", "gen1_offsets.ini", "gen2_offsets.ini",
-                "gen3_offsets.ini", "gen4_offsets.ini", "gen5_offsets.ini", SysConstants.customNamesFile};
-        for (String filename : required) {
-            if (!FileFunctions.configExists(filename)) {
-                throw new FileNotFoundException(filename);
-            }
-        }
-    }
-
+    // To be used when implementing presets
     public static void validatePresetSupplementFiles(String config, CustomNamesSet customNames)
             throws UnsupportedEncodingException, InvalidSupplementFilesException {
         byte[] data = DatatypeConverter.parseBase64Binary(config);
@@ -114,10 +101,9 @@ public class Utils {
         }
     }
 
-    public static File getExecutionLocation() throws UnsupportedEncodingException {
+   public static File getExecutionLocation() throws UnsupportedEncodingException {
         URL location = MainActivity.class.getProtectionDomain().getCodeSource().getLocation();
-        File fh = new File(java.net.URLDecoder.decode(location.getFile(), "UTF-8"));
-        return fh;
+       return new File(URLDecoder.decode(location.getFile(), "UTF-8"));
     }
 
     public static class InvalidROMException extends Exception {
