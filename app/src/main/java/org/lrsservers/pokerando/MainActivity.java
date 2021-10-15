@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
+            Toast.makeText(MainActivity.this, files.get(0).toString(), Toast.LENGTH_SHORT).show();
             return null;
         });
     }

@@ -16,18 +16,19 @@ Development in progress
 
 ### skunkwerks1:
 
-- Very, Very, Very basic UI
-- Requests Storage Permissions
-- Has some images
+- [*] Very, Very, Very basic UI
+- [*] Requests Storage Permissions
+- [*] Has some images
 
 ### skunkwerks2:
 
-- open file
-- save non-random file with new name
-- verify file is rom
-- Pokemon names array
-- add select pokemon fragment (only lists pokemon names)
-- full gen 1 support?(ambitious)
+- [*] open file
+- [] save non-random file with new name
+- [*] verify file is rom
+- [] Pokemon names array
+- [] Dynamic Box Art Loading 
+- [] add select pokemon fragment (only lists pokemon names)
+- [] full gen 1 support?(ambitious)
 
 ## FUTURE:
 
