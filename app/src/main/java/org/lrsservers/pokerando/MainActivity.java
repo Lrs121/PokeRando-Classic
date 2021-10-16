@@ -6,8 +6,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.anggrayudi.storage.SimpleStorageHelper;
 import com.anggrayudi.storage.file.DocumentFileUtils;
@@ -25,6 +25,7 @@ import com.anggrayudi.storage.permission.PermissionReport;
 import com.anggrayudi.storage.permission.PermissionResult;
 
 import org.jetbrains.annotations.NotNull;
+import org.lrsservers.pokerando.upr.RandomSource;
 import org.lrsservers.pokerando.upr.Utils;
 import org.lrsservers.pokerando.upr.pokemon.GenRestrictions;
 import org.lrsservers.pokerando.upr.romhandlers.Gen1RomHandler;
@@ -52,15 +53,16 @@ public class MainActivity extends AppCompatActivity {
                        }
                   }).build();
     private ImageButton ibLoadRom, ibSaveRom;
-    private final RomHandler romHandler = null;
+    private RomHandler romHandler = null;
     private final GenRestrictions genRestrictions = null;
+    private RomHandler.Factory[] factories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RomHandler.Factory[] factories = new RomHandler.Factory[]{
+        factories = new RomHandler.Factory[]{
                 new Gen1RomHandler.Factory(), new Gen2RomHandler.Factory(), new Gen3RomHandler.Factory(), new Gen4RomHandler.Factory(), new Gen5RomHandler.Factory()
         };
 
@@ -137,16 +139,37 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, String.valueOf(R.string.ips_file_selected), Toast.LENGTH_SHORT).show();
                         break;
                     case UNREADABLE:
-                    default:
                         Log.e(String.valueOf(R.string.invalid_rom), String.valueOf(R.string.unknown_file));
                         Toast.makeText(MainActivity.this, String.valueOf(R.string.unknown_file), Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                         break;
+                    default:
+                        for(RomHandler.Factory factory : factories){
+                            if (factory.isLoadable( DocumentFileUtils.getBaseName(files.get(0)))){
+                                this.romHandler = factory.create(RandomSource.instance());
+
+                            }
+                        }
+                        break;
                 }
             }
             Toast.makeText(MainActivity.this, files.get(0).toString(), Toast.LENGTH_SHORT).show();
+
             return null;
         });
+    }
+
+    private void initialState(){
+//        SwitchMaterial swRace, swLimitPkm, swGameBreakingMoves, swStdExpCurve, swFollowEvo, swUpdateBaseStats, swAllwo;
+        Button btnSelectPkm = findViewById(R.id.btnLimitPoke);
+        ScrollView mainView = findViewById(R.id.clMain);
+
+        btnSelectPkm.setEnabled(false);
+        for(int i = 0; i < mainView.getChildCount(); i++){
+            View child = mainView.getChildAt(i);
+            child.setEnabled(false);
+        }
+
     }
 
 }
