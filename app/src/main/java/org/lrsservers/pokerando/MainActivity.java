@@ -162,11 +162,11 @@ public class MainActivity extends AppCompatActivity {
                                 romName.setText(this.romHandler.getROMName());
                                 romCode.setText(this.romHandler.getROMCode());
                                 supportStat.setText(this.romHandler.getSupportLevel());
-                                enableUI(DocumentFileUtils.toRawFile(files.get(0), getApplicationContext()));
+                                enableUI();
 
 
                             }else{
-                                Snackbar.make(MainActivity.this, findViewById(R.id.topLayout), String.valueOf(R.string.invalid_rom), Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(MainActivity.this, findViewById(R.id.topLayout), String.valueOf(R.string.unsupported_game), Snackbar.LENGTH_SHORT).show();
                             }
                         }
                         break;
@@ -222,7 +222,22 @@ public class MainActivity extends AppCompatActivity {
     private void setBoxArt(String romCode){
         ImageView boxArt = findViewById(R.id.imgBoxArt);
         switch (romCode){
-            case "BPRE0":
+            case "POKEMON RED":
+            case "POKEMON BLUE":
+            case "POKEMON YELLOW":
+            case "POKEMON GREEN":
+            case "AAUE":
+            case "AAUJ":
+                //this is gold
+                break;
+            case "AAXJ":
+            case "AAXE":
+                //this is silver
+            case "KAPB":
+            case "BYTE":
+                //this is crystal
+
+            case "BPRE":
                 break;
             default:
                 break;

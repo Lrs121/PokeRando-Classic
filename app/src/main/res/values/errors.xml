@@ -6,4 +6,5 @@
     <string name="rar_file_selected">rar file selected</string>
     <string name="ips_file_selected">ips file selected</string>
     <string name="unknown_file">unknown file selected</string>
+    <string name="unsupported_game">Unsupported Pokemon Game</string>
 </resources>
