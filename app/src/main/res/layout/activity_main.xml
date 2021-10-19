@@ -127,10 +127,11 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="16dp"
+                    android:background="#F44336"
                     android:contentDescription="@string/rom_name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/txtRomHeader"
-                    app:srcCompat="@drawable/blue" />
+                    app:srcCompat="@android:drawable/stat_notify_error" />
 
                 <View
                     android:id="@+id/divider"

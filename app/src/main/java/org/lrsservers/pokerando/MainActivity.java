@@ -2,6 +2,8 @@ package org.lrsservers.pokerando;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -221,25 +223,185 @@ public class MainActivity extends AppCompatActivity {
 
     private void setBoxArt(String romCode){
         ImageView boxArt = findViewById(R.id.imgBoxArt);
+        boxArt.setBackgroundColor(Color.TRANSPARENT);
         switch (romCode){
             case "POKEMON RED":
+                boxArt.setImageResource(R.drawable.red);
+                break;
             case "POKEMON BLUE":
+                boxArt.setImageResource(R.drawable.blue);
+                break;
             case "POKEMON YELLOW":
+                boxArt.setImageResource(R.drawable.yellow);
+                break;
             case "POKEMON GREEN":
+                boxArt.setImageResource(R.drawable.green);
+                break;
             case "AAUE":
             case "AAUJ":
-                //this is gold
+            case "AAUF":
+            case "AAUD":
+            case "AAUS":
+            case "AAUI":
+                boxArt.setImageResource(R.drawable.gold);
                 break;
             case "AAXJ":
             case "AAXE":
+            case "AAXF":
+            case "AAXD":
+            case "AAXS":
+            case "AAXI":
                 //this is silver
+                boxArt.setImageResource(R.drawable.silver);
+                break;
             case "KAPB":
             case "BYTE":
+            case "BXTJ":
+            case "BYTF":
+            case "BYTD":
+            case "BYTS":
+            case "BYTI":
                 //this is crystal
-
+                boxArt.setImageResource(R.drawable.crystal);
+                break;
+            case "AXVE":
+            case "AXVF":
+            case "AXVD":
+            case "AXVS":
+            case "AXVI":
+            case "AXVJ":
+                //ruby
+                boxArt.setImageResource(R.drawable.ruby);
+                break;
+            case "AXPE":
+            case "AXPF":
+            case "AXPD":
+            case "AXPS":
+            case "AXPI":
+            case "AXPJ":
+                //sapphire
+                boxArt.setImageResource(R.drawable.sapphire);
+                break;
+            case "BPEE":
+            case "BPEF":
+            case "BPED":
+            case "BPEI":
+            case "BPES":
+            case "BPET":
+            case "BPEJ":
+                //emerald
+                boxArt.setImageResource(R.drawable.emerald);
+                break;
             case "BPRE":
+            case "BPRF":
+            case "BPRD":
+            case "BPRS":
+            case "BPRI":
+            case "BPRJ":
+                //firered
+                boxArt.setImageResource(R.drawable.firered);
+                break;
+            case "BPGE":
+            case "BPGF":
+            case "BPGD":
+            case "BPGS":
+            case "BPGI":
+            case "BPGJ":
+                //leafgreen
+                boxArt.setImageResource(R.drawable.leafgreen);
+                break;
+            case "ADAE":
+            case "ADAJ":
+            case "ADAD":
+            case "ADAS":
+            case "ADAI":
+            case "ADAF":
+            case "ADAK":
+                //diamond
+                boxArt.setImageResource(R.drawable.diamond);
+                break;
+            case "APAK":
+            case "APAF":
+            case "APAI":
+            case "APAS":
+            case "APAE":
+            case "APAD":
+            case "APAJ":
+                //perl
+                boxArt.setImageResource(R.drawable.pearl);
+                break;
+            case "CPUE":
+            case "CPUJ":
+            case "CPUD":
+            case "CPUF":
+            case "CPUS":
+            case "CPUI":
+            case "CPUK":
+                //platinum
+                boxArt.setImageResource(R.drawable.platinum);
+                break;
+            case "IPKJ":
+            case "IPKE":
+            case "IPKK":
+            case "IPKF":
+            case "IPKD":
+            case "IPKS":
+            case "IPKI":
+                //heartgold
+                boxArt.setImageResource(R.drawable.heartgold);
+                break;
+            case "IPGI":
+            case "IPGS":
+            case "IPGD":
+            case "IPGF":
+            case "IPGK":
+            case "IPGE":
+            case "IPGJ":
+                //soulsilver
+                boxArt.setImageResource(R.drawable.soulsilver);
+                break;
+            case "IRBO":
+            case "IRBF":
+            case "IRBD":
+            case "IRBS":
+            case "IRBI":
+            case "IRBJ":
+            case "IRBK":
+                //black
+                boxArt.setImageResource(R.drawable.black);
+                break;
+            case "IRAF":
+            case "IRAO":
+            case "IRAD":
+            case "IRAS":
+            case "IRAI":
+            case "IRAJ":
+            case "IRAK":
+                //white
+                boxArt.setImageResource(R.drawable.white);
+                break;
+            case "IREO":
+            case "IREF":
+            case "IRED":
+            case "IREI":
+            case "IRES":
+            case "IREJ":
+            case "IREK":
+                //black2
+                boxArt.setImageResource(R.drawable.black2);
+                break;
+            case "IRDO":
+            case "IRDF":
+            case "IRDD":
+            case "IRDI":
+            case "IRDS":
+            case "IRDJ":
+            case "IRDK":
+                //white2
+                boxArt.setImageResource(R.drawable.white2);
                 break;
             default:
+                boxArt.setBackgroundColor(Color.RED);
                 break;
         }
     }
