@@ -3,11 +3,11 @@ package org.lrsservers.pokerando;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.Group;
 
 import com.anggrayudi.storage.SimpleStorageHelper;
 import com.anggrayudi.storage.file.DocumentFileUtils;
@@ -27,7 +28,6 @@ import com.anggrayudi.storage.permission.ActivityPermissionRequest;
 import com.anggrayudi.storage.permission.PermissionCallback;
 import com.anggrayudi.storage.permission.PermissionReport;
 import com.anggrayudi.storage.permission.PermissionResult;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ import org.lrsservers.pokerando.upr.romhandlers.Gen4RomHandler;
 import org.lrsservers.pokerando.upr.romhandlers.Gen5RomHandler;
 import org.lrsservers.pokerando.upr.romhandlers.RomHandler;
 
-import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -64,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton ibLoadRom, ibSaveRom;
     private RomHandler romHandler = null;
     private RomHandler.Factory[] factories;
+    private final Group gpGeneralSettings = findViewById(R.id.gpGeneralSettings), gpPokeBase = findViewById(R.id.gpPokeBase), gpPokeAbilities = findViewById(R.id.gpPokeAbilities), gpPokeTypes = findViewById(R.id.gpPokeTypes), gpPokeEvo = findViewById(R.id.gpPokeEvo), gpStarterPoke = findViewById(R.id.gpStarterPoke), gpMoveData = findViewById(R.id.gpMoveData), gpMoveSets = findViewById(R.id.gpMoveSets), gpTrainerPoke = findViewById(R.id.gpTrainerPoke), gpWildPoke = findViewById(R.id.gpWildPoke), gpTMHM = findViewById(R.id.gpTMHM), gpMoveTutor = findViewById(R.id.gpMoveTutor), gpPokeTrades = findViewById(R.id.gpPokeTrades), gpFieldItems = findViewById(R.id.gpFieldItems), gpMisc = findViewById(R.id.gpMisc);
+    private final Group[] groups = new Group[]{gpGeneralSettings, gpPokeBase, gpPokeAbilities, gpPokeTypes, gpPokeEvo, gpStarterPoke, gpMoveData, gpMoveSets, gpTrainerPoke, gpWildPoke, gpTMHM, gpMoveTutor,gpPokeTrades, gpFieldItems, gpMisc};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setupSimpleStorage(Bundle savedState) {
         if (savedState != null) {
             storageHelper.onRestoreInstanceState(savedState);
@@ -164,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                                 romName.setText(this.romHandler.getROMName());
                                 romCode.setText(this.romHandler.getROMCode());
                                 supportStat.setText(this.romHandler.getSupportLevel());
+                                setBoxArt(this.romHandler.getROMCode());
                                 enableUI();
 
 
@@ -180,44 +185,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initialState() {
-        ScrollView mainView = findViewById(R.id.clMain);
-        RadioGroup rgBase = findViewById(R.id.rbgpBaseStats), rgAbility = findViewById(R.id.rgPokeAbility), rgTypes = findViewById(R.id.rgPokeTypes), rgEvo = findViewById(R.id.rgPokeEvoRand), rgStarter = findViewById(R.id.rgStarterPoke), rgMovesets = findViewById(R.id.rgMoveSets), rgTrainerRand = findViewById(R.id.rgTrainerRand), rgWildsPoke = findViewById(R.id.rgWildsRandSetting), rgWildsRules = findViewById(R.id.rgWildsAddRules), rgTMRand = findViewById(R.id.rgTMRando), rgTMHMComp = findViewById(R.id.rgTMHMCompats), rgTutorMoves = findViewById(R.id.rgTutorMoveRand), rgTutorCompat = findViewById(R.id.rgTutorCompat), rgTrades = findViewById(R.id.rgTradeRandom), rgFieldItems = findViewById(R.id.rgFieldItemsRand);
-        RadioGroup[] radioGroups = new RadioGroup[]{rgBase, rgAbility, rgTypes, rgEvo, rgStarter, rgMovesets, rgTrainerRand, rgWildsPoke, rgWildsRules, rgTMRand, rgTMHMComp, rgTutorCompat, rgTutorMoves, rgTrades, rgFieldItems};
-        ImageView boxArt = findViewById(R.id.imgBoxArt);
-
-        for (int i = 0; i < mainView.getChildCount(); i++) {
-            View child = mainView.getChildAt(i);
-            child.setEnabled(false);
-        }
-        for (RadioGroup radioGroup : radioGroups) {
-            for (int j = 0; j < radioGroup.getChildCount(); j++) {
-                View child = radioGroup.getChildAt(j);
-                child.setEnabled(false);
+        for(Group group : this.groups){
+            for (int i = 0; i < Arrays.stream(group.getReferencedIds()).count(); i++) {
+                int[] ids = group.getReferencedIds();
+                findViewById(ids[i]).setEnabled(true);
             }
         }
-        boxArt.setVisibility(View.INVISIBLE);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void enableUI(){
-        ScrollView mainView = findViewById(R.id.clMain);
-        RadioGroup rgBase = findViewById(R.id.rbgpBaseStats), rgAbility = findViewById(R.id.rgPokeAbility), rgTypes = findViewById(R.id.rgPokeTypes), rgEvo = findViewById(R.id.rgPokeEvoRand), rgStarter = findViewById(R.id.rgStarterPoke), rgMovesets = findViewById(R.id.rgMoveSets), rgTrainerRand = findViewById(R.id.rgTrainerRand), rgWildsPoke = findViewById(R.id.rgWildsRandSetting), rgWildsRules = findViewById(R.id.rgWildsAddRules), rgTMRand = findViewById(R.id.rgTMRando), rgTMHMComp = findViewById(R.id.rgTMHMCompats), rgTutorMoves = findViewById(R.id.rgTutorMoveRand), rgTutorCompat = findViewById(R.id.rgTutorCompat), rgTrades = findViewById(R.id.rgTradeRandom), rgFieldItems = findViewById(R.id.rgFieldItemsRand);
-        RadioGroup[] radioGroups = new RadioGroup[]{rgBase, rgAbility, rgTypes, rgEvo, rgStarter, rgMovesets, rgTrainerRand, rgWildsPoke, rgWildsRules, rgTMRand, rgTMHMComp, rgTutorCompat, rgTutorMoves, rgTrades, rgFieldItems};
-        ImageView boxArt = findViewById(R.id.imgBoxArt);
-
-        for (int i = 0; i < mainView.getChildCount(); i++) {
-            View child = mainView.getChildAt(i);
-            child.setEnabled(true);
-        }
-        boxArt.setEnabled(false);
-        for (RadioGroup radioGroup : radioGroups) {
-            for (int j = 0; j < radioGroup.getChildCount(); j++) {
-                View child = radioGroup.getChildAt(j);
-                child.setEnabled(true);
+        for(Group group : this.groups){
+            for (int i = 0; i < Arrays.stream(group.getReferencedIds()).count(); i++) {
+                int[] ids = group.getReferencedIds();
+                findViewById(ids[i]).setEnabled(true);
             }
-        }
-        if(this.romHandler.generationOfPokemon() < 6){
-
         }
     }
 
