@@ -3,7 +3,6 @@ package org.lrsservers.pokerando;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +26,6 @@ import com.anggrayudi.storage.permission.ActivityPermissionRequest;
 import com.anggrayudi.storage.permission.PermissionCallback;
 import com.anggrayudi.storage.permission.PermissionReport;
 import com.anggrayudi.storage.permission.PermissionResult;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +39,6 @@ import org.lrsservers.pokerando.upr.romhandlers.Gen4RomHandler;
 import org.lrsservers.pokerando.upr.romhandlers.Gen5RomHandler;
 import org.lrsservers.pokerando.upr.romhandlers.RomHandler;
 
-import java.io.File;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,9 +58,14 @@ public class MainActivity extends AppCompatActivity {
                                                                             }
                                                                         }).build();
     private final GenRestrictions genRestrictions = null;
-    private ImageButton ibLoadRom, ibSaveRom;
+    private ImageButton ibLoadRom = findViewById(R.id.imgbLoadRom), ibSaveRom = findViewById(R.id.imgbSaveRom);
     private RomHandler romHandler = null;
     private RomHandler.Factory[] factories;
+    TextView romName = findViewById(R.id.txtRomName);
+    TextView romCode = findViewById(R.id.txtRomCode);
+    TextView romFile = findViewById(R.id.txtFileName);
+    TextView supportStat = findViewById(R.id.txtRomSupport);
+    ImageView boxArt = findViewById(R.id.imgBoxArt);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupBtnAction() {
-        findViewById(R.id.imgbLoadRom).setOnClickListener(view -> {
+        ibLoadRom.setOnClickListener(view -> {
             permissionRequest.check();
             storageHelper.openFilePicker(LOAD_ROM);
         });
@@ -156,14 +158,11 @@ public class MainActivity extends AppCompatActivity {
                         for (RomHandler.Factory factory : factories) {
                             if (factory.isLoadable(DocumentFileUtils.getBaseName(files.get(0)))) {
                                 this.romHandler = factory.create(RandomSource.instance());
-                                TextView romName = findViewById(R.id.txtRomName);
-                                TextView romCode = findViewById(R.id.txtRomCode);
-                                TextView romFile = findViewById(R.id.txtFileName);
-                                TextView supportStat = findViewById(R.id.txtRomSupport);
-                                romFile.setText(DocumentFileUtils.getBaseName(files.get(0)));
+                                this.romFile.setText(DocumentFileUtils.getBaseName(files.get(0)));
                                 romName.setText(this.romHandler.getROMName());
                                 romCode.setText(this.romHandler.getROMCode());
                                 supportStat.setText(this.romHandler.getSupportLevel());
+                                setBoxArt(this.romHandler.getROMCode());
                                 enableUI();
 
 
@@ -184,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
         ScrollView mainView = findViewById(R.id.clMain);
         RadioGroup rgBase = findViewById(R.id.rbgpBaseStats), rgAbility = findViewById(R.id.rgPokeAbility), rgTypes = findViewById(R.id.rgPokeTypes), rgEvo = findViewById(R.id.rgPokeEvoRand), rgStarter = findViewById(R.id.rgStarterPoke), rgMovesets = findViewById(R.id.rgMoveSets), rgTrainerRand = findViewById(R.id.rgTrainerRand), rgWildsPoke = findViewById(R.id.rgWildsRandSetting), rgWildsRules = findViewById(R.id.rgWildsAddRules), rgTMRand = findViewById(R.id.rgTMRando), rgTMHMComp = findViewById(R.id.rgTMHMCompats), rgTutorMoves = findViewById(R.id.rgTutorMoveRand), rgTutorCompat = findViewById(R.id.rgTutorCompat), rgTrades = findViewById(R.id.rgTradeRandom), rgFieldItems = findViewById(R.id.rgFieldItemsRand);
         RadioGroup[] radioGroups = new RadioGroup[]{rgBase, rgAbility, rgTypes, rgEvo, rgStarter, rgMovesets, rgTrainerRand, rgWildsPoke, rgWildsRules, rgTMRand, rgTMHMComp, rgTutorCompat, rgTutorMoves, rgTrades, rgFieldItems};
-        ImageView boxArt = findViewById(R.id.imgBoxArt);
 
         for (int i = 0; i < mainView.getChildCount(); i++) {
             View child = mainView.getChildAt(i);
@@ -203,8 +201,7 @@ public class MainActivity extends AppCompatActivity {
         ScrollView mainView = findViewById(R.id.clMain);
         RadioGroup rgBase = findViewById(R.id.rbgpBaseStats), rgAbility = findViewById(R.id.rgPokeAbility), rgTypes = findViewById(R.id.rgPokeTypes), rgEvo = findViewById(R.id.rgPokeEvoRand), rgStarter = findViewById(R.id.rgStarterPoke), rgMovesets = findViewById(R.id.rgMoveSets), rgTrainerRand = findViewById(R.id.rgTrainerRand), rgWildsPoke = findViewById(R.id.rgWildsRandSetting), rgWildsRules = findViewById(R.id.rgWildsAddRules), rgTMRand = findViewById(R.id.rgTMRando), rgTMHMComp = findViewById(R.id.rgTMHMCompats), rgTutorMoves = findViewById(R.id.rgTutorMoveRand), rgTutorCompat = findViewById(R.id.rgTutorCompat), rgTrades = findViewById(R.id.rgTradeRandom), rgFieldItems = findViewById(R.id.rgFieldItemsRand);
         RadioGroup[] radioGroups = new RadioGroup[]{rgBase, rgAbility, rgTypes, rgEvo, rgStarter, rgMovesets, rgTrainerRand, rgWildsPoke, rgWildsRules, rgTMRand, rgTMHMComp, rgTutorCompat, rgTutorMoves, rgTrades, rgFieldItems};
-        ImageView boxArt = findViewById(R.id.imgBoxArt);
-
+        
         for (int i = 0; i < mainView.getChildCount(); i++) {
             View child = mainView.getChildAt(i);
             child.setEnabled(true);
@@ -216,13 +213,9 @@ public class MainActivity extends AppCompatActivity {
                 child.setEnabled(true);
             }
         }
-        if(this.romHandler.generationOfPokemon() < 6){
-
-        }
     }
 
     private void setBoxArt(String romCode){
-        ImageView boxArt = findViewById(R.id.imgBoxArt);
         boxArt.setBackgroundColor(Color.TRANSPARENT);
         switch (romCode){
             case "POKEMON RED":
