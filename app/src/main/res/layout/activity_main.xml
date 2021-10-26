@@ -70,6 +70,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpRomInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="txtRomHeader,txtRomName,txtRomSupport,divider" />
+
                 <TextView
                     android:id="@+id/txtRomHeader"
                     android:layout_width="wrap_content"
@@ -144,6 +150,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtRomSupport" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpGeneralSettings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="txtGeneralHeader,swBreakingMoves,swLimitPoke,divider2" />
+
                 <TextView
                     android:id="@+id/txtGeneralHeader"
                     android:layout_width="wrap_content"
@@ -208,6 +220,12 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnLimitPoke" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpPokeBase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="div3,txtPokeBase,swBaseFollowEvo,swBaseExpCurve,rbgpBaseStats,swBaseUpExpCurve" />
 
                 <TextView
                     android:id="@+id/txtPokeBase"
@@ -292,6 +310,12 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swBaseUpExpCurve" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpPokeAbilities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="swAbilityTrapping,swAbilityNegative,swAbilityFollowEvo,rgPokeAbility,txtAbilityBan,swAbilityWG,txtPokeAbility" />
 
                 <TextView
                     android:id="@+id/txtPokeAbility"
@@ -394,6 +418,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swAbilityTrapping" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpPokeTypes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="rgPokeTypes,txtPokeTypes" />
+
                 <TextView
                     android:id="@+id/txtPokeTypes"
                     android:layout_width="wrap_content"
@@ -446,6 +476,12 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rgPokeTypes" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpPokeEvo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="swEvoLimitStage,txtPokeEvo,swEvoChangeImpossible,swEvoEasy,swEvoStrength,rgPokeEvoRand,swEvoForceChange,swEvoType" />
 
                 <TextView
                     android:id="@+id/txtPokeEvo"
@@ -559,6 +595,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swEvoEasy" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpStarterPoke"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="swStarterRandItem,txtStarterPoke,rgStarterPoke,swStarterBanItem" />
+
                 <TextView
                     android:id="@+id/txtStarterPoke"
                     android:layout_width="wrap_content"
@@ -655,6 +697,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swStarterBanItem" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpMoveData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="swMoveDataRandPwr,swMoveDataRandPP,swMoveDataRandTypes,txtMoveData,swMoveDataRandAcc" />
+
                 <TextView
                     android:id="@+id/txtMoveData"
                     android:layout_width="wrap_content"
@@ -720,6 +768,12 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swMoveDataRandTypes" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpMoveSets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="slideGoodMovePct,rgMoveSets,swMoveSetGoodDmgPct,swMoveSetStartFourMove,swMoveSetReorder,txtMoveSets" />
 
                 <TextView
                     android:id="@+id/txtMoveSets"
@@ -824,6 +878,12 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/slideGoodMovePct" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpTrainerPoke"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="rgTrainerRand,txtTrainerHeader,swTrainerUseLegend,slideTrainerFullEvo,swTrainerEarlyWG,swTrainerRandName,slideTrainerLevelPct,swTrainerRivalStarter,swTrainerWeightTypes,swTrainerLevelModifier,swTrainerSimilarStrgh,swTrainerClassRand,swTrainerForceFullEvo" />
 
                 <TextView
                     android:id="@+id/txtTrainerHeader"
@@ -1002,6 +1062,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/slideTrainerLevelPct" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpWildPoke"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="swWildsHeldItem,slideWildsCatchRate,swWildsMinCatch,txtWildsPokeHeader,rgWildsRandSetting,swWildsLegends,swWildsBanItem,swWildsTimeEncounters,rgWildsAddRules" />
+
                 <TextView
                     android:id="@+id/txtWildsPokeHeader"
                     android:layout_width="wrap_content"
@@ -1170,6 +1236,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swWildsBanItem" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpTMHM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="rgTMRando,rgTMHMCompats,txtTMHMHeader" />
+
                 <TextView
                     android:id="@+id/txtTMHMHeader"
                     android:layout_width="wrap_content"
@@ -1312,6 +1384,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rgTMHMCompats" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpMoveTutor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="txtTutorHeader,rgTutorMoveRand,rgTutorCompat" />
+
                 <TextView
                     android:id="@+id/txtTutorHeader"
                     android:layout_width="wrap_content"
@@ -1445,6 +1523,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rgTutorCompat" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpPokeTrades"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="txtTradeHeader,swTradeRandOT,swTradeRandIV,swTradeRandItems,swTradeRandNicks,rgTradeRandom" />
+
                 <TextView
                     android:id="@+id/txtTradeHeader"
                     android:layout_width="wrap_content"
@@ -1541,6 +1625,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/swTradeRandItems" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpFieldItems"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="rgFieldItemsRand,txtFieldItemsHeader" />
+
                 <TextView
                     android:id="@+id/txtFieldItemsHeader"
                     android:layout_width="wrap_content"
@@ -1600,6 +1690,12 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rgFieldItemsRand" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpMisc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="swMiscBanLuckyEgg,swMiscFastestText,swMiscBWExpPatch,swMiscNerfXAcc,swMiscRandHiddenHallows,swMiscFixCrit,swMiscPikaEvolve,swMiscTypeEffective,swMiscLowerCase,swMiscNationDex,swMiscRandPCPotion,swMiscRandCatchTut,swMiscRunIndoors,txtMiscHeader" />
 
                 <TextView
                     android:id="@+id/txtMiscHeader"
