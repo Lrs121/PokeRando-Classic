@@ -84,7 +84,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
         super(random, logStream);
     }
 
-    private static class RomEntry {
+    private class RomEntry {
         private String name;
         private String romCode;
         private int romType;
@@ -112,12 +112,12 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
 
     private static List<RomEntry> roms;
 
-    static {
+    {
         loadROMInfo();
 
     }
 
-    private static void loadROMInfo() {
+    private void loadROMInfo() {
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
         try {
@@ -226,7 +226,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
                 }
             }
             sc.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
         }
 
     }

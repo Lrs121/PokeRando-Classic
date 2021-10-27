@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/topLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/topLayout">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -19,31 +19,32 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <ImageButton
                 android:id="@+id/imgbLoadRom"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="52dp"
+                android:layout_height="?attr/actionBarSize"
                 android:layout_margin="2dp"
-                app:srcCompat="@android:drawable/ic_menu_edit"
-                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/open_file"
+                android:scaleType="centerInside"
                 app:layout_constraintEnd_toStartOf="@id/imgbSaveRom"
-                android:contentDescription="@string/open_file"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_open_file" />
 
             <ImageButton
                 android:id="@+id/imgbSaveRom"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="52dp"
+                android:layout_height="?attr/actionBarSize"
                 android:layout_margin="2dp"
-                app:srcCompat="@android:drawable/ic_menu_send"
-                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/create_random_rom"
+                android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:contentDescription="@string/create_random_rom" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_save_rom" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -60,8 +61,8 @@
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:overScrollMode="ifContentScrolls"
             android:fillViewport="true"
+            android:overScrollMode="ifContentScrolls"
             tools:context=".MainActivity"
             tools:ignore="TooManyViews">
 
@@ -69,6 +70,36 @@
                 android:id="@+id/clMain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpPokeEvo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="swEvoLimitStage,txtPokeEvo,swEvoChangeImpossible,swEvoEasy,swEvoStrength,rgPokeEvoRand,swEvoForceChange,swEvoType" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpPokeTypes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="rgPokeTypes,txtPokeTypes" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpPokeAbilities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="swAbilityTrapping,swAbilityNegative,swAbilityFollowEvo,rgPokeAbility,txtAbilityBan,swAbilityWG,txtPokeAbility" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpPokeBase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="div3,txtPokeBase,swBaseFollowEvo,swBaseExpCurve,rgBaseStats,swBaseUpExpCurve" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpGeneralSettings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="txtGeneralHeader,swRace,swBreakingMoves,swLimitPoke,divider2,btnLimitPoke" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/gpRomInfo"
@@ -82,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:text="@string/rom_header"
-                    android:textSize="17sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -93,8 +124,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="@string/file_name"
-                    android:textSize="16sp"
+                    android:text="@string/none"
+                    android:textSize="17sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/txtRomHeader" />
 
@@ -103,8 +134,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="@string/rom_name"
-                    android:textSize="16sp"
+                    android:text="@string/none"
+                    android:textSize="17sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/txtFileName" />
 
@@ -113,8 +144,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="@string/rom_code"
-                    android:textSize="16sp"
+                    android:text="@string/none"
+                    android:textSize="17sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/txtRomName" />
 
@@ -123,38 +154,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="@string/supported"
+                    android:text="@string/none"
                     android:textSize="17sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/txtRomCode" />
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgBoxArt"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
                     android:layout_margin="16dp"
-                    android:background="#F44336"
-                    android:contentDescription="@string/rom_name"
+                    android:scaleType="centerInside"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/txtRomHeader"
-                    app:srcCompat="@android:drawable/stat_notify_error" />
+                    app:srcCompat="@drawable/ic_error" />
 
                 <View
                     android:id="@+id/divider"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="4dp"
                     android:background="?android:attr/listDivider"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtRomSupport" />
-
-                <androidx.constraintlayout.widget.Group
-                    android:id="@+id/gpGeneralSettings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="txtGeneralHeader,swBreakingMoves,swLimitPoke,divider2" />
+                    app:layout_constraintTop_toBottomOf="@+id/imgBoxArt" />
 
                 <TextView
                     android:id="@+id/txtGeneralHeader"
@@ -162,7 +186,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:text="@string/general_setting_header"
-                    android:textSize="17sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -221,26 +245,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnLimitPoke" />
 
-                <androidx.constraintlayout.widget.Group
-                    android:id="@+id/gpPokeBase"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="div3,txtPokeBase,swBaseFollowEvo,swBaseExpCurve,rbgpBaseStats,swBaseUpExpCurve" />
-
                 <TextView
                     android:id="@+id/txtPokeBase"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:text="@string/base_stats_header"
-                    android:textSize="17sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
                 <RadioGroup
-                    android:id="@+id/rbgpBaseStats"
+                    android:id="@+id/rgBaseStats"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -275,7 +293,7 @@
                     android:minHeight="48dp"
                     android:text="@string/exp_curves"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/rbgpBaseStats"
+                    app:layout_constraintStart_toEndOf="@id/rgBaseStats"
                     app:layout_constraintTop_toBottomOf="@+id/txtPokeBase" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
@@ -286,7 +304,7 @@
                     android:minHeight="48dp"
                     android:text="@string/follow_evo"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/rbgpBaseStats"
+                    app:layout_constraintStart_toEndOf="@id/rgBaseStats"
                     app:layout_constraintTop_toBottomOf="@+id/swBaseExpCurve" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
@@ -297,7 +315,7 @@
                     android:minHeight="48dp"
                     android:text="@string/up_base_stats"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/rbgpBaseStats"
+                    app:layout_constraintStart_toEndOf="@id/rgBaseStats"
                     app:layout_constraintTop_toBottomOf="@+id/swBaseFollowEvo" />
 
                 <View
@@ -310,12 +328,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swBaseUpExpCurve" />
-
-                <androidx.constraintlayout.widget.Group
-                    android:id="@+id/gpPokeAbilities"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="swAbilityTrapping,swAbilityNegative,swAbilityFollowEvo,rgPokeAbility,txtAbilityBan,swAbilityWG,txtPokeAbility" />
 
                 <TextView
                     android:id="@+id/txtPokeAbility"
@@ -418,12 +430,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swAbilityTrapping" />
 
-                <androidx.constraintlayout.widget.Group
-                    android:id="@+id/gpPokeTypes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="rgPokeTypes,txtPokeTypes" />
-
                 <TextView
                     android:id="@+id/txtPokeTypes"
                     android:layout_width="wrap_content"
@@ -476,12 +482,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rgPokeTypes" />
-
-                <androidx.constraintlayout.widget.Group
-                    android:id="@+id/gpPokeEvo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="swEvoLimitStage,txtPokeEvo,swEvoChangeImpossible,swEvoEasy,swEvoStrength,rgPokeEvoRand,swEvoForceChange,swEvoType" />
 
                 <TextView
                     android:id="@+id/txtPokeEvo"
@@ -636,21 +636,24 @@
 
                     <Spinner
                         android:id="@+id/spStarterFirst"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:minHeight="48dp" />
+                        android:minHeight="48dp"
+                        android:textAlignment="center" />
 
                     <Spinner
                         android:id="@+id/spStarterSecond"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:minHeight="48dp" />
+                        android:minHeight="48dp"
+                        android:textAlignment="center" />
 
                     <Spinner
                         android:id="@+id/spStarterThird"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:minHeight="48dp" />
+                        android:minHeight="48dp"
+                        android:textAlignment="center" />
 
                     <RadioButton
                         android:id="@+id/rbStarterCompleteRand"
@@ -1703,6 +1706,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:text="@string/misc_tweak_header"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/div15" />

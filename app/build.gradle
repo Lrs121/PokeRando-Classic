@@ -7,11 +7,12 @@ android {
 
     defaultConfig {
         applicationId "org.lrsservers.pokerando"
-        minSdk 21
+        minSdk 25
         targetSdk 31
         versionCode 2
         versionName "skunkwerks2"
         setProperty("archivesBaseName", "$applicationId-$versionName")
+        vectorDrawables.useSupportLibrary = true
 
     }
 
@@ -32,6 +33,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    implementation 'androidx.palette:palette:1.0.0'
+    //others
     implementation 'com.anggrayudi:storage:0.13.0'
     implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
 }

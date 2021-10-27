@@ -27,7 +27,7 @@ import android.content.res.AssetManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.lrsservers.pokerando.MainActivity;
+import org.lrsservers.pokerando.R;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -46,7 +46,7 @@ import java.util.zip.CRC32;
 
 public class FileFunctions extends AppCompatActivity {
 
-    public static File fixFilename(File original, String defaultExtension) {
+    public File fixFilename(File original, String defaultExtension) {
         return fixFilename(original, defaultExtension, null);
     }
 
@@ -55,7 +55,7 @@ public class FileFunctions extends AppCompatActivity {
     // if there are banned extensions & file has a banned extension, replace
     // with defaultExtension
     // else, leave as is
-    public static File fixFilename(File original, String defaultExtension, List<String> bannedExtensions) {
+    public File fixFilename(File original, String defaultExtension, List<String> bannedExtensions) {
         String filename = original.getName();
         if (filename.lastIndexOf('.') >= filename.length() - 5 && filename.lastIndexOf('.') != filename.length() - 1
                 && filename.length() > 4 && filename.lastIndexOf('.') != -1) {
@@ -90,12 +90,13 @@ public class FileFunctions extends AppCompatActivity {
         return FileFunctions.class.getResource(SysConstants.ROOT_PATH + "config/" + filename) != null;
     }
 
-    public static InputStream openConfig(String filename) throws FileNotFoundException {
-        return AssetManager.AssetInputStream.class.getResourceAsStream("config/" + filename);
+    public static InputStream openConfig(String filename) throws IOException {
+        String asset = "R.id." + filename;
+        return AssetManager.AssetInputStream.class.getResourceAsStream(asset);
 
     }
 
-    public static CustomNamesSet getCustomNames() throws IOException {
+    public CustomNamesSet getCustomNames() throws IOException {
         InputStream is = openConfig(SysConstants.customNamesFile);
         CustomNamesSet cns = new CustomNamesSet(is);
         is.close();
@@ -145,13 +146,13 @@ public class FileFunctions extends AppCompatActivity {
         }
     }
 
-    public static void writeBytesToFile(String filename, byte[] data) throws IOException {
+    public void writeBytesToFile(String filename, byte[] data) throws IOException {
         FileOutputStream fos = new FileOutputStream(filename);
         fos.write(data);
         fos.close();
     }
 
-    public static byte[] getConfigAsBytes(String filename) throws IOException {
+    public byte[] getConfigAsBytes(String filename) throws IOException {
         InputStream in = openConfig(filename);
         byte[] buf = readFullyIntoBuffer(in, in.available());
         in.close();
@@ -208,7 +209,7 @@ public class FileFunctions extends AppCompatActivity {
         return buf;
     }
 
-    public static byte[] downloadFile(String url) throws IOException {
+    public byte[] downloadFile(String url) throws IOException {
         BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         byte[] buf = new byte[1024];
@@ -289,7 +290,7 @@ public class FileFunctions extends AppCompatActivity {
         return ((data[offset] & 0xFF) << 8) | (data[offset + 1] & 0xFF);
     }
 
-    public static byte[] convIntArrToByteArr(int[] arg) {
+    public byte[] convIntArrToByteArr(int[] arg) {
         byte[] out = new byte[arg.length];
         for (int i = 0; i < arg.length; i++) {
             out[i] = (byte) arg[i];

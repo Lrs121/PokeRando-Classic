@@ -25,13 +25,6 @@ package org.lrsservers.pokerando.upr;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
-import android.content.Context;
-import android.content.res.AssetManager;
-
-import org.lrsservers.pokerando.MainActivity;
-
-import java.io.File;
-
 public class SysConstants {
 
     public static final String ROOT_PATH = "/data/data/org.lrsservers.org/";

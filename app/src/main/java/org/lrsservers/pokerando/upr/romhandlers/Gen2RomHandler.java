@@ -67,7 +67,7 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
 
     private static List<RomEntry> roms;
 
-    static {
+    {
         loadROMInfo();
     }
 
@@ -90,7 +90,7 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
         super(random, logStream);
     }
 
-    private static void loadROMInfo() {
+    private void loadROMInfo() {
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
         try {
@@ -206,7 +206,7 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
                 }
             }
             sc.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
         }
 
     }

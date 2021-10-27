@@ -6,8 +6,11 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,49 +40,95 @@ import org.lrsservers.pokerando.upr.romhandlers.Gen4RomHandler;
 import org.lrsservers.pokerando.upr.romhandlers.Gen5RomHandler;
 import org.lrsservers.pokerando.upr.romhandlers.RomHandler;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private final SimpleStorageHelper storageHelper = new SimpleStorageHelper(this);
+    private final SimpleStorageHelper storageHelper = new SimpleStorageHelper(MainActivity.this);
     private final int SAVE_ROM = 10, LOAD_ROM = 15;
-    private final ActivityPermissionRequest permissionRequest= new ActivityPermissionRequest.Builder(this)
-                                                                        .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-                                                                        .withCallback(new PermissionCallback() {
-                                                                            @Override
-                                                                            public void onPermissionsChecked(@NotNull PermissionResult result, boolean fromSystemDialog) {
-                                                                            }
+    private final ActivityPermissionRequest permissionRequest = new ActivityPermissionRequest.Builder(
+            MainActivity.this)
+            .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+            .withCallback(new PermissionCallback() {
+                @Override
+                public void onPermissionsChecked(@NotNull PermissionResult result, boolean fromSystemDialog) {
+                }
 
-                                                                            @RequiresApi(api = Build.VERSION_CODES.R)
-                                                                            @Override
-                                                                            public void onShouldRedirectToSystemSettings(@NotNull List<PermissionReport> blockedPermissions) {
-                                                                                storageHelper.requestStorageAccess();
-                                                                            }
-                                                                        }).build();
-    private final GenRestrictions genRestrictions = null;
-    private ImageButton ibLoadRom = findViewById(R.id.imgbLoadRom), ibSaveRom = findViewById(R.id.imgbSaveRom);
+                @RequiresApi(api = Build.VERSION_CODES.R)
+                @Override
+                public void onShouldRedirectToSystemSettings(@NotNull List<PermissionReport> blockedPermissions) {
+                    storageHelper.requestStorageAccess();
+                }
+            }).build();
+    private GenRestrictions genRestrictions;
+    private ImageButton ibLoadRom, ibSaveRom;
     private RomHandler romHandler = null;
     private RomHandler.Factory[] factories;
-    TextView romName = findViewById(R.id.txtRomName);
-    TextView romCode = findViewById(R.id.txtRomCode);
-    TextView romFile = findViewById(R.id.txtFileName);
-    TextView supportStat = findViewById(R.id.txtRomSupport);
-    ImageView boxArt = findViewById(R.id.imgBoxArt);
-    private final Group gpGeneralSettings = findViewById(R.id.gpGeneralSettings), gpPokeBase = findViewById(R.id.gpPokeBase), gpPokeAbilities = findViewById(R.id.gpPokeAbilities), gpPokeTypes = findViewById(R.id.gpPokeTypes), gpPokeEvo = findViewById(R.id.gpPokeEvo), gpStarterPoke = findViewById(R.id.gpStarterPoke), gpMoveData = findViewById(R.id.gpMoveData), gpMoveSets = findViewById(R.id.gpMoveSets), gpTrainerPoke = findViewById(R.id.gpTrainerPoke), gpWildPoke = findViewById(R.id.gpWildPoke), gpTMHM = findViewById(R.id.gpTMHM), gpMoveTutor = findViewById(R.id.gpMoveTutor), gpPokeTrades = findViewById(R.id.gpPokeTrades), gpFieldItems = findViewById(R.id.gpFieldItems), gpMisc = findViewById(R.id.gpMisc);
-    private final Group[] groups = new Group[]{gpGeneralSettings, gpPokeBase, gpPokeAbilities, gpPokeTypes, gpPokeEvo, gpStarterPoke, gpMoveData, gpMoveSets, gpTrainerPoke, gpWildPoke, gpTMHM, gpMoveTutor,gpPokeTrades, gpFieldItems, gpMisc};
+    private TextView romName, romCode, romFile, supportStat;
+    private ImageView boxArt;
+    private RadioGroup rgPokeEvoRand, rgPokeTypes, rgPokeAbilities, rgBaseStats, rgStarterPoke,
+            rgMoveSets, rgTrainerRand, rgWildsPoke, rgWildsAdditionalRules, rgTMRando, rgTMHMCompat,
+            rgTutorMoves, rgTutorCompat, rgPokeTrade, rgFieldItems;
+    private RadioGroup[] radioGroups;
+    private Group gpGeneralSettings, gpPokeBase, gpPokeAbilities, gpPokeTypes, gpPokeEvo,
+            gpStarterPoke, gpMoveData, gpMoveSets, gpTrainerPoke, gpWildPoke, gpTMHM, gpMoveTutor,
+            gpPokeTrades, gpFieldItems, gpMisc;
+    private Group[] groups;
+    private Spinner spStarterFirst, spStarterSecond, spStarterThird;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //app init
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        factories = new RomHandler.Factory[]{
-                new Gen1RomHandler.Factory(), new Gen2RomHandler.Factory(), new Gen3RomHandler.Factory(), new Gen4RomHandler.Factory(), new Gen5RomHandler.Factory()
-        };
-
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getColor(R.color.white));
         setSupportActionBar(toolbar);
+
+        //variable init
+        genRestrictions = null;
+        factories = new RomHandler.Factory[]{
+                new Gen1RomHandler.Factory(), new Gen2RomHandler.Factory(),
+                new Gen3RomHandler.Factory(), new Gen4RomHandler.Factory(),
+                new Gen5RomHandler.Factory()
+        };
+        groups = new Group[]{gpGeneralSettings = findViewById(R.id.gpGeneralSettings),
+                gpPokeBase = findViewById(R.id.gpPokeBase), gpPokeAbilities = findViewById(R.id.gpPokeAbilities),
+                gpPokeTypes = findViewById(R.id.gpPokeTypes), gpPokeEvo = findViewById(R.id.gpPokeEvo),
+                gpStarterPoke = findViewById(R.id.gpStarterPoke), gpMoveData = findViewById(R.id.gpMoveData),
+                gpMoveSets = findViewById(R.id.gpMoveSets), gpTrainerPoke = findViewById(R.id.gpTrainerPoke),
+                gpWildPoke = findViewById(R.id.gpWildPoke), gpTMHM = findViewById(R.id.gpTMHM),
+                gpMoveTutor = findViewById(R.id.gpMoveTutor), gpPokeTrades = findViewById(R.id.gpPokeTrades),
+                gpFieldItems = findViewById(R.id.gpFieldItems), gpMisc = findViewById(R.id.gpMisc)
+        };
+        radioGroups = new RadioGroup[]{rgBaseStats = findViewById(R.id.rgBaseStats),
+                rgStarterPoke = findViewById(R.id.rgStarterPoke), rgFieldItems = findViewById(R.id.rgFieldItemsRand),
+                rgMoveSets = findViewById(R.id.rgMoveSets), rgPokeAbilities = findViewById(R.id.rgPokeAbility),
+                rgPokeEvoRand = findViewById(R.id.rgPokeEvoRand), rgPokeTrade = findViewById(R.id.rgTradeRandom),
+                rgPokeTypes = findViewById(R.id.rgPokeTypes), rgTMHMCompat = findViewById(R.id.rgTMHMCompats),
+                rgTMRando = findViewById(R.id.rgTMRando), rgTrainerRand = findViewById(R.id.rgTrainerRand),
+                rgTutorCompat = findViewById(R.id.rgTutorCompat), rgTutorMoves = findViewById(R.id.rgTutorMoveRand),
+                rgWildsAdditionalRules = findViewById(R.id.rgWildsAddRules), rgWildsPoke = findViewById(R.id.rgWildsRandSetting)
+        };
+        spStarterFirst = findViewById(R.id.spStarterFirst);
+        spStarterSecond = findViewById(R.id.spStarterSecond);
+        spStarterThird = findViewById(R.id.spStarterThird);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(MainActivity.this,
+                R.array.pokemon_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spStarterFirst.setAdapter(adapter);
+        spStarterSecond.setAdapter(adapter);
+        spStarterThird.setAdapter(adapter);
+        ibLoadRom = findViewById(R.id.imgbLoadRom);
+        ibSaveRom = findViewById(R.id.imgbSaveRom);
+        romName = findViewById(R.id.txtRomName);
+        romCode = findViewById(R.id.txtRomCode);
+        romFile = findViewById(R.id.txtFileName);
+        supportStat = findViewById(R.id.txtRomSupport);
+        boxArt = findViewById(R.id.imgBoxArt);
+
+        //begin personal code
         setupSimpleStorage(savedInstanceState);
         setupBtnAction();
         initialState();
@@ -115,9 +164,9 @@ public class MainActivity extends AppCompatActivity {
             permissionRequest.check();
             storageHelper.openFilePicker(LOAD_ROM);
         });
+
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setupSimpleStorage(Bundle savedState) {
         if (savedState != null) {
             storageHelper.onRestoreInstanceState(savedState);
@@ -133,78 +182,88 @@ public class MainActivity extends AppCompatActivity {
         });
         storageHelper.setOnFileSelected((requestCode, files) -> {
             try {
-                Utils.validateRomFile(DocumentFileUtils.toRawFile(files.get(0), getApplicationContext()));
+                Utils.validateRomFile(new File(DocumentFileUtils.getAbsolutePath(files.get(0), getApplicationContext()).toString().trim()));
             } catch (Utils.InvalidROMException e) {
                 switch (e.getType()) {
                     case LENGTH:
-                        Log.e(String.valueOf(R.string.invalid_rom), String.valueOf(R.string.rom_too_short));
+                        Log.e(String.valueOf(R.string.invalid_rom), getString(R.string.rom_too_short));
                         Toast.makeText(MainActivity.this, String.valueOf(R.string.rom_too_short), Toast.LENGTH_SHORT).show();
-                        break;
+                        return null;
                     case ZIP_FILE:
-                        Log.e(String.valueOf(R.string.invalid_rom), String.valueOf(R.string.zip_file_selected));
+                        Log.e(String.valueOf(R.string.invalid_rom), getString(R.string.zip_file_selected));
                         Toast.makeText(MainActivity.this, String.valueOf(R.string.zip_file_selected), Toast.LENGTH_SHORT).show();
-                        break;
+                        return null;
                     case RAR_FILE:
-                        Log.e(String.valueOf(R.string.invalid_rom), String.valueOf(R.string.rar_file_selected));
+                        Log.e(String.valueOf(R.string.invalid_rom), getString(R.string.rar_file_selected));
                         Toast.makeText(MainActivity.this, String.valueOf(R.string.rar_file_selected), Toast.LENGTH_SHORT).show();
-                        break;
+                        return null;
                     case IPS_FILE:
-                        Log.e(String.valueOf(R.string.invalid_rom), String.valueOf(R.string.ips_file_selected));
+                        Log.e(String.valueOf(R.string.invalid_rom), getString(R.string.ips_file_selected));
                         Toast.makeText(MainActivity.this, String.valueOf(R.string.ips_file_selected), Toast.LENGTH_SHORT).show();
-                        break;
+                        return null;
                     case UNREADABLE:
-                        Log.e(String.valueOf(R.string.invalid_rom), String.valueOf(R.string.unknown_file));
-                        Toast.makeText(MainActivity.this, String.valueOf(R.string.unknown_file), Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                        break;
                     default:
-                        for (RomHandler.Factory factory : factories) {
-                            if (factory.isLoadable(DocumentFileUtils.getBaseName(files.get(0)))) {
-                                this.romHandler = factory.create(RandomSource.instance());
-                                this.romFile.setText(DocumentFileUtils.getBaseName(files.get(0)));
-                                romName.setText(this.romHandler.getROMName());
-                                romCode.setText(this.romHandler.getROMCode());
-                                supportStat.setText(this.romHandler.getSupportLevel());
-                                setBoxArt(this.romHandler.getROMCode());
-                                enableUI();
-
-
-                            }else{
-                                Snackbar.make(MainActivity.this, findViewById(R.id.topLayout), String.valueOf(R.string.unsupported_game), Snackbar.LENGTH_SHORT).show();
-                            }
-                        }
-                        break;
+                        Log.e(String.valueOf(R.string.invalid_rom), getString(R.string.unknown_file));
+                        Toast.makeText(MainActivity.this, R.string.unknown_file, Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                        return null;
                 }
             }
-            Toast.makeText(MainActivity.this, files.get(0).toString(), Toast.LENGTH_SHORT).show();
+
+            for (RomHandler.Factory factory : factories) {
+                if (factory.isLoadable(DocumentFileUtils.getAbsolutePath(files.get(0), getApplicationContext()).toString().trim())) {
+                    this.romHandler = factory.create(RandomSource.instance());
+                    this.romFile.setText(DocumentFileUtils.getBaseName(files.get(0)));
+                    this.romName.setText(this.romHandler.getROMName());
+                    this.romCode.setText(this.romHandler.getROMCode());
+                    this.supportStat.setText(this.romHandler.getSupportLevel());
+                    setBoxArt(this.romHandler.getROMCode());
+                    enableUI();
+
+                } else {
+                    Snackbar.make(MainActivity.this, findViewById(R.id.topLayout),
+                            getString(R.string.unsupported_game), Snackbar.LENGTH_SHORT).show();
+                }
+            }
+            Toast.makeText(MainActivity.this, DocumentFileUtils.getBaseName(files.get(0)),
+                    Toast.LENGTH_SHORT).show();
 
             return null;
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initialState() {
-        for(Group group : this.groups){
+        for (Group group : this.groups) {
+            for (int i = 0; i < Arrays.stream(group.getReferencedIds()).count(); i++) {
+                int[] ids = group.getReferencedIds();
+                findViewById(ids[i]).setEnabled(false);
+            }
+        }
+        for (RadioGroup radioGroup : this.radioGroups) {
+            for (int i = 0; i < radioGroup.getChildCount(); i++) {
+                radioGroup.getChildAt(i).setEnabled(false);
+            }
+        }
+
+    }
+
+    private void enableUI() {
+        for (Group group : this.groups) {
             for (int i = 0; i < Arrays.stream(group.getReferencedIds()).count(); i++) {
                 int[] ids = group.getReferencedIds();
                 findViewById(ids[i]).setEnabled(true);
             }
         }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void enableUI(){
-        for(Group group : this.groups){
-            for (int i = 0; i < Arrays.stream(group.getReferencedIds()).count(); i++) {
-                int[] ids = group.getReferencedIds();
-                findViewById(ids[i]).setEnabled(true);
+        for (RadioGroup radioGroup : this.radioGroups) {
+            for (int i = 0; i < radioGroup.getChildCount(); i++) {
+                radioGroup.getChildAt(i).setEnabled(true);
             }
         }
     }
 
-    private void setBoxArt(String romCode){
+    private void setBoxArt(String romCode) {
         boxArt.setBackgroundColor(Color.TRANSPARENT);
-        switch (romCode){
+        switch (romCode) {
             case "POKEMON RED":
                 boxArt.setImageResource(R.drawable.red);
                 break;
@@ -381,7 +440,7 @@ public class MainActivity extends AppCompatActivity {
                 boxArt.setImageResource(R.drawable.white2);
                 break;
             default:
-                boxArt.setBackgroundColor(Color.RED);
+                boxArt.setImageResource(R.drawable.ic_error);
                 break;
         }
     }

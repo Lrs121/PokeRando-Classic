@@ -9,6 +9,7 @@ package org.lrsservers.pokerando.upr.pptxt;
 import org.lrsservers.pokerando.upr.FileFunctions;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,11 +23,12 @@ public class PPTxtHandler {
     public static Map<String, String> pokeToText = new HashMap<String, String>();
     public static Map<String, String> textToPoke = new HashMap<String, String>();
 
-    public static Pattern pokeToTextPattern, textToPokePattern;
+    public static Pattern pokeToTextPattern;
+    public static Pattern textToPokePattern;
     private static List<Integer> lastKeys;
     private static List<Integer> lastUnknowns;
 
-    static {
+        {
         try {
             Scanner sc = new Scanner(FileFunctions.openConfig("Generation5.tbl"), "UTF-8");
             while (sc.hasNextLine()) {
@@ -44,19 +46,19 @@ public class PPTxtHandler {
             sc.close();
             pokeToTextPattern = makePattern(pokeToText.keySet());
             textToPokePattern = makePattern(textToPoke.keySet());
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static Pattern makePattern(Iterable<String> tokens) {
+    public Pattern makePattern(Iterable<String> tokens) {
         String patternStr = "("
                 + implode(tokens, "|").replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]")
                 .replace("(", "\\(").replace(")", "\\)") + ")";
         return Pattern.compile(patternStr);
     }
 
-    public static String implode(Iterable<String> tokens, String sep) {
+    public String implode(Iterable<String> tokens, String sep) {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
         for (String token : tokens) {

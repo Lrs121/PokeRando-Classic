@@ -46,7 +46,7 @@ import javax.xml.bind.DatatypeConverter;
 
 public class Settings {
 
-    public static final int VERSION = 172;
+    public final int VERSION = 172;
 
     public static final int LENGTH_OF_SETTINGS_DATA = 36;
 
@@ -228,7 +228,7 @@ public class Settings {
         out.write(settings);
     }
 
-    public static Settings read(FileInputStream in) throws IOException, UnsupportedOperationException {
+    public Settings read(FileInputStream in) throws IOException, UnsupportedOperationException {
         int version = in.read();
         if (version > VERSION) {
             throw new UnsupportedOperationException("Cannot read settings from a newer version of the randomizer.");

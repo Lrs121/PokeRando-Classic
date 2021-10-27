@@ -5,6 +5,7 @@ import org.lrsservers.pokerando.upr.constants.GBConstants;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public abstract class AbstractGBCRomHandler extends AbstractGBRomHandler {
                 }
             }
             sc.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
         }
 
     }

@@ -91,7 +91,7 @@ public abstract class AbstractGBRomHandler extends AbstractRomHandler {
 
     public abstract void savingRom();
 
-    protected static byte[] loadFile(String filename) {
+    protected byte[] loadFile(String filename) {
         try {
             return FileFunctions.readFileFullyIntoBuffer(filename);
         } catch (IOException ex) {

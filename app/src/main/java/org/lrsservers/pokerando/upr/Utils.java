@@ -74,7 +74,7 @@ public class Utils {
     }
 
     // To be used when implementing presets
-    public static void validatePresetSupplementFiles(String config, CustomNamesSet customNames)
+    public void validatePresetSupplementFiles(String config, CustomNamesSet customNames)
             throws UnsupportedEncodingException, InvalidSupplementFilesException {
         byte[] data = DatatypeConverter.parseBase64Binary(config);
 
@@ -101,7 +101,7 @@ public class Utils {
         }
     }
 
-   public static File getExecutionLocation() throws UnsupportedEncodingException {
+   public File getExecutionLocation() throws UnsupportedEncodingException {
         URL location = MainActivity.class.getProtectionDomain().getCodeSource().getLocation();
        return new File(URLDecoder.decode(location.getFile(), "UTF-8"));
     }

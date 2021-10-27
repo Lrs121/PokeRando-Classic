@@ -9,6 +9,7 @@ package org.lrsservers.pokerando.upr.thenewpoketext;
 import org.lrsservers.pokerando.upr.FileFunctions;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -18,7 +19,7 @@ public class UnicodeParser {
     public static String[] tb = new String[65536];
     public static Map<String, Integer> d = new HashMap<String, Integer>();
 
-    static {
+    {
         try {
             Scanner sc = new Scanner(FileFunctions.openConfig("Generation4.tbl"), "UTF-8");
             while (sc.hasNextLine()) {
@@ -33,7 +34,8 @@ public class UnicodeParser {
                 }
             }
             sc.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

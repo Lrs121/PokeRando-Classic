@@ -255,7 +255,7 @@ public class SettingsUpdater {
         return DatatypeConverter.printBase64Binary(finalConfigString);
     }
 
-    private static byte getRemappedByte(byte old, int[] oldIndexes) {
+    private byte getRemappedByte(byte old, int[] oldIndexes) {
         int newValue = 0;
         int oldValue = old & 0xFF;
         for (int i = 0; i < oldIndexes.length; i++) {

@@ -128,5 +128,6 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="create_random_rom">Randomize</string>
     <string name="open_file">Open File</string>
+    <string name="todo">TODO</string>
 
 </resources>

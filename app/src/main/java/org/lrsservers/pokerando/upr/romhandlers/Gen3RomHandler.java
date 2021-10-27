@@ -48,6 +48,7 @@ import org.lrsservers.pokerando.upr.pokemon.TrainerPokemon;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -69,7 +70,7 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
 
     private static List<RomEntry> roms;
 
-    static {
+    {
         loadROMInfo();
     }
 
@@ -107,7 +108,7 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
         super(random, logStream);
     }
 
-    private static void loadROMInfo() {
+    private void loadROMInfo() {
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
         try {
@@ -235,7 +236,7 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
                 }
             }
             sc.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
         }
 
     }
@@ -357,7 +358,7 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
                 }
             }
             sc.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
         }
 
     }

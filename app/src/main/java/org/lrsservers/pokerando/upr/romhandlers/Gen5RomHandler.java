@@ -240,7 +240,7 @@ public class Gen5RomHandler extends AbstractDSRomHandler {
                 }
             }
             sc.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
         }
     }
 

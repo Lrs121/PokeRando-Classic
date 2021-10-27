@@ -19,7 +19,7 @@ public class CustomNamesSet {
     private List<String> doublesTrainerClasses;
     private List<String> pokemonNicknames;
 
-    private static final int CUSTOM_NAMES_VERSION = 1;
+    private final int CUSTOM_NAMES_VERSION = 1;
 
     // Standard constructor: read binary data from an input stream.
     public CustomNamesSet(InputStream data) throws IOException {
@@ -145,7 +145,7 @@ public class CustomNamesSet {
         pokemonNicknames.addAll(names);
     }
 
-    public CustomNamesSet importOldNames() throws FileNotFoundException {
+    public CustomNamesSet importOldNames() throws IOException {
         CustomNamesSet cns = new CustomNamesSet();
 
         // Trainer Names
