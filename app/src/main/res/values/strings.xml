@@ -129,5 +129,6 @@
     <string name="create_random_rom">Randomize</string>
     <string name="open_file">Open File</string>
     <string name="todo">TODO</string>
+    <string name="title_activity_main2">MainActivity2</string>
 
 </resources>
