@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                     this.romCode.setText(this.romHandler.getROMCode());
                     this.supportStat.setText(this.romHandler.getSupportLevel());
                     setBoxArt(this.romHandler.getROMCode());
-                    enableUI();
+                    newRomUI();
 
                 } else {
                     Snackbar.make(MainActivity.this, findViewById(R.id.topLayout),
@@ -247,18 +247,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void enableUI() {
+    private void newRomUI() {
         for (Group group : this.groups) {
             for (int i = 0; i < Arrays.stream(group.getReferencedIds()).count(); i++) {
                 int[] ids = group.getReferencedIds();
                 findViewById(ids[i]).setEnabled(true);
+                findViewById(ids[i]).setSelected(false);
             }
         }
         for (RadioGroup radioGroup : this.radioGroups) {
             for (int i = 0; i < radioGroup.getChildCount(); i++) {
                 radioGroup.getChildAt(i).setEnabled(true);
+                if (i == 0){
+                    radioGroup.getChildAt(i).setSelected(true);
+                }
+                radioGroup.getChildAt(i).
             }
         }
+        spStarterFirst.setEnabled(false);
+        spStarterSecond.setEnabled(false);
+        spStarterThird.setEnabled(false);
+
     }
 
     private void setBoxArt(String romCode) {
