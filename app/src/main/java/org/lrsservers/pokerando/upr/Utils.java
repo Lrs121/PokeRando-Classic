@@ -26,7 +26,7 @@ package org.lrsservers.pokerando.upr;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
-import org.lrsservers.pokerando.MainActivity;
+import org.lrsservers.pokerando.MainActivityOld;
 import org.lrsservers.pokerando.upr.exceptions.InvalidSupplementFilesException;
 
 import java.io.File;
@@ -102,7 +102,7 @@ public class Utils {
     }
 
    public File getExecutionLocation() throws UnsupportedEncodingException {
-        URL location = MainActivity.class.getProtectionDomain().getCodeSource().getLocation();
+        URL location = MainActivityOld.class.getProtectionDomain().getCodeSource().getLocation();
        return new File(URLDecoder.decode(location.getFile(), "UTF-8"));
     }
 

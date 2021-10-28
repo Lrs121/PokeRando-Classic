@@ -37,4 +37,5 @@ dependencies {
     //others
     implementation 'com.anggrayudi:storage:0.13.0'
     implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }

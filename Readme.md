@@ -33,6 +33,7 @@ Development in progress
 ## FUTURE:
 
 - Parity with Dabomstew UPR
+- A good UI
 
 ## Copyright & Licence
 

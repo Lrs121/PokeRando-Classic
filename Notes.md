@@ -3,10 +3,9 @@
 - java.bind.xml Alternatives
     - [xmlbeans](http://xmlbeans.apache.org/)
     - [eclipselink](https://github.com/eclipse-ee4j/eclipselink)
-- java BufferedImage is largely useless (i think, need better understanding of parent code)
 - going file by file is slow but worth it
 - read copyright at top of parent code, provides idea of usage
-- SysConstants.java is not needed
+- SysConstants.java is needed
 - files in config/* and patches/* are now stored in res/raw folder
     - use android calls instead
     - refactor parent code to adapt to change

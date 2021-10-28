@@ -2,6 +2,7 @@ package org.lrsservers.pokerando.ui.main;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
@@ -16,23 +17,28 @@ import org.lrsservers.pokerando.R;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private final Context mContext;
+    int totalTabs;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+    public SectionsPagerAdapter(Context context, FragmentManager fm, int tabCount) {
         super(fm);
-        mContext = context;
+        totalTabs = tabCount;
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+       switch (position){
+           case 0:
+                RomInfoFragment romInfoFragment = new RomInfoFragment();
+                return romInfoFragment;
+           default:
+               return null;
+       }
     }
 
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 2;
+        return totalTabs;
     }
 }
