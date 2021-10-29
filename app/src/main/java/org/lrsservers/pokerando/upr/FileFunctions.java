@@ -75,7 +75,7 @@ public class FileFunctions extends AppCompatActivity {
         return new File(original.getAbsolutePath().replace(original.getName(), "") + filename);
     }
 
-    private static final List<String> overrideFiles = Arrays.asList(SysConstants.customNamesFile,
+/*    private static final List<String> overrideFiles = Arrays.asList(SysConstants.customNamesFile,
             SysConstants.tclassesFile, SysConstants.tnamesFile, SysConstants.nnamesFile);
 
     public static boolean configExists(String filename) {
@@ -91,8 +91,7 @@ public class FileFunctions extends AppCompatActivity {
         }
         return FileFunctions.class.getResource(SysConstants.ROOT_PATH + "config/" + filename) != null;
     }
-
-/*    public static InputStream openConfig(String filename) throws IOException {
+    public static InputStream openConfig(String filename) throws IOException {
                 return AssetManager.AssetInputStream.class.getResourceAsStream(filename);
 
     }*/

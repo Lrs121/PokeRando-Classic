@@ -25,6 +25,8 @@ package org.lrsservers.pokerando.upr.romhandlers;
 
 /*import java.awt.Graphics;
 import java.awt.image.BufferedImage;*/
+import org.lrsservers.pokerando.R;
+import org.lrsservers.pokerando.ResourceFunctions;
 import org.lrsservers.pokerando.upr.FileFunctions;
 import org.lrsservers.pokerando.upr.GFXFunctions;
 import org.lrsservers.pokerando.upr.MiscTweak;
@@ -126,122 +128,119 @@ public class Gen5RomHandler extends AbstractDSRomHandler {
     private static void loadROMInfo() {
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
-        try {
-            Scanner sc = new Scanner(FileFunctions.openConfig("gen5_offsets.ini"), "UTF-8");
-            while (sc.hasNextLine()) {
-                String q = sc.nextLine().trim();
-                if (q.contains("//")) {
-                    q = q.substring(0, q.indexOf("//")).trim();
-                }
-                if (!q.isEmpty()) {
-                    if (q.startsWith("[") && q.endsWith("]")) {
-                        // New rom
-                        current = new RomEntry();
-                        current.name = q.substring(1, q.length() - 1);
-                        roms.add(current);
-                    } else {
-                        String[] r = q.split("=", 2);
-                        if (r.length == 1) {
-                            System.err.println("invalid entry " + q);
-                            continue;
+        Scanner sc = new Scanner(ResourceFunctions.getRes().openRawResource(R.raw.gen5_offsets), "UTF-8");
+        while (sc.hasNextLine()) {
+            String q = sc.nextLine().trim();
+            if (q.contains("//")) {
+                q = q.substring(0, q.indexOf("//")).trim();
+            }
+            if (!q.isEmpty()) {
+                if (q.startsWith("[") && q.endsWith("]")) {
+                    // New rom
+                    current = new RomEntry();
+                    current.name = q.substring(1, q.length() - 1);
+                    roms.add(current);
+                } else {
+                    String[] r = q.split("=", 2);
+                    if (r.length == 1) {
+                        System.err.println("invalid entry " + q);
+                        continue;
+                    }
+                    if (r[1].endsWith("\r\n")) {
+                        r[1] = r[1].substring(0, r[1].length() - 2);
+                    }
+                    r[1] = r[1].trim();
+                    if (r[0].equals("Game")) {
+                        current.romCode = r[1];
+                    } else if (r[0].equals("Type")) {
+                        if (r[1].equalsIgnoreCase("BW2")) {
+                            current.romType = Gen5Constants.Type_BW2;
+                        } else {
+                            current.romType = Gen5Constants.Type_BW;
                         }
-                        if (r[1].endsWith("\r\n")) {
-                            r[1] = r[1].substring(0, r[1].length() - 2);
-                        }
-                        r[1] = r[1].trim();
-                        if (r[0].equals("Game")) {
-                            current.romCode = r[1];
-                        } else if (r[0].equals("Type")) {
-                            if (r[1].equalsIgnoreCase("BW2")) {
-                                current.romType = Gen5Constants.Type_BW2;
-                            } else {
-                                current.romType = Gen5Constants.Type_BW;
-                            }
-                        } else if (r[0].equals("CopyFrom")) {
-                            for (RomEntry otherEntry : roms) {
-                                if (r[1].equalsIgnoreCase(otherEntry.romCode)) {
-                                    // copy from here
-                                    current.arrayEntries.putAll(otherEntry.arrayEntries);
-                                    current.numbers.putAll(otherEntry.numbers);
-                                    current.strings.putAll(otherEntry.strings);
-                                    current.offsetArrayEntries.putAll(otherEntry.offsetArrayEntries);
-                                    if (current.copyStaticPokemon) {
-                                        current.staticPokemon.addAll(otherEntry.staticPokemon);
-                                        current.staticPokemonSupport = true;
-                                    } else {
-                                        current.staticPokemonSupport = false;
-                                    }
+                    } else if (r[0].equals("CopyFrom")) {
+                        for (RomEntry otherEntry : roms) {
+                            if (r[1].equalsIgnoreCase(otherEntry.romCode)) {
+                                // copy from here
+                                current.arrayEntries.putAll(otherEntry.arrayEntries);
+                                current.numbers.putAll(otherEntry.numbers);
+                                current.strings.putAll(otherEntry.strings);
+                                current.offsetArrayEntries.putAll(otherEntry.offsetArrayEntries);
+                                if (current.copyStaticPokemon) {
+                                    current.staticPokemon.addAll(otherEntry.staticPokemon);
+                                    current.staticPokemonSupport = true;
+                                } else {
+                                    current.staticPokemonSupport = false;
                                 }
                             }
-                        } else if (r[0].equals("StaticPokemon[]")) {
-                            if (r[1].startsWith("[") && r[1].endsWith("]")) {
-                                String[] offsets = r[1].substring(1, r[1].length() - 1).split(",");
-                                int[] offs = new int[offsets.length];
-                                int[] files = new int[offsets.length];
-                                int c = 0;
-                                for (String off : offsets) {
-                                    String[] parts = off.split("\\:");
-                                    files[c] = parseRIInt(parts[0]);
-                                    offs[c++] = parseRIInt(parts[1]);
-                                }
-                                StaticPokemon sp = new StaticPokemon();
-                                sp.files = files;
-                                sp.offsets = offs;
-                                current.staticPokemon.add(sp);
-                            } else {
-                                String[] parts = r[1].split("\\:");
-                                int files = parseRIInt(parts[0]);
-                                int offs = parseRIInt(parts[1]);
-                                StaticPokemon sp = new StaticPokemon();
-                                sp.files = new int[] { files };
-                                sp.offsets = new int[] { offs };
-                            }
-                        } else if (r[0].equals("StaticPokemonSupport")) {
-                            int spsupport = parseRIInt(r[1]);
-                            current.staticPokemonSupport = (spsupport > 0);
-                        } else if (r[0].equals("CopyStaticPokemon")) {
-                            int csp = parseRIInt(r[1]);
-                            current.copyStaticPokemon = (csp > 0);
-                        } else if (r[0].startsWith("StarterOffsets") || r[0].equals("StaticPokemonFormValues")) {
+                        }
+                    } else if (r[0].equals("StaticPokemon[]")) {
+                        if (r[1].startsWith("[") && r[1].endsWith("]")) {
                             String[] offsets = r[1].substring(1, r[1].length() - 1).split(",");
-                            OffsetWithinEntry[] offs = new OffsetWithinEntry[offsets.length];
+                            int[] offs = new int[offsets.length];
+                            int[] files = new int[offsets.length];
                             int c = 0;
                             for (String off : offsets) {
                                 String[] parts = off.split("\\:");
-                                OffsetWithinEntry owe = new OffsetWithinEntry();
-                                owe.entry = parseRIInt(parts[0]);
-                                owe.offset = parseRIInt(parts[1]);
-                                offs[c++] = owe;
+                                files[c] = parseRIInt(parts[0]);
+                                offs[c++] = parseRIInt(parts[1]);
                             }
-                            current.offsetArrayEntries.put(r[0], offs);
-                        } else if (r[0].endsWith("Tweak")) {
-                            current.tweakFiles.put(r[0], r[1]);
+                            StaticPokemon sp = new StaticPokemon();
+                            sp.files = files;
+                            sp.offsets = offs;
+                            current.staticPokemon.add(sp);
                         } else {
-                            if (r[1].startsWith("[") && r[1].endsWith("]")) {
-                                String[] offsets = r[1].substring(1, r[1].length() - 1).split(",");
-                                if (offsets.length == 1 && offsets[0].trim().isEmpty()) {
-                                    current.arrayEntries.put(r[0], new int[0]);
-                                } else {
-                                    int[] offs = new int[offsets.length];
-                                    int c = 0;
-                                    for (String off : offsets) {
-                                        offs[c++] = parseRIInt(off);
-                                    }
-                                    current.arrayEntries.put(r[0], offs);
-                                }
-                            } else if (r[0].endsWith("Offset") || r[0].endsWith("Count") || r[0].endsWith("Number")) {
-                                int offs = parseRIInt(r[1]);
-                                current.numbers.put(r[0], offs);
+                            String[] parts = r[1].split("\\:");
+                            int files = parseRIInt(parts[0]);
+                            int offs = parseRIInt(parts[1]);
+                            StaticPokemon sp = new StaticPokemon();
+                            sp.files = new int[] { files };
+                            sp.offsets = new int[] { offs };
+                        }
+                    } else if (r[0].equals("StaticPokemonSupport")) {
+                        int spsupport = parseRIInt(r[1]);
+                        current.staticPokemonSupport = (spsupport > 0);
+                    } else if (r[0].equals("CopyStaticPokemon")) {
+                        int csp = parseRIInt(r[1]);
+                        current.copyStaticPokemon = (csp > 0);
+                    } else if (r[0].startsWith("StarterOffsets") || r[0].equals("StaticPokemonFormValues")) {
+                        String[] offsets = r[1].substring(1, r[1].length() - 1).split(",");
+                        OffsetWithinEntry[] offs = new OffsetWithinEntry[offsets.length];
+                        int c = 0;
+                        for (String off : offsets) {
+                            String[] parts = off.split("\\:");
+                            OffsetWithinEntry owe = new OffsetWithinEntry();
+                            owe.entry = parseRIInt(parts[0]);
+                            owe.offset = parseRIInt(parts[1]);
+                            offs[c++] = owe;
+                        }
+                        current.offsetArrayEntries.put(r[0], offs);
+                    } else if (r[0].endsWith("Tweak")) {
+                        current.tweakFiles.put(r[0], r[1]);
+                    } else {
+                        if (r[1].startsWith("[") && r[1].endsWith("]")) {
+                            String[] offsets = r[1].substring(1, r[1].length() - 1).split(",");
+                            if (offsets.length == 1 && offsets[0].trim().isEmpty()) {
+                                current.arrayEntries.put(r[0], new int[0]);
                             } else {
-                                current.strings.put(r[0], r[1]);
+                                int[] offs = new int[offsets.length];
+                                int c = 0;
+                                for (String off : offsets) {
+                                    offs[c++] = parseRIInt(off);
+                                }
+                                current.arrayEntries.put(r[0], offs);
                             }
+                        } else if (r[0].endsWith("Offset") || r[0].endsWith("Count") || r[0].endsWith("Number")) {
+                            int offs = parseRIInt(r[1]);
+                            current.numbers.put(r[0], offs);
+                        } else {
+                            current.strings.put(r[0], r[1]);
                         }
                     }
                 }
             }
-            sc.close();
-        } catch (IOException e) {
         }
+        sc.close();
     }
 
     private static int parseRIInt(String off) {

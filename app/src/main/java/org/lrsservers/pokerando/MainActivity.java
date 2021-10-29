@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             for (RomHandler.Factory factory : factories) {
                 if (factory.isLoadable(DocumentFileUtils.getAbsolutePath(files.get(0), getApplicationContext()).trim())) {
                     this.romHandler = factory.create(RandomSource.instance());
-                    this.romFile.setText(DocumentFileUtils.getBaseName(files.get(0)));
+                    //this.romFile.setText(DocumentFileUtils.getBaseName(files.get(0)));
                     this.romName.setText(this.romHandler.getROMName());
                     this.romCode.setText(this.romHandler.getROMCode());
                     this.supportStat.setText(this.romHandler.getSupportLevel());

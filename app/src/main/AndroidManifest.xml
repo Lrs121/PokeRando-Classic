@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PokeRando"
         android:fullBackupContent="false"
-        android:requestLegacyExternalStorage="true">
+        android:requestLegacyExternalStorage="true"
+        android:name=".ResourceFunctions">
         <activity
             android:name=".MainActivity"
             android:exported="true" >

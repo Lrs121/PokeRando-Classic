@@ -30,6 +30,7 @@ import android.content.res.Resources;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.lrsservers.pokerando.R;
+import org.lrsservers.pokerando.ResourceFunctions;
 import org.lrsservers.pokerando.upr.FileFunctions;
 import org.lrsservers.pokerando.upr.GFXFunctions;
 import org.lrsservers.pokerando.upr.MiscTweak;
@@ -73,9 +74,6 @@ import java.util.TreeSet;
 import java.util.zip.CRC32;
 
 public class Gen3RomHandler extends AbstractGBRomHandler {
-    private AppCompatActivity activity;
-    private PackageManager manager = activity.getPackageManager();
-    private Resources resources = manager.getResourcesForApplication("org.lrsservers.pokerando");
     private static List<RomEntry> roms;
 
     {
@@ -116,7 +114,7 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
     public Gen3RomHandler(Random random) throws PackageManager.NameNotFoundException {
         super(random, null);
     }
-    public Gen3RomHandler(Random random, PrintStream logStream) throws PackageManager.NameNotFoundException {
+    public Gen3RomHandler(Random random, PrintStream logStream){
         super(random, logStream);
     }
 
@@ -124,7 +122,7 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
 
-        Scanner sc = new Scanner(resources.openRawResource(R.raw.gen3_offsets), "UTF-8");
+        Scanner sc = new Scanner(ResourceFunctions.getRes().openRawResource(R.raw.gen3_offsets), "UTF-8");
         while (sc.hasNextLine()) {
             String q = sc.nextLine().trim();
             if (q.contains("//")) {
@@ -354,8 +352,9 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
     }
 
     private void loadTextTable(String filename) {
-        int res = resources.getIdentifier(filename, "raw", "org.lrsservers.pokerando");
-        Scanner sc = new Scanner(resources.openRawResource(res), "UTF-8");
+        int res = ResourceFunctions.getRes().getIdentifier(filename, "raw",
+                ResourceFunctions.getInstance().getString(R.string.pkg_name));
+        Scanner sc = new Scanner(ResourceFunctions.getRes().openRawResource(res), "UTF-8");
         while (sc.hasNextLine()) {
             String q = sc.nextLine();
             if (!q.trim().isEmpty()) {
@@ -3017,7 +3016,7 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
     public static class Factory extends RomHandler.Factory {
 
         @Override
-        public Gen3RomHandler create(Random random, PrintStream logStream) throws PackageManager.NameNotFoundException {
+        public Gen3RomHandler create(Random random, PrintStream logStream){
             return new Gen3RomHandler(random, logStream);
         }
 

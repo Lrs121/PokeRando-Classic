@@ -6,6 +6,8 @@ package org.lrsservers.pokerando.upr.pptxt;
 /*--  Ported to Java and bugfixed/customized by Dabomstew                   --*/
 /*----------------------------------------------------------------------------*/
 
+import org.lrsservers.pokerando.R;
+import org.lrsservers.pokerando.ResourceFunctions;
 import org.lrsservers.pokerando.upr.FileFunctions;
 
 import java.io.FileNotFoundException;
@@ -29,8 +31,7 @@ public class PPTxtHandler {
     private static List<Integer> lastUnknowns;
 
         {
-        try {
-            Scanner sc = new Scanner(FileFunctions.openConfig("Generation5.tbl"), "UTF-8");
+            Scanner sc = new Scanner(ResourceFunctions.getRes().openRawResource(R.raw.generation5), "UTF-8");
             while (sc.hasNextLine()) {
                 String q = sc.nextLine();
                 if (!q.trim().isEmpty()) {
@@ -46,10 +47,7 @@ public class PPTxtHandler {
             sc.close();
             pokeToTextPattern = makePattern(pokeToText.keySet());
             textToPokePattern = makePattern(textToPoke.keySet());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-    }
 
     public Pattern makePattern(Iterable<String> tokens) {
         String patternStr = "("

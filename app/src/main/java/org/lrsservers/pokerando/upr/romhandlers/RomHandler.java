@@ -436,11 +436,11 @@ public interface RomHandler {
     }
 
     abstract class Factory {
-        public RomHandler create(Random random) throws PackageManager.NameNotFoundException {
+        public RomHandler create(Random random) {
             return create(random, null);
         }
 
-        public abstract RomHandler create(Random random, PrintStream log) throws PackageManager.NameNotFoundException;
+        public abstract RomHandler create(Random random, PrintStream log);
 
         public abstract boolean isLoadable(String filename);
     }

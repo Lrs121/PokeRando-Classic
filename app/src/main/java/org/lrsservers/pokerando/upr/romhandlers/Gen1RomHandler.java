@@ -29,6 +29,7 @@ import android.content.res.Resources;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.lrsservers.pokerando.R;
+import org.lrsservers.pokerando.ResourceFunctions;
 import org.lrsservers.pokerando.upr.FileFunctions;
 import org.lrsservers.pokerando.upr.GFXFunctions;
 import org.lrsservers.pokerando.upr.MiscTweak;
@@ -70,7 +71,6 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 public class Gen1RomHandler extends AbstractGBCRomHandler {
-    private static AppCompatActivity activity;
     public static class Factory extends RomHandler.Factory {
 
         @Override
@@ -156,11 +156,8 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
     private static List<RomEntry> roms;
 
     static {
-        try {
             loadROMInfo();
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+
     }
 
     private static class GameCornerPokemon {
@@ -177,12 +174,10 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
         private String template;
     }
 
-    private static void loadROMInfo() throws PackageManager.NameNotFoundException {
+    private static void loadROMInfo() {
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
-        PackageManager packageManager = activity.getPackageManager();
-        Resources resources = packageManager.getResourcesForApplication(activity.getPackageName());
-        try (Scanner sc = new Scanner(resources.openRawResource(R.raw.gen1_offsets), "UTF-8")) {
+        try (Scanner sc = new Scanner(ResourceFunctions.getRes().openRawResource(R.raw.gen1_offsets), "UTF-8")) {
             while (sc.hasNextLine()) {
                 String q = sc.nextLine().trim();
                 if (q.contains("//")) {
