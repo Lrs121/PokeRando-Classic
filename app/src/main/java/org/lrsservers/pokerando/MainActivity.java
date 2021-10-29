@@ -3,8 +3,11 @@ package org.lrsservers.pokerando;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -14,13 +17,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.app.ActivityCompat;
 
+import com.anggrayudi.storage.SimpleStorage;
 import com.anggrayudi.storage.SimpleStorageHelper;
 import com.anggrayudi.storage.file.DocumentFileUtils;
 import com.anggrayudi.storage.permission.ActivityPermissionRequest;
@@ -41,26 +47,15 @@ import org.lrsservers.pokerando.upr.romhandlers.Gen5RomHandler;
 import org.lrsservers.pokerando.upr.romhandlers.RomHandler;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+@RequiresApi(api = Build.VERSION_CODES.R)
 public class MainActivity extends AppCompatActivity {
     private final SimpleStorageHelper storageHelper = new SimpleStorageHelper(MainActivity.this);
     private final int SAVE_ROM = 10, LOAD_ROM = 15;
-    private final ActivityPermissionRequest permissionRequest = new ActivityPermissionRequest.Builder(
-            MainActivity.this)
-            .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-            .withCallback(new PermissionCallback() {
-                @Override
-                public void onPermissionsChecked(@NotNull PermissionResult result, boolean fromSystemDialog) {
-                }
 
-                @RequiresApi(api = Build.VERSION_CODES.R)
-                @Override
-                public void onShouldRedirectToSystemSettings(@NotNull List<PermissionReport> blockedPermissions) {
-                    storageHelper.requestStorageAccess();
-                }
-            }).build();
     private GenRestrictions genRestrictions;
     private ImageButton ibLoadRom, ibSaveRom;
     private RomHandler romHandler = null;
@@ -153,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         storageHelper.getStorage().onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
+   @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         storageHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -161,8 +156,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupBtnAction() {
         ibLoadRom.setOnClickListener(view -> {
-            permissionRequest.check();
-            storageHelper.openFilePicker(LOAD_ROM);
+            if(!Environment.isExternalStorageManager()){
+                //request for the permission
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            } else {
+                storageHelper.openFilePicker(LOAD_ROM);
+            }
         });
 
     }
@@ -182,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         });
         storageHelper.setOnFileSelected((requestCode, files) -> {
             try {
-                Utils.validateRomFile(new File(DocumentFileUtils.getAbsolutePath(files.get(0), getApplicationContext()).toString().trim()));
+                Utils.validateRomFile(new File(DocumentFileUtils.getAbsolutePath(files.get(0), getApplicationContext()).trim()));
             } catch (Utils.InvalidROMException e) {
                 switch (e.getType()) {
                     case LENGTH:
@@ -211,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             for (RomHandler.Factory factory : factories) {
-                if (factory.isLoadable(DocumentFileUtils.getAbsolutePath(files.get(0), getApplicationContext()).toString().trim())) {
+                if (factory.isLoadable(DocumentFileUtils.getAbsolutePath(files.get(0), getApplicationContext()).trim())) {
                     this.romHandler = factory.create(RandomSource.instance());
                     this.romFile.setText(DocumentFileUtils.getBaseName(files.get(0)));
                     this.romName.setText(this.romHandler.getROMName());
@@ -261,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                 if (i == 0){
                     radioGroup.getChildAt(i).setSelected(true);
                 }
-                radioGroup.getChildAt(i).
+                //radioGroup.getChildAt(i).
             }
         }
         spStarterFirst.setEnabled(false);

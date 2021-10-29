@@ -91,8 +91,7 @@ public class FileFunctions extends AppCompatActivity {
     }
 
     public static InputStream openConfig(String filename) throws IOException {
-        String asset = "R.id." + filename;
-        return AssetManager.AssetInputStream.class.getResourceAsStream(asset);
+                return AssetManager.AssetInputStream.class.getResourceAsStream(filename);
 
     }
 

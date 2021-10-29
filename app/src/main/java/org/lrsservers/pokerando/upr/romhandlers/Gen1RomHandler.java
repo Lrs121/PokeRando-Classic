@@ -23,6 +23,7 @@ package org.lrsservers.pokerando.upr.romhandlers;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import org.lrsservers.pokerando.R;
 import org.lrsservers.pokerando.upr.FileFunctions;
 import org.lrsservers.pokerando.upr.GFXFunctions;
 import org.lrsservers.pokerando.upr.MiscTweak;
@@ -65,28 +66,26 @@ import java.util.TreeMap;
 
 public class Gen1RomHandler extends AbstractGBCRomHandler {
 
-    private static List<RomEntry> roms;
+    public static class Factory extends RomHandler.Factory {
 
-    {
-        loadROMInfo();
+        @Override
+        public Gen1RomHandler create(Random random, PrintStream logStream) {
+            return new Gen1RomHandler(random, logStream);
+        }
+
+        public boolean isLoadable(String filename) {
+            long fileLength = new File(filename).length();
+            if (fileLength > 8 * 1024 * 1024) {
+                return false;
+            }
+            byte[] loaded = loadFilePartial(filename, 0x1000);
+            if (loaded.length == 0) {
+                // nope
+                return false;
+            }
+            return detectRomInner(loaded, (int) fileLength);
+        }
     }
-
-    private int[] pokeNumToRBYTable;
-
-    // Important RBY Data Structures
-    private int[] pokeRBYToNumTable;
-    private int[] moveNumToRomTable;
-    private int[] moveRomToNumTable;
-    private int pokedexCount;
-    // This ROM's data
-    private Pokemon[] pokes;
-    private List<Pokemon> pokemonList;
-    private RomEntry romEntry;
-    private Move[] moves;
-    private String[] itemNames;
-    private String[] mapNames;
-    private SubMap[] maps;
-    private boolean xAccNerfed;
 
     public Gen1RomHandler(Random random) {
         super(random, null);
@@ -96,11 +95,84 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
         super(random, logStream);
     }
 
-    private void loadROMInfo() {
+    // Important RBY Data Structures
+
+    private int[] pokeNumToRBYTable;
+    private int[] pokeRBYToNumTable;
+    private int[] moveNumToRomTable;
+    private int[] moveRomToNumTable;
+    private int pokedexCount;
+
+    private Type idToType(int value) {
+        if (Gen1Constants.typeTable[value] != null) {
+            return Gen1Constants.typeTable[value];
+        }
+        if (romEntry.extraTypeLookup.containsKey(value)) {
+            return romEntry.extraTypeLookup.get(value);
+        }
+        return null;
+    }
+
+    private byte typeToByte(Type type) {
+        if (type == null) {
+            return 0x00; // revert to normal
+        }
+        if (romEntry.extraTypeReverse.containsKey(type)) {
+            return romEntry.extraTypeReverse.get(type).byteValue();
+        }
+        return Gen1Constants.typeToByte(type);
+    }
+
+    private static class RomEntry {
+        private String name;
+        private String romName;
+        private int version, nonJapanese;
+        private String extraTableFile;
+        private boolean isYellow;
+        private int crcInHeader = -1;
+        private Map<String, String> tweakFiles = new HashMap<String, String>();
+        private List<TMTextEntry> tmTexts = new ArrayList<TMTextEntry>();
+        private Map<String, Integer> entries = new HashMap<String, Integer>();
+        private Map<String, int[]> arrayEntries = new HashMap<String, int[]>();
+        private List<Integer> staticPokemonSingle = new ArrayList<Integer>();
+        private List<GameCornerPokemon> staticPokemonGameCorner = new ArrayList<GameCornerPokemon>();
+        private int[] ghostMarowakOffsets = new int[0];
+        private Map<Integer, Type> extraTypeLookup = new HashMap<Integer, Type>();
+        private Map<Type, Integer> extraTypeReverse = new HashMap<Type, Integer>();
+
+        private int getValue(String key) {
+            if (!entries.containsKey(key)) {
+                entries.put(key, 0);
+            }
+            return entries.get(key);
+        }
+    }
+
+    private static List<RomEntry> roms;
+
+    static {
+        loadROMInfo();
+    }
+
+    private static class GameCornerPokemon {
+        private int[] offsets;
+
+        public String toString() {
+            return Arrays.toString(offsets);
+        }
+    }
+
+    private static class TMTextEntry {
+        private int number;
+        private int offset;
+        private String template;
+    }
+
+    private static void loadROMInfo() {
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
         try {
-            Scanner sc = new Scanner(FileFunctions.openConfig("gen1_offsets.ini"), "UTF-8");
+            Scanner sc = new Scanner(FileFunctions.openConfig("R.raw.gen1_offsets"), "UTF-8");
             while (sc.hasNextLine()) {
                 String q = sc.nextLine().trim();
                 if (q.contains("//")) {
@@ -138,7 +210,7 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
                             } else {
                                 int offs = parseRIInt(r[1]);
                                 GameCornerPokemon gc = new GameCornerPokemon();
-                                gc.offsets = new int[]{offs};
+                                gc.offsets = new int[] { offs };
                                 current.staticPokemonGameCorner.add(gc);
                             }
                         } else if (r[0].equals("StaticPokemonGhostMarowak")) {
@@ -168,7 +240,11 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
                         } else if (r[0].equals("NonJapanese")) {
                             current.nonJapanese = parseRIInt(r[1]);
                         } else if (r[0].equals("Type")) {
-                            current.isYellow = r[1].equalsIgnoreCase("Yellow");
+                            if (r[1].equalsIgnoreCase("Yellow")) {
+                                current.isYellow = true;
+                            } else {
+                                current.isYellow = false;
+                            }
                         } else if (r[0].equals("ExtraTableFile")) {
                             current.extraTableFile = r[1];
                         } else if (r[0].equals("CRCInHeader")) {
@@ -258,57 +334,26 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
         }
     }
 
+    // This ROM's data
+    private Pokemon[] pokes;
+    private List<Pokemon> pokemonList;
+    private RomEntry romEntry;
+    private Move[] moves;
+    private String[] itemNames;
+    private String[] mapNames;
+    private SubMap[] maps;
+    private boolean xAccNerfed;
+
+    @Override
+    public boolean detectRom(byte[] rom) {
+        return detectRomInner(rom, rom.length);
+    }
+
     public static boolean detectRomInner(byte[] rom, int romSize) {
         if (romSize < GBConstants.minRomSize || romSize > GBConstants.maxRomSize) {
             return false; // size check
         }
         return checkRomEntry(rom) != null; // so it's OK if it's a valid ROM
-    }
-
-    private static RomEntry checkRomEntry(byte[] rom) {
-        int version = rom[GBConstants.versionOffset] & 0xFF;
-        int nonjap = rom[GBConstants.jpFlagOffset] & 0xFF;
-        // Check for specific CRC first
-        int crcInHeader = ((rom[GBConstants.crcOffset] & 0xFF) << 8) | (rom[GBConstants.crcOffset + 1] & 0xFF);
-        for (RomEntry re : roms) {
-            if (romSig(rom, re.romName) && re.version == version && re.nonJapanese == nonjap
-                    && re.crcInHeader == crcInHeader) {
-                return re;
-            }
-        }
-        // Now check for non-specific-CRC entries
-        for (RomEntry re : roms) {
-            if (romSig(rom, re.romName) && re.version == version && re.nonJapanese == nonjap && re.crcInHeader == -1) {
-                return re;
-            }
-        }
-        // Not found
-        return null;
-    }
-
-    private Type idToType(int value) {
-        if (Gen1Constants.typeTable[value] != null) {
-            return Gen1Constants.typeTable[value];
-        }
-        if (romEntry.extraTypeLookup.containsKey(value)) {
-            return romEntry.extraTypeLookup.get(value);
-        }
-        return null;
-    }
-
-    private byte typeToByte(Type type) {
-        if (type == null) {
-            return 0x00; // revert to normal
-        }
-        if (romEntry.extraTypeReverse.containsKey(type)) {
-            return romEntry.extraTypeReverse.get(type).byteValue();
-        }
-        return Gen1Constants.typeToByte(type);
-    }
-
-    @Override
-    public boolean detectRom(byte[] rom) {
-        return detectRomInner(rom, rom.length);
     }
 
     @Override
@@ -346,6 +391,27 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
             }
             pokedexCount = Math.max(pokedexCount, pokedexNum);
         }
+    }
+
+    private static RomEntry checkRomEntry(byte[] rom) {
+        int version = rom[GBConstants.versionOffset] & 0xFF;
+        int nonjap = rom[GBConstants.jpFlagOffset] & 0xFF;
+        // Check for specific CRC first
+        int crcInHeader = ((rom[GBConstants.crcOffset] & 0xFF) << 8) | (rom[GBConstants.crcOffset + 1] & 0xFF);
+        for (RomEntry re : roms) {
+            if (romSig(rom, re.romName) && re.version == version && re.nonJapanese == nonjap
+                    && re.crcInHeader == crcInHeader) {
+                return re;
+            }
+        }
+        // Now check for non-specific-CRC entries
+        for (RomEntry re : roms) {
+            if (romSig(rom, re.romName) && re.version == version && re.nonJapanese == nonjap && re.crcInHeader == -1) {
+                return re;
+            }
+        }
+        // Not found
+        return null;
     }
 
     @Override
@@ -1030,7 +1096,10 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
         if (type.isHackOnly == false && (type != Type.DARK && type != Type.STEEL)) {
             return true;
         }
-        return romEntry.extraTypeReverse.containsKey(type);
+        if (romEntry.extraTypeReverse.containsKey(type)) {
+            return true;
+        }
+        return false;
     }
 
     private void fixTypeEffectiveness() {
@@ -1176,6 +1245,16 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
     }
 
     @Override
+    public List<Integer> getHMMoves() {
+        List<Integer> hms = new ArrayList<Integer>();
+        int offset = romEntry.getValue("TMMovesOffset");
+        for (int i = 1; i <= Gen1Constants.hmCount; i++) {
+            hms.add(moveRomToNumTable[rom[offset + Gen1Constants.tmCount + (i - 1)] & 0xFF]);
+        }
+        return hms;
+    }
+
+    @Override
     public void setTMMoves(List<Integer> moveIndexes) {
         int offset = romEntry.getValue("TMMovesOffset");
         for (int i = 1; i <= Gen1Constants.tmCount; i++) {
@@ -1200,16 +1279,6 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
             String text = tte.template.replace("%m", moveName);
             writeVariableLengthString(text, tte.offset, true);
         }
-    }
-
-    @Override
-    public List<Integer> getHMMoves() {
-        List<Integer> hms = new ArrayList<Integer>();
-        int offset = romEntry.getValue("TMMovesOffset");
-        for (int i = 1; i <= Gen1Constants.hmCount; i++) {
-            hms.add(moveRomToNumTable[rom[offset + Gen1Constants.tmCount + (i - 1)] & 0xFF]);
-        }
-        return hms;
     }
 
     @Override
@@ -1689,6 +1758,37 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
         return itemNames;
     }
 
+    private static class SubMap {
+        private int id;
+        private int addr;
+        private int bank;
+        private MapHeader header;
+        private Connection[] cons;
+        private int n_cons;
+        private int obj_addr;
+        private List<Integer> itemOffsets;
+    }
+
+    private static class MapHeader {
+        private int tileset_id; // u8
+        private int map_h, map_w; // u8
+        private int map_ptr, text_ptr, script_ptr; // u16
+        private int connect_byte; // u8
+        // 10 bytes
+    }
+
+    private static class Connection {
+        private int index; // u8
+        private int connected_map; // u16
+        private int current_map; // u16
+        private int bigness; // u8
+        private int map_width; // u8
+        private int y_align; // u8
+        private int x_align; // u8
+        private int window; // u16
+        // 11 bytes
+    }
+
     private void preloadMaps() {
         int mapBanks = romEntry.getValue("MapBanks");
         int mapAddresses = romEntry.getValue("MapAddresses");
@@ -2059,7 +2159,7 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
                 // null entry
                 if (nullEntryPointer == -1) {
                     // make the null entry
-                    writeData = new byte[]{0, 0};
+                    writeData = new byte[] { 0, 0 };
                     setNullEntryPointerHere = true;
                 } else {
                     writeWord(pointerTable, (i - 1) * 2, nullEntryPointer);
@@ -2209,151 +2309,4 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
             System.arraycopy(extraDataBlock, 0, rom, extraSpaceOffset, extraDataBlock.length);
         }
     }
-
-/*    @Override
-    public BufferedImage getMascotImage() {
-        Pokemon mascot = randomPokemon();
-        int idx = pokeNumToRBYTable[mascot.number];
-        int fsBank;
-        // define (by index number) the bank that a pokemon's image is in
-        // using pokered code
-        if (mascot.number == 151 && !romEntry.isYellow) {
-            // Mew
-            fsBank = 1;
-        } else if (idx < 0x1F) {
-            fsBank = 0x9;
-        } else if (idx < 0x4A) {
-            fsBank = 0xA;
-        } else if (idx < 0x74 || idx == 0x74 && mascot.frontSpritePointer > 0x7000) {
-            fsBank = 0xB;
-        } else if (idx < 0x99 || idx == 0x99 && mascot.frontSpritePointer > 0x7000) {
-            fsBank = 0xC;
-        } else {
-            fsBank = 0xD;
-        }
-
-        int fsOffset = calculateOffset(fsBank, mascot.frontSpritePointer);
-        Gen1Decmp mscSprite = new Gen1Decmp(rom, fsOffset);
-        mscSprite.decompress();
-        mscSprite.transpose();
-        int w = mscSprite.getWidth();
-        int h = mscSprite.getHeight();
-
-        // Palette?
-        int[] palette;
-        if (romEntry.getValue("MonPaletteIndicesOffset") > 0 && romEntry.getValue("SGBPalettesOffset") > 0) {
-            int palIndex = rom[romEntry.getValue("MonPaletteIndicesOffset") + mascot.number] & 0xFF;
-            int palOffset = romEntry.getValue("SGBPalettesOffset") + palIndex * 8;
-            if (romEntry.isYellow && romEntry.nonJapanese == 1) {
-                // Non-japanese Yellow can use GBC palettes instead.
-                // Stored directly after regular SGB palettes.
-                palOffset += 320;
-            }
-            palette = new int[4];
-            for (int i = 0; i < 4; i++) {
-                palette[i] = GFXFunctions.conv16BitColorToARGB(readWord(palOffset + i * 2));
-            }
-        } else {
-            palette = new int[]{0xFFFFFFFF, 0xFFAAAAAA, 0xFF666666, 0xFF000000};
-        }
-
-        byte[] data = mscSprite.getFlattenedData();
-
-        BufferedImage bim = GFXFunctions.drawTiledImage(data, palette, w, h, 8);
-        GFXFunctions.pseudoTransparency(bim, palette[0]);
-
-        return bim;
-    }*/
-
-    public static class Factory extends RomHandler.Factory {
-
-        @Override
-        public Gen1RomHandler create(Random random, PrintStream logStream) {
-            return new Gen1RomHandler(random, logStream);
-        }
-
-        public boolean isLoadable(String filename) {
-            long fileLength = new File(filename).length();
-            if (fileLength > 8 * 1024 * 1024) {
-                return false;
-            }
-            byte[] loaded = loadFilePartial(filename, 0x1000);
-            if (loaded.length == 0) {
-                // nope
-                return false;
-            }
-            return detectRomInner(loaded, (int) fileLength);
-        }
-    }
-
-    private static class RomEntry {
-        private String name;
-        private String romName;
-        private int version, nonJapanese;
-        private String extraTableFile;
-        private boolean isYellow;
-        private int crcInHeader = -1;
-        private final Map<String, String> tweakFiles = new HashMap<String, String>();
-        private final List<TMTextEntry> tmTexts = new ArrayList<TMTextEntry>();
-        private final Map<String, Integer> entries = new HashMap<String, Integer>();
-        private final Map<String, int[]> arrayEntries = new HashMap<String, int[]>();
-        private final List<Integer> staticPokemonSingle = new ArrayList<Integer>();
-        private final List<GameCornerPokemon> staticPokemonGameCorner = new ArrayList<GameCornerPokemon>();
-        private int[] ghostMarowakOffsets = new int[0];
-        private final Map<Integer, Type> extraTypeLookup = new HashMap<Integer, Type>();
-        private final Map<Type, Integer> extraTypeReverse = new HashMap<Type, Integer>();
-
-        private int getValue(String key) {
-            if (!entries.containsKey(key)) {
-                entries.put(key, 0);
-            }
-            return entries.get(key);
-        }
-    }
-
-    private static class GameCornerPokemon {
-        private int[] offsets;
-
-        public String toString() {
-            return Arrays.toString(offsets);
-        }
-    }
-
-    private static class TMTextEntry {
-        private int number;
-        private int offset;
-        private String template;
-    }
-
-    private static class SubMap {
-        private int id;
-        private int addr;
-        private int bank;
-        private MapHeader header;
-        private Connection[] cons;
-        private int n_cons;
-        private int obj_addr;
-        private List<Integer> itemOffsets;
-    }
-
-    private static class MapHeader {
-        private int tileset_id; // u8
-        private int map_h, map_w; // u8
-        private int map_ptr, text_ptr, script_ptr; // u16
-        private int connect_byte; // u8
-        // 10 bytes
-    }
-
-    private static class Connection {
-        private int index; // u8
-        private int connected_map; // u16
-        private int current_map; // u16
-        private int bigness; // u8
-        private int map_width; // u8
-        private int y_align; // u8
-        private int x_align; // u8
-        private int window; // u16
-        // 11 bytes
-    }
-
 }
