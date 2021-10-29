@@ -29,11 +29,11 @@ public class SysConstants {
 
     public static final String ROOT_PATH = "/data/data/org.lrsservers.org/";
     public static final String LINE_SEP = System.getProperty("line.separator");
-    public static final String customNamesFile = "customnames.rncn";
+    public static final String customNamesFile = "customnames";
 
-    // OLD custom names files
+/*    // OLD custom names files
     public static final String tnamesFile = "trainernames.txt";
     public static final String tclassesFile = "trainerclasses.txt";
-    public static final String nnamesFile = "nicknames.txt";
+    public static final String nnamesFile = "nicknames.txt";*/
 
 }

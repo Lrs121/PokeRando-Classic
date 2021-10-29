@@ -25,6 +25,9 @@ package org.lrsservers.pokerando.upr;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.lrsservers.pokerando.R;
 import org.lrsservers.pokerando.upr.pokemon.GenRestrictions;
 import org.lrsservers.pokerando.upr.pokemon.Pokemon;
 import org.lrsservers.pokerando.upr.romhandlers.Gen1RomHandler;
@@ -44,7 +47,7 @@ import java.util.zip.CRC32;
 
 import javax.xml.bind.DatatypeConverter;
 
-public class Settings {
+public class Settings extends AppCompatActivity {
 
     public final int VERSION = 172;
 
@@ -400,7 +403,7 @@ public class Settings {
 
         try {
             writeFullInt(out, (int) checksum.getValue());
-            writeFullInt(out, FileFunctions.getFileChecksum(SysConstants.customNamesFile));
+            writeFullInt(out, FileFunctions.getFileChecksum(getResources().openRawResource(R.raw.customnames)));
         } catch (IOException e) {
         }
 

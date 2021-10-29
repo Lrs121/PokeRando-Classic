@@ -23,6 +23,11 @@ package org.lrsservers.pokerando.upr.romhandlers;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.lrsservers.pokerando.R;
 import org.lrsservers.pokerando.upr.FileFunctions;
 import org.lrsservers.pokerando.upr.GFXFunctions;
@@ -65,7 +70,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 public class Gen1RomHandler extends AbstractGBCRomHandler {
-
+    private static AppCompatActivity activity;
     public static class Factory extends RomHandler.Factory {
 
         @Override
@@ -151,7 +156,11 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
     private static List<RomEntry> roms;
 
     static {
-        loadROMInfo();
+        try {
+            loadROMInfo();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private static class GameCornerPokemon {
@@ -168,11 +177,12 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
         private String template;
     }
 
-    private static void loadROMInfo() {
+    private static void loadROMInfo() throws PackageManager.NameNotFoundException {
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
-        try {
-            Scanner sc = new Scanner(FileFunctions.openConfig("R.raw.gen1_offsets"), "UTF-8");
+        PackageManager packageManager = activity.getPackageManager();
+        Resources resources = packageManager.getResourcesForApplication(activity.getPackageName());
+        try (Scanner sc = new Scanner(resources.openRawResource(R.raw.gen1_offsets), "UTF-8")) {
             while (sc.hasNextLine()) {
                 String q = sc.nextLine().trim();
                 if (q.contains("//")) {
@@ -210,7 +220,7 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
                             } else {
                                 int offs = parseRIInt(r[1]);
                                 GameCornerPokemon gc = new GameCornerPokemon();
-                                gc.offsets = new int[] { offs };
+                                gc.offsets = new int[]{offs};
                                 current.staticPokemonGameCorner.add(gc);
                             }
                         } else if (r[0].equals("StaticPokemonGhostMarowak")) {
@@ -314,7 +324,6 @@ public class Gen1RomHandler extends AbstractGBCRomHandler {
                 }
             }
             sc.close();
-        } catch (IOException e) {
         }
 
     }

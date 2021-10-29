@@ -26,6 +26,8 @@ package org.lrsservers.pokerando.upr.romhandlers;
 
 //import java.awt.image.BufferedImage;
 
+import android.content.pm.PackageManager;
+
 import org.lrsservers.pokerando.upr.CustomNamesSet;
 import org.lrsservers.pokerando.upr.MiscTweak;
 import org.lrsservers.pokerando.upr.pokemon.EncounterSet;
@@ -434,11 +436,11 @@ public interface RomHandler {
     }
 
     abstract class Factory {
-        public RomHandler create(Random random) {
+        public RomHandler create(Random random) throws PackageManager.NameNotFoundException {
             return create(random, null);
         }
 
-        public abstract RomHandler create(Random random, PrintStream log);
+        public abstract RomHandler create(Random random, PrintStream log) throws PackageManager.NameNotFoundException;
 
         public abstract boolean isLoadable(String filename);
     }

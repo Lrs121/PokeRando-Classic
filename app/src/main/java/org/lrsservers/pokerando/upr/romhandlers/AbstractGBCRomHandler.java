@@ -1,5 +1,7 @@
 package org.lrsservers.pokerando.upr.romhandlers;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.lrsservers.pokerando.upr.FileFunctions;
 import org.lrsservers.pokerando.upr.constants.GBConstants;
 
@@ -16,6 +18,7 @@ import java.util.Scanner;
 
 public abstract class AbstractGBCRomHandler extends AbstractGBRomHandler {
 
+    private AppCompatActivity appCompatActivity;
     private String[] tb;
     private Map<String, Byte> d;
     private int longestTableToken;
@@ -35,31 +38,29 @@ public abstract class AbstractGBCRomHandler extends AbstractGBRomHandler {
     }
 
     protected void readTextTable(String name) {
-        try {
-            Scanner sc = new Scanner(FileFunctions.openConfig(name + ".tbl"), "UTF-8");
-            while (sc.hasNextLine()) {
-                String q = sc.nextLine();
-                if (!q.trim().isEmpty()) {
-                    String[] r = q.split("=", 2);
-                    if (r[1].endsWith("\r\n")) {
-                        r[1] = r[1].substring(0, r[1].length() - 2);
-                    }
-                    int hexcode = Integer.parseInt(r[0], 16);
-                    if (tb[hexcode] != null) {
-                        String oldMatch = tb[hexcode];
-                        tb[hexcode] = null;
-                        if (d.get(oldMatch) == hexcode) {
-                            d.remove(oldMatch);
-                        }
-                    }
-                    tb[hexcode] = r[1];
-                    longestTableToken = Math.max(longestTableToken, r[1].length());
-                    d.put(r[1], (byte) hexcode);
+        int res = appCompatActivity.getResources().getIdentifier("name", "raw", appCompatActivity.getPackageName());
+        Scanner sc = new Scanner(appCompatActivity.getResources().openRawResource(res), "UTF-8");
+        while (sc.hasNextLine()) {
+            String q = sc.nextLine();
+            if (!q.trim().isEmpty()) {
+                String[] r = q.split("=", 2);
+                if (r[1].endsWith("\r\n")) {
+                    r[1] = r[1].substring(0, r[1].length() - 2);
                 }
+                int hexcode = Integer.parseInt(r[0], 16);
+                if (tb[hexcode] != null) {
+                    String oldMatch = tb[hexcode];
+                    tb[hexcode] = null;
+                    if (d.get(oldMatch) == hexcode) {
+                        d.remove(oldMatch);
+                    }
+                }
+                tb[hexcode] = r[1];
+                longestTableToken = Math.max(longestTableToken, r[1].length());
+                d.put(r[1], (byte) hexcode);
             }
-            sc.close();
-        } catch (IOException e) {
         }
+        sc.close();
 
     }
 

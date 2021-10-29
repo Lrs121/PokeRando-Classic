@@ -26,7 +26,10 @@ package org.lrsservers.pokerando.upr;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.lrsservers.pokerando.MainActivity;
+import org.lrsservers.pokerando.R;
 import org.lrsservers.pokerando.upr.exceptions.InvalidSupplementFilesException;
 
 import java.io.File;
@@ -40,7 +43,7 @@ import java.util.zip.CRC32;
 
 import javax.xml.bind.DatatypeConverter;
 
-public class Utils {
+public class Utils extends AppCompatActivity {
 
     public static void validateRomFile(File fh) throws InvalidROMException {
         // first, check for common filetypes that aren't ROMs
@@ -95,7 +98,7 @@ public class Utils {
         }
 
         // Check the trainerclass & trainernames & nicknames crc
-        if (customNames == null && !FileFunctions.checkOtherCRC(data, 16, 4, SysConstants.customNamesFile, data.length - 4)) {
+        if (customNames == null && !FileFunctions.checkOtherCRC(data, 16, 4, getResources().openRawResource(R.raw.customnames) , data.length - 4)) {
             throw new InvalidSupplementFilesException(InvalidSupplementFilesException.Type.CUSTOM_NAMES,
                     "Can't use this preset because you have a different set " + "of custom names to the creator.");
         }

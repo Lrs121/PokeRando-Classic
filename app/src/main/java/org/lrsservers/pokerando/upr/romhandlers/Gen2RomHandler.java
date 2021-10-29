@@ -24,6 +24,12 @@ package org.lrsservers.pokerando.upr.romhandlers;
 /*----------------------------------------------------------------------------*/
 
 //import java.awt.image.BufferedImage;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.lrsservers.pokerando.R;
 import org.lrsservers.pokerando.upr.FileFunctions;
 import org.lrsservers.pokerando.upr.GFXFunctions;
 import org.lrsservers.pokerando.upr.MiscTweak;
@@ -64,11 +70,15 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class Gen2RomHandler extends AbstractGBCRomHandler {
-
+    private AppCompatActivity activity;
     private static List<RomEntry> roms;
 
     {
-        loadROMInfo();
+        try {
+            loadROMInfo();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     // This ROM's data
@@ -90,124 +100,124 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
         super(random, logStream);
     }
 
-    private void loadROMInfo() {
+    private void loadROMInfo() throws PackageManager.NameNotFoundException {
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
-        try {
-            Scanner sc = new Scanner(FileFunctions.openConfig("gen2_offsets.ini"), "UTF-8");
-            while (sc.hasNextLine()) {
-                String q = sc.nextLine().trim();
-                if (q.contains("//")) {
-                    q = q.substring(0, q.indexOf("//")).trim();
-                }
-                if (!q.isEmpty()) {
-                    if (q.startsWith("[") && q.endsWith("]")) {
-                        // New rom
-                        current = new RomEntry();
-                        current.name = q.substring(1, q.length() - 1);
-                        roms.add(current);
-                    } else {
-                        String[] r = q.split("=", 2);
-                        if (r.length == 1) {
-                            System.err.println("invalid entry " + q);
-                            continue;
-                        }
-                        if (r[1].endsWith("\r\n")) {
-                            r[1] = r[1].substring(0, r[1].length() - 2);
-                        }
-                        r[1] = r[1].trim();
-                        r[0] = r[0].trim();
-                        // Static Pokemon?
-                        if (r[0].equals("StaticPokemon[]")) {
-                            if (r[1].startsWith("[") && r[1].endsWith("]")) {
-                                String[] offsets = r[1].substring(1, r[1].length() - 1).split(",");
-                                int[] offs = new int[offsets.length];
-                                int c = 0;
-                                for (String off : offsets) {
-                                    offs[c++] = parseRIInt(off);
-                                }
-                                current.staticPokemon.add(new StaticPokemon(offs));
-                            } else {
-                                int offs = parseRIInt(r[1]);
-                                current.staticPokemon.add(new StaticPokemon(offs));
-                            }
-                        } else if (r[0].equals("StaticPokemonGameCorner[]")) {
+        PackageManager manager = activity.getPackageManager();
+        Resources resources = manager.getResourcesForApplication("org.lrsservers.pokerando");
+
+        Scanner sc = new Scanner(resources.openRawResource(R.raw.gen2_offsets), "UTF-8");
+        while (sc.hasNextLine()) {
+            String q = sc.nextLine().trim();
+            if (q.contains("//")) {
+                q = q.substring(0, q.indexOf("//")).trim();
+            }
+            if (!q.isEmpty()) {
+                if (q.startsWith("[") && q.endsWith("]")) {
+                    // New rom
+                    current = new RomEntry();
+                    current.name = q.substring(1, q.length() - 1);
+                    roms.add(current);
+                } else {
+                    String[] r = q.split("=", 2);
+                    if (r.length == 1) {
+                        System.err.println("invalid entry " + q);
+                        continue;
+                    }
+                    if (r[1].endsWith("\r\n")) {
+                        r[1] = r[1].substring(0, r[1].length() - 2);
+                    }
+                    r[1] = r[1].trim();
+                    r[0] = r[0].trim();
+                    // Static Pokemon?
+                    if (r[0].equals("StaticPokemon[]")) {
+                        if (r[1].startsWith("[") && r[1].endsWith("]")) {
                             String[] offsets = r[1].substring(1, r[1].length() - 1).split(",");
                             int[] offs = new int[offsets.length];
                             int c = 0;
                             for (String off : offsets) {
                                 offs[c++] = parseRIInt(off);
                             }
-                            current.staticPokemon.add(new StaticPokemonGameCorner(offs));
-                        } else if (r[0].equals("TMText[]")) {
-                            if (r[1].startsWith("[") && r[1].endsWith("]")) {
-                                String[] parts = r[1].substring(1, r[1].length() - 1).split(",", 3);
-                                TMTextEntry tte = new TMTextEntry();
-                                tte.number = parseRIInt(parts[0]);
-                                tte.offset = parseRIInt(parts[1]);
-                                tte.template = parts[2];
-                                current.tmTexts.add(tte);
-                            }
-                        } else if (r[0].equals("Game")) {
-                            current.romCode = r[1];
-                        } else if (r[0].equals("Version")) {
-                            current.version = parseRIInt(r[1]);
-                        } else if (r[0].equals("NonJapanese")) {
-                            current.nonJapanese = parseRIInt(r[1]);
-                        } else if (r[0].equals("Type")) {
-                            current.isCrystal = r[1].equalsIgnoreCase("Crystal");
-                        } else if (r[0].equals("ExtraTableFile")) {
-                            current.extraTableFile = r[1];
-                        } else if (r[0].equals("CRCInHeader")) {
-                            current.crcInHeader = parseRIInt(r[1]);
-                        } else if (r[0].endsWith("Tweak")) {
-                            current.codeTweaks.put(r[0], r[1]);
-                        } else if (r[0].equals("CopyFrom")) {
-                            for (RomEntry otherEntry : roms) {
-                                if (r[1].equalsIgnoreCase(otherEntry.name)) {
-                                    // copy from here
-                                    boolean cSP = (current.getValue("CopyStaticPokemon") == 1);
-                                    boolean cTT = (current.getValue("CopyTMText") == 1);
-                                    current.arrayEntries.putAll(otherEntry.arrayEntries);
-                                    current.entries.putAll(otherEntry.entries);
-                                    if (cSP) {
-                                        current.staticPokemon.addAll(otherEntry.staticPokemon);
-                                        current.entries.put("StaticPokemonSupport", 1);
-                                    } else {
-                                        current.entries.put("StaticPokemonSupport", 0);
-                                        current.entries.remove("StaticPokemonOddEggOffset");
-                                        current.entries.remove("StaticPokemonOddEggDataSize");
-                                    }
-                                    if (cTT) {
-                                        current.tmTexts.addAll(otherEntry.tmTexts);
-                                    }
-                                    current.extraTableFile = otherEntry.extraTableFile;
+                            current.staticPokemon.add(new StaticPokemon(offs));
+                        } else {
+                            int offs = parseRIInt(r[1]);
+                            current.staticPokemon.add(new StaticPokemon(offs));
+                        }
+                    } else if (r[0].equals("StaticPokemonGameCorner[]")) {
+                        String[] offsets = r[1].substring(1, r[1].length() - 1).split(",");
+                        int[] offs = new int[offsets.length];
+                        int c = 0;
+                        for (String off : offsets) {
+                            offs[c++] = parseRIInt(off);
+                        }
+                        current.staticPokemon.add(new StaticPokemonGameCorner(offs));
+                    } else if (r[0].equals("TMText[]")) {
+                        if (r[1].startsWith("[") && r[1].endsWith("]")) {
+                            String[] parts = r[1].substring(1, r[1].length() - 1).split(",", 3);
+                            TMTextEntry tte = new TMTextEntry();
+                            tte.number = parseRIInt(parts[0]);
+                            tte.offset = parseRIInt(parts[1]);
+                            tte.template = parts[2];
+                            current.tmTexts.add(tte);
+                        }
+                    } else if (r[0].equals("Game")) {
+                        current.romCode = r[1];
+                    } else if (r[0].equals("Version")) {
+                        current.version = parseRIInt(r[1]);
+                    } else if (r[0].equals("NonJapanese")) {
+                        current.nonJapanese = parseRIInt(r[1]);
+                    } else if (r[0].equals("Type")) {
+                        current.isCrystal = r[1].equalsIgnoreCase("Crystal");
+                    } else if (r[0].equals("ExtraTableFile")) {
+                        current.extraTableFile = r[1];
+                    } else if (r[0].equals("CRCInHeader")) {
+                        current.crcInHeader = parseRIInt(r[1]);
+                    } else if (r[0].endsWith("Tweak")) {
+                        current.codeTweaks.put(r[0], r[1]);
+                    } else if (r[0].equals("CopyFrom")) {
+                        for (RomEntry otherEntry : roms) {
+                            if (r[1].equalsIgnoreCase(otherEntry.name)) {
+                                // copy from here
+                                boolean cSP = (current.getValue("CopyStaticPokemon") == 1);
+                                boolean cTT = (current.getValue("CopyTMText") == 1);
+                                current.arrayEntries.putAll(otherEntry.arrayEntries);
+                                current.entries.putAll(otherEntry.entries);
+                                if (cSP) {
+                                    current.staticPokemon.addAll(otherEntry.staticPokemon);
+                                    current.entries.put("StaticPokemonSupport", 1);
+                                } else {
+                                    current.entries.put("StaticPokemonSupport", 0);
+                                    current.entries.remove("StaticPokemonOddEggOffset");
+                                    current.entries.remove("StaticPokemonOddEggDataSize");
                                 }
+                                if (cTT) {
+                                    current.tmTexts.addAll(otherEntry.tmTexts);
+                                }
+                                current.extraTableFile = otherEntry.extraTableFile;
+                            }
+                        }
+                    } else {
+                        if (r[1].startsWith("[") && r[1].endsWith("]")) {
+                            String[] offsets = r[1].substring(1, r[1].length() - 1).split(",");
+                            if (offsets.length == 1 && offsets[0].trim().isEmpty()) {
+                                current.arrayEntries.put(r[0], new int[0]);
+                            } else {
+                                int[] offs = new int[offsets.length];
+                                int c = 0;
+                                for (String off : offsets) {
+                                    offs[c++] = parseRIInt(off);
+                                }
+                                current.arrayEntries.put(r[0], offs);
                             }
                         } else {
-                            if (r[1].startsWith("[") && r[1].endsWith("]")) {
-                                String[] offsets = r[1].substring(1, r[1].length() - 1).split(",");
-                                if (offsets.length == 1 && offsets[0].trim().isEmpty()) {
-                                    current.arrayEntries.put(r[0], new int[0]);
-                                } else {
-                                    int[] offs = new int[offsets.length];
-                                    int c = 0;
-                                    for (String off : offsets) {
-                                        offs[c++] = parseRIInt(off);
-                                    }
-                                    current.arrayEntries.put(r[0], offs);
-                                }
-                            } else {
-                                int offs = parseRIInt(r[1]);
-                                current.entries.put(r[0], offs);
-                            }
+                            int offs = parseRIInt(r[1]);
+                            current.entries.put(r[0], offs);
                         }
                     }
                 }
             }
-            sc.close();
-        } catch (IOException e) {
         }
+        sc.close();
 
     }
 

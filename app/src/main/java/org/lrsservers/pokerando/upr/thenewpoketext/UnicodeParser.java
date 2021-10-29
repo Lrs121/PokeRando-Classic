@@ -6,6 +6,12 @@ package org.lrsservers.pokerando.upr.thenewpoketext;
 /*--  Ported to Java and customized by Dabomstew                            --*/
 /*----------------------------------------------------------------------------*/
 
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.lrsservers.pokerando.R;
 import org.lrsservers.pokerando.upr.FileFunctions;
 
 import java.io.FileNotFoundException;
@@ -14,29 +20,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class UnicodeParser {
+public class UnicodeParser extends AppCompatActivity {
 
     public static String[] tb = new String[65536];
     public static Map<String, Integer> d = new HashMap<String, Integer>();
 
     {
-        try {
-            Scanner sc = new Scanner(FileFunctions.openConfig("Generation4.tbl"), "UTF-8");
-            while (sc.hasNextLine()) {
-                String q = sc.nextLine();
-                if (!q.trim().isEmpty()) {
-                    String[] r = q.split("=", 2);
-                    if (r[1].endsWith("\r\n")) {
-                        r[1] = r[1].substring(0, r[1].length() - 2);
-                    }
-                    tb[Integer.parseInt(r[0], 16)] = r[1];
-                    d.put(r[1], Integer.parseInt(r[0], 16));
+        Scanner sc = new Scanner(getResources().openRawResource(R.raw.generation4), "UTF-8");
+        while (sc.hasNextLine()) {
+            String q = sc.nextLine();
+            if (!q.trim().isEmpty()) {
+                String[] r = q.split("=", 2);
+                if (r[1].endsWith("\r\n")) {
+                    r[1] = r[1].substring(0, r[1].length() - 2);
                 }
+                tb[Integer.parseInt(r[0], 16)] = r[1];
+                d.put(r[1], Integer.parseInt(r[0], 16));
             }
-            sc.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        sc.close();
     }
 
 }

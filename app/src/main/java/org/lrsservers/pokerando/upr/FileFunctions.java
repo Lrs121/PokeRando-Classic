@@ -23,7 +23,9 @@ package org.lrsservers.pokerando.upr;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -90,13 +92,13 @@ public class FileFunctions extends AppCompatActivity {
         return FileFunctions.class.getResource(SysConstants.ROOT_PATH + "config/" + filename) != null;
     }
 
-    public static InputStream openConfig(String filename) throws IOException {
+/*    public static InputStream openConfig(String filename) throws IOException {
                 return AssetManager.AssetInputStream.class.getResourceAsStream(filename);
 
-    }
+    }*/
 
-    public CustomNamesSet getCustomNames() throws IOException {
-        InputStream is = openConfig(SysConstants.customNamesFile);
+    public CustomNamesSet getCustomNames() throws IOException, PackageManager.NameNotFoundException {
+        InputStream is = getResources().openRawResource(R.raw.customnames);
         CustomNamesSet cns = new CustomNamesSet(is);
         is.close();
         return cns;
@@ -151,20 +153,20 @@ public class FileFunctions extends AppCompatActivity {
         fos.close();
     }
 
-    public byte[] getConfigAsBytes(String filename) throws IOException {
+/*    public byte[] getConfigAsBytes(String filename) throws IOException {
         InputStream in = openConfig(filename);
         byte[] buf = readFullyIntoBuffer(in, in.available());
         in.close();
         return buf;
-    }
+    }*/
 
-    public static int getFileChecksum(String filename) {
+/*    public static int getFileChecksum(String filename) {
         try {
             return getFileChecksum(openConfig(filename));
         } catch (IOException e) {
-            return 0;
+            e.printStackTrace();
         }
-    }
+    }*/
 
     public static int getFileChecksum(InputStream stream) {
         try {
@@ -183,7 +185,7 @@ public class FileFunctions extends AppCompatActivity {
         }
     }
 
-    public static boolean checkOtherCRC(byte[] data, int byteIndex, int switchIndex, String filename, int offsetInData) {
+    public static boolean checkOtherCRC(byte[] data, int byteIndex, int switchIndex, InputStream filename, int offsetInData) {
         // If the switch at data[byteIndex].switchIndex is on, then check that
         // the CRC at data[offsetInData] ... data[offsetInData+3] matches the
         // CRC of filename.
