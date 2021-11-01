@@ -149,7 +149,7 @@ public class NARCArchive {
         return nitroFile;
     }
 
-    private Map<String, byte[]> readNitroFrames(byte[] data) throws IOException {
+    private Map<String, byte[]> readNitroFrames(byte[] data) {
 
         // Read the number of frames
         int frameCount = readWord(data, 0x0E);

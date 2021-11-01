@@ -6,6 +6,7 @@ import org.lrsservers.pokerando.upr.pokemon.Trainer;
 import org.lrsservers.pokerando.upr.pokemon.Type;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Gen4Constants {
@@ -108,7 +109,7 @@ public class Gen4Constants {
     // DPPt: rock smash, cut
     public static final List<Integer> dpptEarlyRequiredHMMoves = Arrays.asList(249, 15);
     // HGSS: just cut
-    public static final List<Integer> hgssEarlyRequiredHMMoves = Arrays.asList(15);
+    public static final List<Integer> hgssEarlyRequiredHMMoves = Collections.singletonList(15);
     public static final Type[] typeTable = constructTypeTable();
     public static ItemList allowedItems, nonBadItems;
 

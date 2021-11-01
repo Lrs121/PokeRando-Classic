@@ -155,17 +155,17 @@ public class PokeTextData {
             } else {
                 if (currChar == 0xFFFE) {
                     i++;
-                    string.append("\\v" + String.format("%04X", chars.get(i)));
+                    string.append("\\v").append(String.format("%04X", chars.get(i)));
                     i++;
                     int total = chars.get(i);
                     for (int z = 0; z < total; z++) {
                         i++;
-                        string.append("\\z" + String.format("%04X", chars.get(i)));
+                        string.append("\\z").append(String.format("%04X", chars.get(i)));
                     }
                 } else if (currChar == 0xFFFF) {
                     break;
                 } else {
-                    string.append("\\x" + String.format("%04X", chars.get(i)));
+                    string.append("\\x").append(String.format("%04X", chars.get(i)));
                 }
             }
             i++;

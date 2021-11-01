@@ -95,6 +95,7 @@ public class RomFunctions {
      * @param level
      * @return
      */
+    @SuppressWarnings("JavaDoc")
     public static int[] getMovesAtLevel(Pokemon pkmn, Map<Pokemon, List<MoveLearnt>> movesets, int level) {
         return getMovesAtLevel(pkmn, movesets, level, 0);
     }
@@ -387,14 +388,14 @@ public class RomFunctions {
             int currLineCC = 0;
             int linesWritten = 0;
             char currLineLastChar = 0;
-            for (int i = 0; i < words.length; i++) {
-                int reqLength = ssd.lengthFor(words[i]);
+            for (String word : words) {
+                int reqLength = ssd.lengthFor(word);
                 if (currLineWC > 0) {
                     reqLength++;
                 }
                 if ((currLineCC + reqLength > maxLineLength)
                         || (currLineCC >= sentenceNewLineSize && (currLineLastChar == '.' || currLineLastChar == '?'
-                                || currLineLastChar == '!' || currLineLastChar == '…' || currLineLastChar == ','))) {
+                        || currLineLastChar == '!' || currLineLastChar == '…' || currLineLastChar == ','))) {
                     // new line
                     // Save current line, if applicable
                     if (currLineWC > 0) {
@@ -408,27 +409,22 @@ public class RomFunctions {
                         thisLine = new StringBuilder();
                     }
                     // Start the new line
-                    thisLine.append(words[i]);
+                    thisLine.append(word);
                     currLineWC = 1;
-                    currLineCC = ssd.lengthFor(words[i]);
-                    if (words[i].length() == 0) {
-                        currLineLastChar = 0;
-                    } else {
-                        currLineLastChar = words[i].charAt(words[i].length() - 1);
-                    }
+                    currLineCC = ssd.lengthFor(word);
                 } else {
                     // add to current line
                     if (currLineWC > 0) {
                         thisLine.append(' ');
                     }
-                    thisLine.append(words[i]);
+                    thisLine.append(word);
                     currLineWC++;
                     currLineCC += reqLength;
-                    if (words[i].length() == 0) {
-                        currLineLastChar = 0;
-                    } else {
-                        currLineLastChar = words[i].charAt(words[i].length() - 1);
-                    }
+                }
+                if (word.length() == 0) {
+                    currLineLastChar = 0;
+                } else {
+                    currLineLastChar = word.charAt(word.length() - 1);
                 }
             }
 
@@ -454,7 +450,7 @@ public class RomFunctions {
     }
 
     public interface StringSizeDeterminer {
-        public int lengthFor(String encodedText);
+        int lengthFor(String encodedText);
     }
 
     public static class StringLengthSD implements StringSizeDeterminer {

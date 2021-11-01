@@ -6,16 +6,10 @@ package org.lrsservers.pokerando.upr.thenewpoketext;
 /*--  Ported to Java and customized by Dabomstew                            --*/
 /*----------------------------------------------------------------------------*/
 
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.lrsservers.pokerando.R;
-import org.lrsservers.pokerando.upr.FileFunctions;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;

@@ -24,12 +24,11 @@ package org.lrsservers.pokerando.upr;
 /*----------------------------------------------------------------------------*/
 
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.lrsservers.pokerando.R;
+import org.lrsservers.pokerando.ResourceFunctions;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -41,7 +40,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.zip.CRC32;
@@ -75,8 +75,8 @@ public class FileFunctions extends AppCompatActivity {
         return new File(original.getAbsolutePath().replace(original.getName(), "") + filename);
     }
 
-/*    private static final List<String> overrideFiles = Arrays.asList(SysConstants.customNamesFile,
-            SysConstants.tclassesFile, SysConstants.tnamesFile, SysConstants.nnamesFile);
+    private static final List<String> overrideFiles = Collections.singletonList(SysConstants.customNamesFile);
+//            SysConstants.tclassesFile, SysConstants.tnamesFile, SysConstants.nnamesFile);
 
     public static boolean configExists(String filename) {
         if (overrideFiles.contains(filename)) {
@@ -92,9 +92,10 @@ public class FileFunctions extends AppCompatActivity {
         return FileFunctions.class.getResource(SysConstants.ROOT_PATH + "config/" + filename) != null;
     }
     public static InputStream openConfig(String filename) throws IOException {
-                return AssetManager.AssetInputStream.class.getResourceAsStream(filename);
+        int res = ResourceFunctions.getRes().getIdentifier(filename, "raw", ResourceFunctions.getInstance().getPackageName());
+        return ResourceFunctions.getRes().openRawResource(res);
 
-    }*/
+    }
 
     public CustomNamesSet getCustomNames() throws IOException, PackageManager.NameNotFoundException {
         InputStream is = getResources().openRawResource(R.raw.customnames);
@@ -140,7 +141,7 @@ public class FileFunctions extends AppCompatActivity {
     }
 
     public static void readFully(InputStream in, byte[] buf, int offset, int length) throws IOException {
-        int offs = 0, read = 0;
+        int offs = 0, read;
         while (offs < length && (read = in.read(buf, offs + offset, length - offs)) != -1) {
             offs += read;
         }
@@ -152,36 +153,33 @@ public class FileFunctions extends AppCompatActivity {
         fos.close();
     }
 
-/*    public byte[] getConfigAsBytes(String filename) throws IOException {
+    public byte[] getConfigAsBytes(String filename) throws IOException {
         InputStream in = openConfig(filename);
         byte[] buf = readFullyIntoBuffer(in, in.available());
         in.close();
         return buf;
-    }*/
+    }
 
-/*    public static int getFileChecksum(String filename) {
+    public static int getFileChecksum(String filename) {
         try {
             return getFileChecksum(openConfig(filename));
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }*/
-
-    public static int getFileChecksum(InputStream stream) {
-        try {
-            Scanner sc = new Scanner(stream, "UTF-8");
-            CRC32 checksum = new CRC32();
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine().trim();
-                if (!line.isEmpty()) {
-                    checksum.update(line.getBytes("UTF-8"));
-                }
-            }
-            sc.close();
-            return (int) checksum.getValue();
-        } catch (IOException e) {
             return 0;
         }
+    }
+
+    public static int getFileChecksum(InputStream stream) {
+        Scanner sc = new Scanner(stream, "UTF-8");
+        CRC32 checksum = new CRC32();
+        while (sc.hasNextLine()) {
+            String line = sc.nextLine().trim();
+            if (!line.isEmpty()) {
+                checksum.update(line.getBytes(StandardCharsets.UTF_8));
+            }
+        }
+        sc.close();
+        return (int) checksum.getValue();
     }
 
     public static boolean checkOtherCRC(byte[] data, int byteIndex, int switchIndex, InputStream filename, int offsetInData) {
@@ -195,9 +193,7 @@ public class FileFunctions extends AppCompatActivity {
             // have to check the CRC
             int crc = readFullInt(data, offsetInData);
 
-            if (getFileChecksum(filename) != crc) {
-                return false;
-            }
+            return getFileChecksum(filename) == crc;
         }
         return true;
     }

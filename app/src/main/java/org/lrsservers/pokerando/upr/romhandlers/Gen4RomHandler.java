@@ -23,15 +23,9 @@ package org.lrsservers.pokerando.upr.romhandlers;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
-//import java.awt.image.BufferedImage;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import org.lrsservers.pokerando.R;
+import org.lrsservers.pokerando.ResourceFunctions;
 import org.lrsservers.pokerando.upr.FileFunctions;
-import org.lrsservers.pokerando.upr.GFXFunctions;
 import org.lrsservers.pokerando.upr.MiscTweak;
 import org.lrsservers.pokerando.upr.RomFunctions;
 import org.lrsservers.pokerando.upr.constants.Gen4Constants;
@@ -53,7 +47,6 @@ import org.lrsservers.pokerando.upr.pokemon.TrainerPokemon;
 import org.lrsservers.pokerando.upr.thenewpoketext.PokeTextData;
 import org.lrsservers.pokerando.upr.thenewpoketext.TextToPoke;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -69,7 +62,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class Gen4RomHandler extends AbstractDSRomHandler {
-    private AppCompatActivity activity;
 
     public static class Factory extends RomHandler.Factory {
 
@@ -120,20 +112,14 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
     private static List<RomEntry> roms;
 
     {
-        try {
             loadROMInfo();
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
 
     }
 
-    private void loadROMInfo() throws PackageManager.NameNotFoundException {
+    private void loadROMInfo(){
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
-        PackageManager manager = activity.getPackageManager();
-        Resources resources = manager.getResourcesForApplication("org.lrsservers.pokerando");
-        Scanner sc = new Scanner(resources.openRawResource(R.raw.gen4_offsets), "UTF-8");
+        Scanner sc = new Scanner(ResourceFunctions.getRes().openRawResource(R.raw.gen4_offsets), "UTF-8");
         while (sc.hasNextLine()) {
             String q = sc.nextLine().trim();
             if (q.contains("//")) {
@@ -189,7 +175,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
                             int[] files = new int[offsets.length];
                             int c = 0;
                             for (String off : offsets) {
-                                String[] parts = off.split("\\:");
+                                String[] parts = off.split(":");
                                 files[c] = parseRIInt(parts[0]);
                                 offs[c++] = parseRIInt(parts[1]);
                             }
@@ -198,7 +184,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
                             sp.offsets = offs;
                             current.staticPokemon.add(sp);
                         } else {
-                            String[] parts = r[1].split("\\:");
+                            String[] parts = r[1].split(":");
                             int files = parseRIInt(parts[0]);
                             int offs = parseRIInt(parts[1]);
                             StaticPokemon sp = new StaticPokemon();
@@ -597,8 +583,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
                 // <offset to follow>
                 byte[] magic = Gen4Constants.hgssRivalScriptMagic;
                 NARCArchive scriptNARC = scriptNarc;
-                for (int i = 0; i < filesWithRivalScript.length; i++) {
-                    int fileCheck = filesWithRivalScript[i];
+                for (int fileCheck : filesWithRivalScript) {
                     byte[] file = scriptNARC.files.get(fileCheck);
                     List<Integer> rivalOffsets = RomFunctions.search(file, magic);
                     if (rivalOffsets.size() == 1) {
@@ -655,8 +640,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
                         : Gen4Constants.dpFilesWithRivalScript;
                 byte[] magic = Gen4Constants.dpptRivalScriptMagic;
                 NARCArchive scriptNARC = scriptNarc;
-                for (int i = 0; i < filesWithRivalScript.length; i++) {
-                    int fileCheck = filesWithRivalScript[i];
+                for (int fileCheck : filesWithRivalScript) {
                     byte[] file = scriptNARC.files.get(fileCheck);
                     List<Integer> rivalOffsets = RomFunctions.search(file, magic);
                     if (rivalOffsets.size() > 0) {
@@ -684,8 +668,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
                 byte[] tagBattleMagic2 = Gen4Constants.dpptTagBattleScriptMagic2;
                 int[] filesWithTagBattleScript = (romEntry.romType == Gen4Constants.Type_Plat) ? Gen4Constants.ptFilesWithTagScript
                         : Gen4Constants.dpFilesWithTagScript;
-                for (int i = 0; i < filesWithTagBattleScript.length; i++) {
-                    int fileCheck = filesWithTagBattleScript[i];
+                for (int fileCheck : filesWithTagBattleScript) {
                     byte[] file = scriptNARC.files.get(fileCheck);
                     List<Integer> tbOffsets = RomFunctions.search(file, tagBattleMagic);
                     if (tbOffsets.size() > 0) {
@@ -1067,15 +1050,15 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
                     int pknum = readLong(b, 108 + 4 * i);
                     if (pknum >= 1 && pknum <= Gen4Constants.pokemonCount) {
                         // Valid time of day slot
+                        Pokemon pk;
                         if (useTimeOfDay) {
                             // Get custom randomized encounter
-                            Pokemon pk = grass.encounters.get(todEncounterSlot++).pokemon;
-                            writeLong(b, 108 + 4 * i, pk.number);
+                            pk = grass.encounters.get(todEncounterSlot++).pokemon;
                         } else {
                             // Copy the original slot's randomized encounter
-                            Pokemon pk = grass.encounters.get(Gen4Constants.dpptAlternateSlots[i + 2]).pokemon;
-                            writeLong(b, 108 + 4 * i, pk.number);
+                            pk = grass.encounters.get(Gen4Constants.dpptAlternateSlots[i + 2]).pokemon;
                         }
+                        writeLong(b, 108 + 4 * i, pk.number);
                     }
                 }
 
@@ -1703,7 +1686,6 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
                 }
             }
             // if we can't update the palettes its not a big deal...
-        } else {
         }
     }
 
@@ -2403,8 +2385,8 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
             int tradeCount = tradeNARC.files.size();
             for (int i = 0; i < tradeCount; i++) {
                 boolean isSP = false;
-                for (int j = 0; j < spTrades.length; j++) {
-                    if (spTrades[j] == i) {
+                for (int spTrade : spTrades) {
+                    if (spTrade == i) {
                         isSP = true;
                         break;
                     }
@@ -2446,8 +2428,8 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
             int tradeCount = tradeNARC.files.size();
             for (int i = 0; i < tradeCount; i++) {
                 boolean isSP = false;
-                for (int j = 0; j < spTrades.length; j++) {
-                    if (spTrades[j] == i) {
+                for (int spTrade : spTrades) {
+                    if (spTrade == i) {
                         isSP = true;
                         break;
                     }
@@ -2667,66 +2649,4 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
         }
     }
 
-/*
-    @Override
-    public BufferedImage getMascotImage() {
-        try {
-            Pokemon pk = randomPokemon();
-            NARCArchive pokespritesNARC = this.readNARC(romEntry.getString("PokemonGraphics"));
-            int spriteIndex = pk.number * 6 + 2 + random.nextInt(2);
-            int palIndex = pk.number * 6 + 4;
-            if (random.nextInt(10) == 0) {
-                // shiny
-                palIndex++;
-            }
-
-            // read sprite
-            byte[] rawSprite = pokespritesNARC.files.get(spriteIndex);
-            if (rawSprite.length == 0) {
-                // Must use other gender form
-                rawSprite = pokespritesNARC.files.get(spriteIndex ^ 1);
-            }
-            int[] spriteData = new int[3200];
-            for (int i = 0; i < 3200; i++) {
-                spriteData[i] = readWord(rawSprite, i * 2 + 48);
-            }
-
-            // Decrypt sprite (why does EVERYTHING use the RNG formula geez)
-            if (romEntry.romType != Gen4Constants.Type_DP) {
-                int key = spriteData[0];
-                for (int i = 0; i < 3200; i++) {
-                    spriteData[i] ^= (key & 0xFFFF);
-                    key = key * 0x41C64E6D + 0x6073;
-                }
-            } else {
-                // D/P sprites are encrypted *backwards*. Wut.
-                int key = spriteData[3199];
-                for (int i = 3199; i >= 0; i--) {
-                    spriteData[i] ^= (key & 0xFFFF);
-                    key = key * 0x41C64E6D + 0x6073;
-                }
-            }
-
-            byte[] rawPalette = pokespritesNARC.files.get(palIndex);
-
-            int[] palette = new int[16];
-            for (int i = 1; i < 16; i++) {
-                palette[i] = GFXFunctions.conv16BitColorToARGB(readWord(rawPalette, 40 + i * 2));
-            }
-
-            // Deliberately chop off the right half of the image while still
-            // correctly indexing the array.
-            BufferedImage bim = new BufferedImage(80, 80, BufferedImage.TYPE_INT_ARGB);
-            for (int y = 0; y < 80; y++) {
-                for (int x = 0; x < 80; x++) {
-                    int value = ((spriteData[y * 40 + x / 4]) >> (x % 4) * 4) & 0x0F;
-                    bim.setRGB(x, y, palette[value]);
-                }
-            }
-            return bim;
-        } catch (IOException e) {
-            throw new RandomizerIOException(e);
-        }
-    }
-*/
 }

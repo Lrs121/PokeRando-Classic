@@ -281,9 +281,8 @@ public class SettingsUpdater {
             // can't do
             return;
         }
-        for (int j = actualDataLength; j > position + 3; j--) {
-            dataBlock[j] = dataBlock[j - 4];
-        }
+        if (actualDataLength - (position + 3) >= 0)
+            System.arraycopy(dataBlock, position + 4 - 4, dataBlock, position + 4, actualDataLength - (position + 3));
         byte[] valueBuf = ByteBuffer.allocate(4).putInt(value).array();
         System.arraycopy(valueBuf, 0, dataBlock, position, 4);
         actualDataLength += 4;
@@ -304,9 +303,8 @@ public class SettingsUpdater {
             // can't do
             return;
         }
-        for (int j = actualDataLength; j > position; j--) {
-            dataBlock[j] = dataBlock[j - 1];
-        }
+        if (actualDataLength - position >= 0)
+            System.arraycopy(dataBlock, position, dataBlock, position + 1, actualDataLength - position);
         dataBlock[position] = value;
         actualDataLength++;
     }

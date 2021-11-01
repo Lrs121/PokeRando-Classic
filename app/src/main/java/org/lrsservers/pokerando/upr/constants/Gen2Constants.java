@@ -5,6 +5,7 @@ import org.lrsservers.pokerando.upr.pokemon.Trainer;
 import org.lrsservers.pokerando.upr.pokemon.Type;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Gen2Constants {
@@ -54,10 +55,10 @@ public class Gen2Constants {
 
     public static final List<Integer> fieldMoves = Arrays.asList(15, 19, 57, 70, 148, 91, 100, 250, 127, 249, 29, 230);
 
-    public static final List<Integer> earlyRequiredHMMoves = Arrays.asList(15);
+    public static final List<Integer> earlyRequiredHMMoves = Collections.singletonList(15);
 
     // ban thief from levelup moves
-    public static final List<Integer> bannedLevelupMoves = Arrays.asList(168);
+    public static final List<Integer> bannedLevelupMoves = Collections.singletonList(168);
 
     public static final List<Integer> brokenMoves = Arrays.asList(49, 82, 32, 90, 12);
 

@@ -23,12 +23,15 @@ package org.lrsservers.pokerando.upr.pokemon;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import androidx.annotation.NonNull;
+
 public class Encounter {
 
     public int level;
     public int maxLevel;
     public Pokemon pokemon;
 
+    @NonNull
     public String toString() {
         if (pokemon == null) {
             return "ERROR";

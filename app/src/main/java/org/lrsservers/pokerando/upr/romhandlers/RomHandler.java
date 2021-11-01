@@ -26,8 +26,6 @@ package org.lrsservers.pokerando.upr.romhandlers;
 
 //import java.awt.image.BufferedImage;
 
-import android.content.pm.PackageManager;
-
 import org.lrsservers.pokerando.upr.CustomNamesSet;
 import org.lrsservers.pokerando.upr.MiscTweak;
 import org.lrsservers.pokerando.upr.pokemon.EncounterSet;
@@ -248,6 +246,7 @@ public interface RomHandler {
      * @return
      */
 
+    @SuppressWarnings("JavaDoc")
     Map<Pokemon, boolean[]> getTMHMCompatibility();
 
     void setTMHMCompatibility(Map<Pokemon, boolean[]> compatData);

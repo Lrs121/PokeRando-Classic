@@ -60,9 +60,8 @@ public class DSDecmp {
             flags = data[offset++] & 0xFF;
             for (int i = 0; i < 8; i++) {
                 flag = (flags & (0x80 >> i)) > 0;
+                b = data[offset++] & 0xFF;
                 if (flag) {
-                    disp = 0;
-                    b = data[offset++] & 0xFF;
                     n = b >> 4;
                     disp = (b & 0x0F) << 8;
                     disp |= data[offset++] & 0xFF;
@@ -73,10 +72,7 @@ public class DSDecmp {
                     for (int j = 0; j < n; j++)
                         outData[curr_size++] = outData[cdest - disp - 1 + j];
 
-                    if (curr_size > outData.length)
-                        break;
                 } else {
-                    b = data[offset++] & 0xFF;
                     try {
                         outData[curr_size++] = (byte) b;
                     } catch (ArrayIndexOutOfBoundsException ex) {
@@ -84,9 +80,9 @@ public class DSDecmp {
                             break;
                     }
 
-                    if (curr_size > outData.length)
-                        break;
                 }
+                if (curr_size > outData.length)
+                    break;
             }
         }
         return outData;
@@ -174,14 +170,12 @@ public class DSDecmp {
                     for (int j = 0; j < len && curr_size < outData.length; j++)
                         outData[curr_size++] = outData[cdest - disp - 1 + j];
 
-                    if (curr_size > outData.length)
-                        break;
                 } else {
                     outData[curr_size++] = data[offset++];
 
-                    if (curr_size > outData.length)
-                        break;
                 }
+                if (curr_size > outData.length)
+                    break;
             }
 
         }

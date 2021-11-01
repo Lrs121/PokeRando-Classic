@@ -8,10 +8,7 @@ package org.lrsservers.pokerando.upr.pptxt;
 
 import org.lrsservers.pokerando.R;
 import org.lrsservers.pokerando.ResourceFunctions;
-import org.lrsservers.pokerando.upr.FileFunctions;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -139,7 +136,7 @@ public class PPTxtHandler {
         Map<Integer, List<Integer>> unknown = new HashMap<Integer, List<Integer>>();
         Map<Integer, List<List<Integer>>> encText = new HashMap<Integer, List<List<Integer>>>();
         Map<Integer, List<List<String>>> decText = new HashMap<Integer, List<List<String>>>();
-        String string = "";
+        String string;
         int key;
 
         numSections = readWord(ds, 0);
@@ -183,7 +180,7 @@ public class PPTxtHandler {
                 encText.get(i).add(tmpEncChars);
                 key = encText.get(i).get(j).get(characterCount.get(i).get(j) - 1) ^ 0xFFFF;
                 for (int k = characterCount.get(i).get(j) - 1; k >= 0; k--) {
-                    encText.get(i).get(j).set(k, (encText.get(i).get(j).get(k).intValue()) ^ key);
+                    encText.get(i).get(j).set(k, (encText.get(i).get(j).get(k)) ^ key);
                     if (k == 0) {
                         lastKeys.add(key);
                     }
@@ -194,7 +191,7 @@ public class PPTxtHandler {
                     characterCount.get(i).set(j, encText.get(i).get(j).size());
                 }
                 List<String> chars = new ArrayList<String>();
-                string = "";
+                StringBuilder stringBuilder = new StringBuilder();
                 for (int k = 0; k < characterCount.get(i).get(j); k++) {
                     if (encText.get(i).get(j).get(k) == 0xFFFF) {
                         chars.add("\\xFFFF");
@@ -206,9 +203,10 @@ public class PPTxtHandler {
                             String num = String.format("%04X", encText.get(i).get(j).get(k));
                             chars.add("\\x" + num);
                         }
-                        string += chars.get(k);
+                        stringBuilder.append(chars.get(k));
                     }
                 }
+                string = stringBuilder.toString();
                 strings.add(string);
                 decText.get(i).add(chars);
             }

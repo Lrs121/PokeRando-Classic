@@ -30,7 +30,7 @@ public class Gen1Decmp {
     private final boolean planar;
     private byte[] data;
     private int sizex, sizey, size;
-    private int ramorder;
+
     public Gen1Decmp(byte[] input, int baseOffset) {
         this(input, baseOffset, false, true);
     }
@@ -74,12 +74,11 @@ public class Gen1Decmp {
 
         this.size = this.sizex * this.sizey;
 
-        this.ramorder = this.readbit();
+        int ramorder = this.readbit();
 
-        int r1 = this.ramorder;
-        int r2 = this.ramorder ^ 1;
+        int r2 = ramorder ^ 1;
 
-        fillram(rams, r1);
+        fillram(rams, ramorder);
         int mode = this.readbit();
         if (mode == 1) {
             mode += this.readbit();
@@ -93,12 +92,12 @@ public class Gen1Decmp {
             this.decode(rams[0]);
             this.decode(rams[1]);
         } else if (mode == 1) {
-            this.decode(rams[r1]);
-            this.xor(rams[r1], rams[r2]);
+            this.decode(rams[ramorder]);
+            this.xor(rams[ramorder], rams[r2]);
         } else if (mode == 2) {
             this.decode(rams[r2], false);
-            this.decode(rams[r1]);
-            this.xor(rams[r1], rams[r2]);
+            this.decode(rams[ramorder]);
+            this.xor(rams[ramorder], rams[r2]);
         }
 
         if (this.planar) {
@@ -240,7 +239,7 @@ public class Gen1Decmp {
         int limiter = bits.length - 3;
         byte[] ret = new byte[bits.length / 4];
         for (int i = 0; i < limiter; i += 4) {
-            int n = ((bits[i + 0] << 6) | (bits[i + 1] << 4) | (bits[i + 2] << 2) | (bits[i + 3] << 0));
+            int n = ((bits[i] << 6) | (bits[i + 1] << 4) | (bits[i + 2] << 2) | (bits[i + 3]));
             ret[i / 4] = (byte) n;
         }
         return ret;
@@ -318,9 +317,6 @@ public class Gen1Decmp {
             if (bitsLeft == 0) {
                 offset++;
                 bufVal = data[offset] & 0xFF;
-                if (offset >= data.length) {
-                    return -1;
-                }
                 bitsLeft = 8;
             }
 

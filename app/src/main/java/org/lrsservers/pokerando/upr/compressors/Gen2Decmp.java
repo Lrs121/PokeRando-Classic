@@ -25,7 +25,6 @@ public class Gen2Decmp {
     public int address;
     private byte[] output;
     private int out_idx;
-    private int cmd;
     private int len;
     private int offset;
 
@@ -83,7 +82,7 @@ public class Gen2Decmp {
                 break;
             }
 
-            cmd = (this.peek() & 0xE0) >> 5;
+            int cmd = (this.peek() & 0xE0) >> 5;
             if (cmd == 7) {
                 // LONG command
                 cmd = (this.peek() & 0x1C) >> 2;

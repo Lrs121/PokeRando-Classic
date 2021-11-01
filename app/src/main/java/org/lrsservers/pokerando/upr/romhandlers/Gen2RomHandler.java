@@ -23,18 +23,11 @@ package org.lrsservers.pokerando.upr.romhandlers;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
-//import java.awt.image.BufferedImage;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import org.lrsservers.pokerando.R;
+import org.lrsservers.pokerando.ResourceFunctions;
 import org.lrsservers.pokerando.upr.FileFunctions;
-import org.lrsservers.pokerando.upr.GFXFunctions;
 import org.lrsservers.pokerando.upr.MiscTweak;
 import org.lrsservers.pokerando.upr.RomFunctions;
-import org.lrsservers.pokerando.upr.compressors.Gen2Decmp;
 import org.lrsservers.pokerando.upr.constants.GBConstants;
 import org.lrsservers.pokerando.upr.constants.Gen2Constants;
 import org.lrsservers.pokerando.upr.constants.GlobalConstants;
@@ -54,31 +47,29 @@ import org.lrsservers.pokerando.upr.pokemon.TrainerPokemon;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
 public class Gen2RomHandler extends AbstractGBCRomHandler {
-    private AppCompatActivity activity;
+
     private static List<RomEntry> roms;
 
     {
-        try {
-            loadROMInfo();
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+    loadROMInfo();
+
     }
 
     // This ROM's data
@@ -100,13 +91,10 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
         super(random, logStream);
     }
 
-    private void loadROMInfo() throws PackageManager.NameNotFoundException {
+    private void loadROMInfo(){
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
-        PackageManager manager = activity.getPackageManager();
-        Resources resources = manager.getResourcesForApplication("org.lrsservers.pokerando");
-
-        Scanner sc = new Scanner(resources.openRawResource(R.raw.gen2_offsets), "UTF-8");
+        Scanner sc = new Scanner(ResourceFunctions.getRes().openRawResource(R.raw.gen2_offsets), "UTF-8");
         while (sc.hasNextLine()) {
             String q = sc.nextLine().trim();
             if (q.contains("//")) {
@@ -274,7 +262,7 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
         romEntry = checkRomEntry(this.rom);
         clearTextTables();
         readTextTable("gameboy_jap");
-        if (romEntry.extraTableFile != null && romEntry.extraTableFile.equalsIgnoreCase("none") == false) {
+        if (romEntry.extraTableFile != null && !romEntry.extraTableFile.equalsIgnoreCase("none")) {
             readTextTable(romEntry.extraTableFile);
         }
         // VietCrystal override
@@ -358,7 +346,7 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
             moves[i].number = i;
             moves[i].internalId = i;
             moves[i].effectIndex = rom[offs + (i - 1) * 7 + 1] & 0xFF;
-            moves[i].hitratio = ((rom[offs + (i - 1) * 7 + 4] & 0xFF) + 0) / 255.0 * 100;
+            moves[i].hitratio = ((rom[offs + (i - 1) * 7 + 4] & 0xFF)) / 255.0 * 100;
             moves[i].power = rom[offs + (i - 1) * 7 + 2] & 0xFF;
             moves[i].pp = rom[offs + (i - 1) * 7 + 5] & 0xFF;
             moves[i].type = Gen2Constants.typeTable[rom[offs + (i - 1) * 7 + 3]];
@@ -454,9 +442,9 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
     public List<Pokemon> getStarters() {
         // Get the starters
         List<Pokemon> starters = new ArrayList<Pokemon>();
-        starters.add(pokes[rom[romEntry.arrayEntries.get("StarterOffsets1")[0]] & 0xFF]);
-        starters.add(pokes[rom[romEntry.arrayEntries.get("StarterOffsets2")[0]] & 0xFF]);
-        starters.add(pokes[rom[romEntry.arrayEntries.get("StarterOffsets3")[0]] & 0xFF]);
+        starters.add(pokes[rom[Objects.requireNonNull(romEntry.arrayEntries.get("StarterOffsets1"))[0]] & 0xFF]);
+        starters.add(pokes[rom[Objects.requireNonNull(romEntry.arrayEntries.get("StarterOffsets2"))[0]] & 0xFF]);
+        starters.add(pokes[rom[Objects.requireNonNull(romEntry.arrayEntries.get("StarterOffsets3"))[0]] & 0xFF]);
         return starters;
     }
 
@@ -1011,15 +999,13 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
 
     @Override
     public List<Pokemon> bannedForStaticPokemon() {
-        return Arrays.asList(pokes[Gen2Constants.unownIndex]); // Unown banned
+        return Collections.singletonList(pokes[Gen2Constants.unownIndex]); // Unown banned
     }
 
     private void writePaddedPokemonName(String name, int length, int offset) {
         String paddedName = String.format("%-" + length + "s", name);
         byte[] rawData = translateString(paddedName);
-        for (int i = 0; i < length; i++) {
-            rom[offset + i] = rawData[i];
-        }
+        if (length >= 0) System.arraycopy(rawData, 0, rom, offset, length);
     }
 
     @Override
@@ -1590,7 +1576,7 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
 
     private void applyFastestTextPatch() {
         if (romEntry.getValue("TextDelayFunctionOffset") != 0) {
-            rom[romEntry.getValue("TextDelayFunctionOffset")] = (byte) GBConstants.gbZ80Ret;
+            rom[romEntry.getValue("TextDelayFunctionOffset")] = GBConstants.gbZ80Ret;
         }
     }
 
@@ -1775,7 +1761,7 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
         for (int offset : itemOffs) {
             int itemHere = rom[offset] & 0xFF;
             if (Gen2Constants.allowedItems.isTM(itemHere)) {
-                int thisTM = 0;
+                int thisTM;
                 if (itemHere >= Gen2Constants.tmBlockOneIndex
                         && itemHere < Gen2Constants.tmBlockOneIndex + Gen2Constants.tmBlockOneSize) {
                     thisTM = itemHere - Gen2Constants.tmBlockOneIndex + 1;
@@ -1790,7 +1776,7 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
                             + Gen2Constants.tmBlockTwoSize; // TM block 3 offset
                 }
                 // hack for the bug catching contest repeat TM28
-                if (fieldTMs.contains(thisTM) == false) {
+                if (!fieldTMs.contains(thisTM)) {
                     fieldTMs.add(thisTM);
                 }
             }
@@ -2092,64 +2078,6 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
         // just cut
         return Gen2Constants.earlyRequiredHMMoves;
     }
-
-/*  @Override
-    public BufferedImage getMascotImage() {
-        Pokemon mascot = randomPokemon();
-        while (mascot.number == Gen2Constants.unownIndex) {
-            // Unown is banned as handling it would add a ton of extra effort.
-            mascot = randomPokemon();
-        }
-
-        // Each Pokemon has a front and back pic with a bank and a pointer
-        // (3*2=6)
-        // There is no zero-entry.
-        int picPointer = romEntry.getValue("PicPointers") + (mascot.number - 1) * 6;
-        int picWidth = mascot.picDimensions & 0x0F;
-        int picHeight = (mascot.picDimensions >> 4) & 0x0F;
-
-        int picBank = (rom[picPointer] & 0xFF);
-        if (romEntry.isCrystal) {
-            // Crystal pic banks are offset by x36 for whatever reason.
-            picBank += 0x36;
-        } else {
-            // Hey, G/S are dumb too! Arbitrarily redirected bank numbers.
-            if (picBank == 0x13) {
-                picBank = 0x1F;
-            } else if (picBank == 0x14) {
-                picBank = 0x20;
-            } else if (picBank == 0x1F) {
-                picBank = 0x2E;
-            }
-        }
-        int picOffset = calculateOffset(picBank, readWord(picPointer + 1));
-
-        Gen2Decmp mscSprite = new Gen2Decmp(rom, picOffset, picWidth, picHeight);
-        int w = picWidth * 8;
-        int h = picHeight * 8;
-
-        // Palette?
-        // Two colors per Pokemon + two more for shiny, unlike pics there is a
-        // zero-entry.
-        // Black and white are left alone at the start and end of the palette.
-        int[] palette = new int[]{0xFFFFFFFF, 0xFFAAAAAA, 0xFF666666, 0xFF000000};
-        int paletteOffset = romEntry.getValue("PokemonPalettes") + mascot.number * 8;
-        if (random.nextInt(10) == 0) {
-            // Use shiny instead
-            paletteOffset += 4;
-        }
-        for (int i = 0; i < 2; i++) {
-            palette[i + 1] = GFXFunctions.conv16BitColorToARGB(readWord(paletteOffset + i * 2));
-        }
-
-        byte[] data = mscSprite.getFlattenedData();
-
-        BufferedImage bim = GFXFunctions.drawTiledImage(data, palette, w, h, 8);
-        GFXFunctions.pseudoTransparency(bim, palette[0]);
-
-        return bim;
-    }
-*/
 
     @Override
     public void writeCheckValueToROM(int value) {

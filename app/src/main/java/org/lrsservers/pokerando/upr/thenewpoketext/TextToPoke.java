@@ -64,11 +64,11 @@ public class TextToPoke {
                 } else if (text.charAt(1) == 'l') {
                     data.add(0x25BD);
                     text = text.substring(2);
-                } else if (text.substring(1, 4).equals("and")) {
+                } else if (text.startsWith("and", 1)) {
                     data.add(0x1C2);
                     text = text.substring(4);
                 } else {
-                    System.out.printf("unknown escape: %s\n", text.substring(1, 2));
+                    System.out.printf("unknown escape: %s\n", text.charAt(1));
                     text = text.substring(2);
                 }
             } else {
@@ -76,7 +76,7 @@ public class TextToPoke {
                     i++;
                 }
                 if (i == 6) {
-                    System.out.printf("Char not found %s(%d)", text.substring(0, 1), text.charAt(0));
+                    System.out.printf("Char not found %s(%d)", text.charAt(0), text.charAt(0));
                     text = text.substring(1);
                 } else {
                     data.add(UnicodeParser.d.get(text.substring(0, 6 - i)));

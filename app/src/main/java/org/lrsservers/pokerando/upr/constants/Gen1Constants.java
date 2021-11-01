@@ -5,6 +5,7 @@ import org.lrsservers.pokerando.upr.pokemon.Trainer;
 import org.lrsservers.pokerando.upr.pokemon.Type;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -39,7 +40,7 @@ public class Gen1Constants {
 
     public static final List<Integer> fieldMoves = Arrays.asList(15, 19, 57, 70, 148, 91, 100);
 
-    public static final List<Integer> earlyRequiredHMs = Arrays.asList(15);
+    public static final List<Integer> earlyRequiredHMs = Collections.singletonList(15);
 
     public static final int hmsStartIndex = 0xC4, tmsStartIndex = 0xC9;
 

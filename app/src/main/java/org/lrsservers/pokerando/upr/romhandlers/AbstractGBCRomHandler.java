@@ -2,14 +2,13 @@ package org.lrsservers.pokerando.upr.romhandlers;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.lrsservers.pokerando.upr.FileFunctions;
+import org.lrsservers.pokerando.ResourceFunctions;
 import org.lrsservers.pokerando.upr.constants.GBConstants;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -18,7 +17,6 @@ import java.util.Scanner;
 
 public abstract class AbstractGBCRomHandler extends AbstractGBRomHandler {
 
-    private AppCompatActivity appCompatActivity;
     private String[] tb;
     private Map<String, Byte> d;
     private int longestTableToken;
@@ -38,8 +36,8 @@ public abstract class AbstractGBCRomHandler extends AbstractGBRomHandler {
     }
 
     protected void readTextTable(String name) {
-        int res = appCompatActivity.getResources().getIdentifier("name", "raw", appCompatActivity.getPackageName());
-        Scanner sc = new Scanner(appCompatActivity.getResources().openRawResource(res), "UTF-8");
+        int res = ResourceFunctions.getRes().getIdentifier(name, "raw", ResourceFunctions.getInstance().getPackageName());
+        Scanner sc = new Scanner(ResourceFunctions.getRes().openRawResource(res), "UTF-8");
         while (sc.hasNextLine()) {
             String q = sc.nextLine();
             if (!q.trim().isEmpty()) {
@@ -77,7 +75,7 @@ public abstract class AbstractGBCRomHandler extends AbstractGBRomHandler {
                 if (currChar == GBConstants.stringTerminator) {
                     break;
                 } else {
-                    string.append("\\x" + String.format("%02X", currChar));
+                    string.append("\\x").append(String.format("%02X", currChar));
                 }
             }
         }
@@ -169,34 +167,26 @@ public abstract class AbstractGBCRomHandler extends AbstractGBRomHandler {
     }
 
     protected static boolean romSig(byte[] rom, String sig) {
-        try {
-            int sigOffset = GBConstants.romSigOffset;
-            byte[] sigBytes = sig.getBytes("US-ASCII");
-            for (int i = 0; i < sigBytes.length; i++) {
-                if (rom[sigOffset + i] != sigBytes[i]) {
-                    return false;
-                }
+        int sigOffset = GBConstants.romSigOffset;
+        byte[] sigBytes = sig.getBytes(StandardCharsets.US_ASCII);
+        for (int i = 0; i < sigBytes.length; i++) {
+            if (rom[sigOffset + i] != sigBytes[i]) {
+                return false;
             }
-            return true;
-        } catch (UnsupportedEncodingException ex) {
-            return false;
         }
+        return true;
 
     }
 
     protected static boolean romCode(byte[] rom, String code) {
-        try {
-            int sigOffset = GBConstants.romCodeOffset;
-            byte[] sigBytes = code.getBytes("US-ASCII");
-            for (int i = 0; i < sigBytes.length; i++) {
-                if (rom[sigOffset + i] != sigBytes[i]) {
-                    return false;
-                }
+        int sigOffset = GBConstants.romCodeOffset;
+        byte[] sigBytes = code.getBytes(StandardCharsets.US_ASCII);
+        for (int i = 0; i < sigBytes.length; i++) {
+            if (rom[sigOffset + i] != sigBytes[i]) {
+                return false;
             }
-            return true;
-        } catch (UnsupportedEncodingException ex) {
-            return false;
         }
+        return true;
 
     }
 

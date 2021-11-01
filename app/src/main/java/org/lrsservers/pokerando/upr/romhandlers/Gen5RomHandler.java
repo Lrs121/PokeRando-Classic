@@ -23,12 +23,9 @@ package org.lrsservers.pokerando.upr.romhandlers;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
-/*import java.awt.Graphics;
-import java.awt.image.BufferedImage;*/
 import org.lrsservers.pokerando.R;
 import org.lrsservers.pokerando.ResourceFunctions;
 import org.lrsservers.pokerando.upr.FileFunctions;
-import org.lrsservers.pokerando.upr.GFXFunctions;
 import org.lrsservers.pokerando.upr.MiscTweak;
 import org.lrsservers.pokerando.upr.RomFunctions;
 import org.lrsservers.pokerando.upr.compressors.DSDecmp;
@@ -50,7 +47,6 @@ import org.lrsservers.pokerando.upr.pokemon.Trainer;
 import org.lrsservers.pokerando.upr.pokemon.TrainerPokemon;
 import org.lrsservers.pokerando.upr.pptxt.PPTxtHandler;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -181,7 +177,7 @@ public class Gen5RomHandler extends AbstractDSRomHandler {
                             int[] files = new int[offsets.length];
                             int c = 0;
                             for (String off : offsets) {
-                                String[] parts = off.split("\\:");
+                                String[] parts = off.split(":");
                                 files[c] = parseRIInt(parts[0]);
                                 offs[c++] = parseRIInt(parts[1]);
                             }
@@ -190,7 +186,7 @@ public class Gen5RomHandler extends AbstractDSRomHandler {
                             sp.offsets = offs;
                             current.staticPokemon.add(sp);
                         } else {
-                            String[] parts = r[1].split("\\:");
+                            String[] parts = r[1].split(":");
                             int files = parseRIInt(parts[0]);
                             int offs = parseRIInt(parts[1]);
                             StaticPokemon sp = new StaticPokemon();
@@ -208,7 +204,7 @@ public class Gen5RomHandler extends AbstractDSRomHandler {
                         OffsetWithinEntry[] offs = new OffsetWithinEntry[offsets.length];
                         int c = 0;
                         for (String off : offsets) {
-                            String[] parts = off.split("\\:");
+                            String[] parts = off.split(":");
                             OffsetWithinEntry owe = new OffsetWithinEntry();
                             owe.entry = parseRIInt(parts[0]);
                             owe.offset = parseRIInt(parts[1]);
@@ -600,10 +596,8 @@ public class Gen5RomHandler extends AbstractDSRomHandler {
             replaceStarterFiles(starterNARC, pokespritesNARC, 1, newStarters.get(1).number);
             replaceStarterFiles(starterNARC, pokespritesNARC, 2, newStarters.get(2).number);
             writeNARC(romEntry.getString("StarterGraphics"), starterNARC);
-        } catch (IOException ex) {
+        } catch (IOException | InterruptedException ex) {
             throw new RandomizerIOException(ex);
-        } catch (InterruptedException e) {
-            throw new RandomizerIOException(e);
         }
         // Fix text depending on version
         if (romEntry.romType == Gen5Constants.Type_BW) {
@@ -1452,22 +1446,17 @@ public class Gen5RomHandler extends AbstractDSRomHandler {
                     writeWord(arm9, offsPals + itmNum * 4 + 2, pal);
                 }
             }
-        } else {
         }
     }
 
-    private static RomFunctions.StringSizeDeterminer ssd = new RomFunctions.StringSizeDeterminer() {
-
-        @Override
-        public int lengthFor(String encodedText) {
-            int offs = 0;
-            int len = encodedText.length();
-            while (encodedText.indexOf("\\x", offs) != -1) {
-                len -= 5;
-                offs = encodedText.indexOf("\\x", offs) + 1;
-            }
-            return len;
+    private static RomFunctions.StringSizeDeterminer ssd = encodedText -> {
+        int offs = 0;
+        int len = encodedText.length();
+        while (encodedText.indexOf("\\x", offs) != -1) {
+            len -= 5;
+            offs = encodedText.indexOf("\\x", offs) + 1;
         }
+        return len;
     };
 
     @Override
@@ -2316,50 +2305,4 @@ public class Gen5RomHandler extends AbstractDSRomHandler {
         }
     }
 
-/*
-    @Override
-    public BufferedImage getMascotImage() {
-        try {
-            Pokemon pk = randomPokemon();
-            NARCArchive pokespritesNARC = this.readNARC(romEntry.getString("PokemonGraphics"));
-
-            // First prepare the palette, it's the easy bit
-            byte[] rawPalette = pokespritesNARC.files.get(pk.number * 20 + 18);
-            int[] palette = new int[16];
-            for (int i = 1; i < 16; i++) {
-                palette[i] = GFXFunctions.conv16BitColorToARGB(readWord(rawPalette, 40 + i * 2));
-            }
-
-            // Get the picture and uncompress it.
-            byte[] compressedPic = pokespritesNARC.files.get(pk.number * 20);
-            byte[] uncompressedPic = DSDecmp.Decompress(compressedPic);
-
-            // Output to 64x144 tiled image to prepare for unscrambling
-            BufferedImage bim = GFXFunctions.drawTiledImage(uncompressedPic, palette, 48, 64, 144, 4);
-
-            // Unscramble the above onto a 96x96 canvas
-            BufferedImage finalImage = new BufferedImage(96, 96, BufferedImage.TYPE_INT_ARGB);
-            Graphics g = finalImage.getGraphics();
-            g.drawImage(bim, 0, 0, 64, 64, 0, 0, 64, 64, null);
-            g.drawImage(bim, 64, 0, 96, 8, 0, 64, 32, 72, null);
-            g.drawImage(bim, 64, 8, 96, 16, 32, 64, 64, 72, null);
-            g.drawImage(bim, 64, 16, 96, 24, 0, 72, 32, 80, null);
-            g.drawImage(bim, 64, 24, 96, 32, 32, 72, 64, 80, null);
-            g.drawImage(bim, 64, 32, 96, 40, 0, 80, 32, 88, null);
-            g.drawImage(bim, 64, 40, 96, 48, 32, 80, 64, 88, null);
-            g.drawImage(bim, 64, 48, 96, 56, 0, 88, 32, 96, null);
-            g.drawImage(bim, 64, 56, 96, 64, 32, 88, 64, 96, null);
-            g.drawImage(bim, 0, 64, 64, 96, 0, 96, 64, 128, null);
-            g.drawImage(bim, 64, 64, 96, 72, 0, 128, 32, 136, null);
-            g.drawImage(bim, 64, 72, 96, 80, 32, 128, 64, 136, null);
-            g.drawImage(bim, 64, 80, 96, 88, 0, 136, 32, 144, null);
-            g.drawImage(bim, 64, 88, 96, 96, 32, 136, 64, 144, null);
-
-            // Phew, all done.
-            return finalImage;
-        } catch (IOException e) {
-            throw new RandomizerIOException(e);
-        }
-    }
-*/
 }

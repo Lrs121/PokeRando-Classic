@@ -24,6 +24,8 @@ package org.lrsservers.pokerando.upr.pokemon;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -82,9 +84,10 @@ public class Pokemon implements Comparable<Pokemon> {
     }
 
     public void randomizeStatsWithinBST(Random random) {
+        int bst;
         if (number == 292) {
             // Shedinja is horribly broken unless we restrict him to 1HP.
-            int bst = bst() - 51;
+            bst = bst() - 51;
 
             // Make weightings
             double atkW = random.nextDouble(), defW = random.nextDouble();
@@ -100,11 +103,10 @@ public class Pokemon implements Comparable<Pokemon> {
             speed = (int) Math.max(1, Math.round(speW / totW * bst)) + 10;
 
             // Fix up special too
-            special = (int) Math.ceil((spatk + spdef) / 2.0f);
 
         } else {
             // Minimum 20 HP, 10 everything else
-            int bst = bst() - 70;
+            bst = bst() - 70;
 
             // Make weightings
             double hpW = random.nextDouble(), atkW = random.nextDouble(), defW = random.nextDouble();
@@ -120,8 +122,8 @@ public class Pokemon implements Comparable<Pokemon> {
             speed = (int) Math.max(1, Math.round(speW / totW * bst)) + 10;
 
             // Fix up special too
-            special = (int) Math.ceil((spatk + spdef) / 2.0f);
         }
+        special = (int) Math.ceil((spatk + spdef) / 2.0f);
 
         // Check for something we can't store
         if (hp > 255 || attack > 255 || defense > 255 || spatk > 255 || spdef > 255 || speed > 255) {
@@ -160,6 +162,7 @@ public class Pokemon implements Comparable<Pokemon> {
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Pokemon [name=" + name + ", number=" + number + ", primaryType=" + primaryType + ", secondaryType="

@@ -146,13 +146,13 @@ public class NDSRom {
         for (int i = 1; i < dircount && i < 0x1000; i++) {
             String dirname = directoryNames[i];
             if (dirname != null) {
-                String fullDirName = "";
+                StringBuilder fullDirName = new StringBuilder();
                 int curDir = i;
                 while (dirname != null && !dirname.isEmpty()) {
-                    if (!fullDirName.isEmpty()) {
-                        fullDirName = "/" + fullDirName;
+                    if (fullDirName.length() > 0) {
+                        fullDirName.insert(0, "/");
                     }
-                    fullDirName = dirname + fullDirName;
+                    fullDirName.insert(0, dirname);
                     int parentDir = parentDirIDs[curDir];
                     if (parentDir >= 0xF001 && parentDir <= 0xFFFF) {
                         curDir = parentDir - 0xF000;
@@ -161,7 +161,7 @@ public class NDSRom {
                         break;
                     }
                 }
-                directoryPaths.put(i + 0xF000, fullDirName);
+                directoryPaths.put(i + 0xF000, fullDirName.toString());
             } else {
                 directoryPaths.put(i + 0xF000, "");
             }
@@ -267,7 +267,7 @@ public class NDSRom {
         // don't actually write arm9 ovl yet
 
         // arm7
-        int arm7_offset = ((int) (arm9_ovl_offset + arm9_ovl_size + arm7_align)) & (~arm7_align);
+        int arm7_offset = (arm9_ovl_offset + arm9_ovl_size + arm7_align) & (~arm7_align);
         int old_arm7_offset = readFromFile(this.baseRom, 0x30, 4);
         int arm7_size = readFromFile(this.baseRom, 0x3C, 4);
         // copy arm7
@@ -400,7 +400,7 @@ public class NDSRom {
             x >>= 1;
             devcap++;
         }
-        int devicecap = ((devcap < 0) ? 0 : devcap);
+        int devicecap = (Math.max(devcap, 0));
 
         // Update offsets in ROM header
         writeToFile(fNew, 0x20, 4, arm9_offset);
@@ -431,7 +431,7 @@ public class NDSRom {
         int sizeof_copybuf = Math.min(256 * 1024, bytes);
         byte[] copybuf = new byte[sizeof_copybuf];
         while (bytes > 0) {
-            int size2 = (bytes >= sizeof_copybuf) ? sizeof_copybuf : bytes;
+            int size2 = Math.min(bytes, sizeof_copybuf);
             int read = from.read(copybuf, 0, size2);
             to.write(copybuf, 0, read);
             bytes -= read;
@@ -526,7 +526,6 @@ public class NDSRom {
                         if (foundOffsets2.size() == 1) {
                             arm9_szmode = 2;
                             arm9_szoffset = foundOffsets2.get(0);
-                        } else {
                         }
                     }
                 }
@@ -582,19 +581,16 @@ public class NDSRom {
         }
         arm9_changed = true;
         if (writingEnabled) {
-            FileOutputStream fos = new FileOutputStream(new File(tmpFolder + "arm9.bin"));
+            FileOutputStream fos = new FileOutputStream(tmpFolder + "arm9.bin");
             fos.write(arm9);
             fos.close();
         } else {
-            if (this.arm9_ramstored.length == arm9.length) {
-                // copy new in
-                System.arraycopy(arm9, 0, this.arm9_ramstored, 0, arm9.length);
-            } else {
+            if (this.arm9_ramstored.length != arm9.length) {
                 // make new array
                 this.arm9_ramstored = null;
                 this.arm9_ramstored = new byte[arm9.length];
-                System.arraycopy(arm9, 0, this.arm9_ramstored, 0, arm9.length);
             }
+            System.arraycopy(arm9, 0, this.arm9_ramstored, 0, arm9.length);
         }
     }
 

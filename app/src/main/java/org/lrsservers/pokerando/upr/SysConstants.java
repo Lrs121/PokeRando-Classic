@@ -25,15 +25,11 @@ package org.lrsservers.pokerando.upr;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
-public class SysConstants {
+import org.lrsservers.pokerando.ResourceFunctions;
 
-    public static final String ROOT_PATH = "/data/data/org.lrsservers.org/";
+public class SysConstants {
+    public static final String ROOT_PATH = ResourceFunctions.getInstance().getFilesDir().getPath();
     public static final String LINE_SEP = System.getProperty("line.separator");
     public static final String customNamesFile = "customnames";
-
-/*    // OLD custom names files
-    public static final String tnamesFile = "trainernames.txt";
-    public static final String tclassesFile = "trainerclasses.txt";
-    public static final String nnamesFile = "nicknames.txt";*/
 
 }

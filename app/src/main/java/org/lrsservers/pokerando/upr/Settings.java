@@ -25,6 +25,7 @@ package org.lrsservers.pokerando.upr;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.lrsservers.pokerando.R;
@@ -40,8 +41,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.zip.CRC32;
 
@@ -226,7 +227,7 @@ public class Settings extends AppCompatActivity {
     // to and from strings etc
     public void write(FileOutputStream out) throws IOException {
         out.write(VERSION);
-        byte[] settings = toString().getBytes("UTF-8");
+        byte[] settings = toString().getBytes(StandardCharsets.UTF_8);
         out.write(settings.length);
         out.write(settings);
     }
@@ -238,7 +239,7 @@ public class Settings extends AppCompatActivity {
         }
         int length = in.read();
         byte[] buffer = FileFunctions.readFullyIntoBuffer(in, length);
-        String settings = new String(buffer, "UTF-8");
+        String settings = new String(buffer, StandardCharsets.UTF_8);
         boolean oldUpdate = false;
 
         if (version < VERSION) {
@@ -251,6 +252,7 @@ public class Settings extends AppCompatActivity {
         return settingsObj;
     }
 
+    @NonNull
     @Override
     public String toString() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -375,24 +377,23 @@ public class Settings extends AppCompatActivity {
                 writeFullInt(out, 0);
             }
         } catch (IOException e) {
+            e.printStackTrace();
         }
 
         // @ 31 misc tweaks
         try {
             writeFullInt(out, currentMiscTweaks);
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
 
         // @ 35 trainer pokemon level modifier
         out.write((trainersLevelModified ? 0x80 : 0) | (trainersLevelModifier+50));
 
         try {
-            byte[] romName = this.romName.getBytes("US-ASCII");
+            byte[] romName = this.romName.getBytes(StandardCharsets.US_ASCII);
             out.write(romName.length);
             out.write(romName);
-        } catch (UnsupportedEncodingException e) {
-            out.write(0);
         } catch (IOException e) {
             out.write(0);
         }
@@ -405,12 +406,13 @@ public class Settings extends AppCompatActivity {
             writeFullInt(out, (int) checksum.getValue());
             writeFullInt(out, FileFunctions.getFileChecksum(getResources().openRawResource(R.raw.customnames)));
         } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return DatatypeConverter.printBase64Binary(out.toByteArray());
     }
 
-    public static Settings fromString(String settingsString) throws UnsupportedEncodingException {
+    public static Settings fromString(String settingsString){
         byte[] data = DatatypeConverter.parseBase64Binary(settingsString);
         checkChecksum(data);
 
@@ -584,7 +586,7 @@ public class Settings extends AppCompatActivity {
         settings.setTrainersLevelModifier((data[35] & 0x7F) - 50);
 
         int romNameLength = data[LENGTH_OF_SETTINGS_DATA] & 0xFF;
-        String romName = new String(data, LENGTH_OF_SETTINGS_DATA + 1, romNameLength, "US-ASCII");
+        String romName = new String(data, LENGTH_OF_SETTINGS_DATA + 1, romNameLength, StandardCharsets.US_ASCII);
         settings.setRomName(romName);
 
         return settings;
@@ -1578,7 +1580,7 @@ public class Settings extends AppCompatActivity {
             }
         }
         // We have to return something, so return the default
-        return index >= 0 ? index : 0;
+        return Math.max(index, 0);
     }
 
     private static void checkChecksum(byte[] data) {

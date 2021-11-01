@@ -23,6 +23,8 @@ package org.lrsservers.pokerando.upr.pokemon;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +38,7 @@ public class EncounterSet {
     public String displayName;
     public int offset;
 
+    @NonNull
     public String toString() {
         return "Encounter [Rate = " + rate + ", Encounters = " + encounters + "]";
     }

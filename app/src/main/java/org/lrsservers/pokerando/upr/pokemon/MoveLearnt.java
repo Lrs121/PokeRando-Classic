@@ -23,11 +23,14 @@ package org.lrsservers.pokerando.upr.pokemon;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import androidx.annotation.NonNull;
+
 public class MoveLearnt {
 
     public int move;
     public int level;
 
+    @NonNull
     public String toString() {
         return "move " + move + " at level " + level;
     }

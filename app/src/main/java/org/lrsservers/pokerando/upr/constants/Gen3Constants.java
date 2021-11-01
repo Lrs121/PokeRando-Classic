@@ -5,6 +5,7 @@ import org.lrsservers.pokerando.upr.pokemon.Trainer;
 import org.lrsservers.pokerando.upr.pokemon.Type;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Gen3Constants {
@@ -155,9 +156,9 @@ public class Gen3Constants {
 
     public static final List<Integer> frlgFieldMoves = Arrays.asList(15, 19, 57, 70, 148, 91, 100, 127, 249, 230);
 
-    public static final List<Integer> rseEarlyRequiredHMMoves = Arrays.asList(249);
+    public static final List<Integer> rseEarlyRequiredHMMoves = Collections.singletonList(249);
 
-    public static final List<Integer> frlgEarlyRequiredHMMoves = Arrays.asList(15);
+    public static final List<Integer> frlgEarlyRequiredHMMoves = Collections.singletonList(15);
 
     public static final int luckyEggIndex = 0xC5;
     public static ItemList allowedItems, nonBadItems;

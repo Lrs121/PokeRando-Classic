@@ -23,6 +23,8 @@ package org.lrsservers.pokerando.upr.pokemon;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,15 +38,16 @@ public class Trainer implements Comparable<Trainer> {
     public int trainerclass;
     public String fullDisplayName;
 
+    @NonNull
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
         if (fullDisplayName != null) {
-            sb.append(fullDisplayName + " ");
+            sb.append(fullDisplayName).append(" ");
         } else if (name != null) {
-            sb.append(name + " ");
+            sb.append(name).append(" ");
         }
         if (trainerclass != 0) {
-            sb.append("(" + trainerclass + ") - ");
+            sb.append("(").append(trainerclass).append(") - ");
         }
         sb.append(String.format("%x", offset));
         sb.append(" => ");
@@ -53,12 +56,12 @@ public class Trainer implements Comparable<Trainer> {
             if (!first) {
                 sb.append(',');
             }
-            sb.append(p.pokemon.name + " Lv" + p.level);
+            sb.append(p.pokemon.name).append(" Lv").append(p.level);
             first = false;
         }
         sb.append(']');
         if (tag != null) {
-            sb.append(" (" + tag + ")");
+            sb.append(" (").append(tag).append(")");
         }
         return sb.toString();
     }

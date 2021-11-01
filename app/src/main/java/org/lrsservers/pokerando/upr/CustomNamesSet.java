@@ -2,10 +2,10 @@ package org.lrsservers.pokerando.upr;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -84,7 +84,7 @@ public class CustomNamesSet {
 
     private void writeNamesBlock(OutputStream out, List<String> names) throws IOException {
         String newln = SysConstants.LINE_SEP;
-        StringBuffer outNames = new StringBuffer();
+        StringBuilder outNames = new StringBuilder();
         boolean first = true;
         for (String name : names) {
             if (!first) {
@@ -93,7 +93,7 @@ public class CustomNamesSet {
             first = false;
             outNames.append(name);
         }
-        byte[] namesData = outNames.toString().getBytes("UTF-8");
+        byte[] namesData = outNames.toString().getBytes(StandardCharsets.UTF_8);
         byte[] szData = new byte[4];
         FileFunctions.writeFullInt(szData, 0, namesData.length);
         out.write(szData);

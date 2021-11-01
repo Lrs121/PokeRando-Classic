@@ -26,6 +26,7 @@ package org.lrsservers.pokerando.upr.romhandlers;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 import org.lrsservers.pokerando.upr.FileFunctions;
@@ -120,7 +121,7 @@ public abstract class AbstractDSRomHandler extends AbstractRomHandler {
             fis.skip(0x0C);
             byte[] sig = FileFunctions.readFullyIntoBuffer(fis, 4);
             fis.close();
-            String ndsCode = new String(sig, "US-ASCII");
+            String ndsCode = new String(sig, StandardCharsets.US_ASCII);
             return ndsCode;
         } catch (IOException e) {
             throw new RandomizerIOException(e);

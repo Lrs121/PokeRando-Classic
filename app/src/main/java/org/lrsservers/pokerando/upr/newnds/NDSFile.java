@@ -88,19 +88,16 @@ public class NDSFile {
         }
         if (status == Extracted.TO_FILE) {
             String tmpDir = parent.getTmpFolder();
-            FileOutputStream fos = new FileOutputStream(new File(tmpDir + this.extFilename));
+            FileOutputStream fos = new FileOutputStream(tmpDir + this.extFilename);
             fos.write(data);
             fos.close();
         } else {
-            if (this.data.length == data.length) {
-                // copy new in
-                System.arraycopy(data, 0, this.data, 0, data.length);
-            } else {
+            if (this.data.length != data.length) {
                 // make new array
                 this.data = null;
                 this.data = new byte[data.length];
-                System.arraycopy(data, 0, this.data, 0, data.length);
             }
+            System.arraycopy(data, 0, this.data, 0, data.length);
         }
     }
 

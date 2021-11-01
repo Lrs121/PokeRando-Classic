@@ -23,6 +23,8 @@ package org.lrsservers.pokerando.upr.pokemon;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import androidx.annotation.NonNull;
+
 public class TrainerPokemon {
 
     public Pokemon pokemon;
@@ -39,6 +41,7 @@ public class TrainerPokemon {
 
     public boolean resetMoves = false;
 
+    @NonNull
     public String toString() {
         return pokemon.name + " Lv" + level;
     }

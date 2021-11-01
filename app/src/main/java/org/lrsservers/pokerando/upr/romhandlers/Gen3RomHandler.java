@@ -23,19 +23,10 @@ package org.lrsservers.pokerando.upr.romhandlers;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
-//import java.awt.image.BufferedImage;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import org.lrsservers.pokerando.R;
 import org.lrsservers.pokerando.ResourceFunctions;
-import org.lrsservers.pokerando.upr.FileFunctions;
-import org.lrsservers.pokerando.upr.GFXFunctions;
 import org.lrsservers.pokerando.upr.MiscTweak;
 import org.lrsservers.pokerando.upr.RomFunctions;
-import org.lrsservers.pokerando.upr.compressors.DSDecmp;
 import org.lrsservers.pokerando.upr.constants.Gen3Constants;
 import org.lrsservers.pokerando.upr.constants.GlobalConstants;
 import org.lrsservers.pokerando.upr.exceptions.RandomizationException;
@@ -54,13 +45,11 @@ import org.lrsservers.pokerando.upr.pokemon.Trainer;
 import org.lrsservers.pokerando.upr.pokemon.TrainerPokemon;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -77,11 +66,8 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
     private static List<RomEntry> roms;
 
     {
-        try {
-            loadROMInfo();
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+        loadROMInfo();
+
     }
 
     public String[] tb;
@@ -104,21 +90,15 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
     private int pokedexCount;
     private String[] pokeNames;
     private ItemList allowedItems, nonBadItems;
-    private final RomFunctions.StringSizeDeterminer ssd = new RomFunctions.StringSizeDeterminer() {
-
-        @Override
-        public int lengthFor(String encodedText) {
-            return translateString(encodedText).length;
-        }
-    };
-    public Gen3RomHandler(Random random) throws PackageManager.NameNotFoundException {
+    private final RomFunctions.StringSizeDeterminer ssd = encodedText -> translateString(encodedText).length;
+    public Gen3RomHandler(Random random){
         super(random, null);
     }
     public Gen3RomHandler(Random random, PrintStream logStream){
         super(random, logStream);
     }
 
-    private void loadROMInfo() throws PackageManager.NameNotFoundException {
+    private void loadROMInfo(){
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
 
@@ -441,13 +421,13 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
         this.determineMapBankSizes();
 
         // map labels
+        int baseMLOffset;
         if (romEntry.romType == Gen3Constants.RomType_FRLG) {
-            int baseMLOffset = find(rom, Gen3Constants.frlgMapLabelsPointerPrefix);
-            romEntry.entries.put("MapLabels", readPointer(baseMLOffset + 12));
+            baseMLOffset = find(rom, Gen3Constants.frlgMapLabelsPointerPrefix);
         } else {
-            int baseMLOffset = find(rom, Gen3Constants.rseMapLabelsPointerPrefix);
-            romEntry.entries.put("MapLabels", readPointer(baseMLOffset + 12));
+            baseMLOffset = find(rom, Gen3Constants.rseMapLabelsPointerPrefix);
         }
+        romEntry.entries.put("MapLabels", readPointer(baseMLOffset + 12));
 
         mapLoadingDone = false;
         loadAbilityNames();
@@ -469,9 +449,10 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
         for (int i = 0; i < searchSuff.length; i++) {
             searchSuff[i] = (byte) Integer.parseInt(suffix.substring(i * 2, i * 2 + 2), 16);
         }
+        List<Integer> offsets;// No match
         if (searchPref.length >= searchSuff.length) {
             // Prefix first
-            List<Integer> offsets = RomFunctions.search(rom, searchPref);
+            offsets = RomFunctions.search(rom, searchPref);
             if (offsets.size() == 0) {
                 return -1;
             }
@@ -496,10 +477,9 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
                     return ptrOffset;
                 }
             }
-            return -1; // No match
         } else {
             // Suffix first
-            List<Integer> offsets = RomFunctions.search(rom, searchSuff);
+            offsets = RomFunctions.search(rom, searchSuff);
             if (offsets.size() == 0) {
                 return -1;
             }
@@ -524,8 +504,8 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
                     return ptrOffset;
                 }
             }
-            return -1; // No match
         }
+        return -1; // No match
     }
 
     private void basicBPRE10HackSupport() {
@@ -933,10 +913,10 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
                     break;
                 } else if (currChar == Gen3Constants.textVariable) {
                     int nextChar = rom[offset + c + 1] & 0xFF;
-                    string.append("\\v" + String.format("%02X", nextChar));
+                    string.append("\\v").append(String.format("%02X", nextChar));
                     c++;
                 } else {
-                    string.append("\\x" + String.format("%02X", currChar));
+                    string.append("\\x").append(String.format("%02X", currChar));
                 }
             }
         }
@@ -1036,24 +1016,22 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
     public List<Pokemon> getStarters() {
         List<Pokemon> starters = new ArrayList<Pokemon>();
         int baseOffset = romEntry.getValue("StarterPokemon");
+        Pokemon starter1 = pokesInternal[readWord(baseOffset)];
+        Pokemon starter2;
+        Pokemon starter3;
         if (romEntry.romType == Gen3Constants.RomType_Ruby || romEntry.romType == Gen3Constants.RomType_Sapp
                 || romEntry.romType == Gen3Constants.RomType_Em) {
             // do something
-            Pokemon starter1 = pokesInternal[readWord(baseOffset)];
-            Pokemon starter2 = pokesInternal[readWord(baseOffset + Gen3Constants.rseStarter2Offset)];
-            Pokemon starter3 = pokesInternal[readWord(baseOffset + Gen3Constants.rseStarter3Offset)];
-            starters.add(starter1);
-            starters.add(starter2);
-            starters.add(starter3);
+            starter2 = pokesInternal[readWord(baseOffset + Gen3Constants.rseStarter2Offset)];
+            starter3 = pokesInternal[readWord(baseOffset + Gen3Constants.rseStarter3Offset)];
         } else {
             // do something else
-            Pokemon starter1 = pokesInternal[readWord(baseOffset)];
-            Pokemon starter2 = pokesInternal[readWord(baseOffset + Gen3Constants.frlgStarter2Offset)];
-            Pokemon starter3 = pokesInternal[readWord(baseOffset + Gen3Constants.frlgStarter3Offset)];
-            starters.add(starter1);
-            starters.add(starter2);
-            starters.add(starter3);
+            starter2 = pokesInternal[readWord(baseOffset + Gen3Constants.frlgStarter2Offset)];
+            starter3 = pokesInternal[readWord(baseOffset + Gen3Constants.frlgStarter3Offset)];
         }
+        starters.add(starter1);
+        starters.add(starter2);
+        starters.add(starter3);
         return starters;
     }
 
@@ -1144,12 +1122,11 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
             if (item <= 0xFF) {
                 rom[baseOffset] = (byte) item;
                 rom[baseOffset + 2] = 0;
-                rom[baseOffset + 3] = Gen3Constants.gbaAddRxOpcode | Gen3Constants.gbaR2;
             } else {
                 rom[baseOffset] = (byte) 0xFF;
                 rom[baseOffset + 2] = (byte) (item - 0xFF);
-                rom[baseOffset + 3] = Gen3Constants.gbaAddRxOpcode | Gen3Constants.gbaR2;
             }
+            rom[baseOffset + 3] = Gen3Constants.gbaAddRxOpcode | Gen3Constants.gbaR2;
         }
     }
 
@@ -1253,11 +1230,7 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
             Encounter enc = new Encounter();
             enc.level = rom[dataOffset + i * 4];
             enc.maxLevel = rom[dataOffset + i * 4 + 1];
-            try {
-                enc.pokemon = pokesInternal[readWord(dataOffset + i * 4 + 2)];
-            } catch (ArrayIndexOutOfBoundsException ex) {
-                throw ex;
-            }
+            enc.pokemon = pokesInternal[readWord(dataOffset + i * 4 + 2)];
             thisSet.encounters.add(enc);
         }
         return thisSet;
@@ -1313,7 +1286,7 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
 
     @Override
     public List<Pokemon> bannedForWildEncounters() {
-        return Arrays.asList(pokes[Gen3Constants.unownIndex]); // Unown banned
+        return Collections.singletonList(pokes[Gen3Constants.unownIndex]); // Unown banned
     }
 
     @Override
@@ -2675,7 +2648,7 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
             if (Gen3Constants.allowedItems.isTM(itemHere)) {
                 int thisTM = itemHere - Gen3Constants.tmItemOffset + 1;
                 // hack for repeat TMs
-                if (fieldTMs.contains(thisTM) == false) {
+                if (!fieldTMs.contains(thisTM)) {
                     fieldTMs.add(thisTM);
                 }
             }
@@ -2986,32 +2959,6 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
     public boolean isROMHack() {
         return this.isRomHack;
     }
-
-/*    @Override
-    public BufferedImage getMascotImage() {
-        Pokemon mascotPk = randomPokemon();
-        int mascotPokemon = pokedexToInternal[mascotPk.number];
-        int frontSprites = romEntry.getValue("FrontSprites");
-        int palettes = romEntry.getValue("PokemonPalettes");
-        int fsOffset = readPointer(frontSprites + mascotPokemon * 8);
-        int palOffset = readPointer(palettes + mascotPokemon * 8);
-
-        byte[] trueFrontSprite = DSDecmp.Decompress(rom, fsOffset);
-        byte[] truePalette = DSDecmp.Decompress(rom, palOffset);
-
-        // Convert palette into RGB
-        int[] convPalette = new int[16];
-        // Leave palette[0] as 00000000 for transparency
-        for (int i = 0; i < 15; i++) {
-            int palValue = readWord(truePalette, i * 2 + 2);
-            convPalette[i + 1] = GFXFunctions.conv16BitColorToARGB(palValue);
-        }
-
-        // Make image, 4bpp
-        BufferedImage bim = GFXFunctions.drawTiledImage(trueFrontSprite, convPalette, 64, 64, 4);
-        return bim;
-    }
-*/
 
     public static class Factory extends RomHandler.Factory {
 

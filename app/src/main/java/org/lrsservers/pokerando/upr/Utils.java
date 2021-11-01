@@ -78,7 +78,7 @@ public class Utils extends AppCompatActivity {
 
     // To be used when implementing presets
     public void validatePresetSupplementFiles(String config, CustomNamesSet customNames)
-            throws UnsupportedEncodingException, InvalidSupplementFilesException {
+            throws InvalidSupplementFilesException {
         byte[] data = DatatypeConverter.parseBase64Binary(config);
 
         if (data.length < Settings.LENGTH_OF_SETTINGS_DATA + 9) {

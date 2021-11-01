@@ -27,9 +27,6 @@ import java.io.IOException;
 
 public class BLZCoder {
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
         new BLZCoder(args);
     }
@@ -178,7 +175,7 @@ public class BLZCoder {
 
         inc_len = readUnsigned(pak_buffer, pak_len - 4);
         if (inc_len < 1) {
-            System.out.printf(", WARNING: not coded file!");
+            System.out.print(", WARNING: not coded file!");
             enc_len = 0;
             dec_len = pak_len;
             pak_len = 0;
@@ -501,7 +498,7 @@ public class BLZCoder {
 
     private SearchPair SEARCH(int p, int[] raw_buffer, int raw, int raw_end) {
         int l = BLZ_THRESHOLD;
-        int max = (raw >= BLZ_N) ? BLZ_N : raw;
+        int max = Math.min(raw, BLZ_N);
         for (int pos = 3; pos <= max; pos++) {
             int len;
             for (len = 0; len < BLZ_F; len++) {
@@ -526,7 +523,7 @@ public class BLZCoder {
         return new SearchPair(l, p);
     }
 
-    private class BLZResult {
+    private static class BLZResult {
         public BLZResult(int[] raw_buffer, int raw_len) {
             this.buffer = raw_buffer;
             this.length = raw_len;

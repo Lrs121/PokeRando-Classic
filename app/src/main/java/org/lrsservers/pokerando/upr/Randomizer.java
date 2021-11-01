@@ -207,9 +207,9 @@ public class Randomizer {
                         StringBuilder evoStr = new StringBuilder(pk.evolutionsFrom.get(0).to.name);
                         for (int i = 1; i < numEvos; i++) {
                             if (i == numEvos - 1) {
-                                evoStr.append(" and " + pk.evolutionsFrom.get(i).to.name);
+                                evoStr.append(" and ").append(pk.evolutionsFrom.get(i).to.name);
                             } else {
-                                evoStr.append(", " + pk.evolutionsFrom.get(i).to.name);
+                                evoStr.append(", ").append(pk.evolutionsFrom.get(i).to.name);
                             }
                         }
                         log.println(pk.name + " now evolves into " + evoStr.toString());

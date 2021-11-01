@@ -23,6 +23,8 @@ package org.lrsservers.pokerando.upr.pokemon;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
+import androidx.annotation.NonNull;
+
 public class Move {
 
     public String name;
@@ -36,6 +38,7 @@ public class Move {
     public MoveCategory category;
     public double hitCount = 1; // not saved, only used in randomized move powers.
 
+    @NonNull
     public String toString() {
         return "#" + number + " " + name + " - Power: " + power + ", Base PP: " + pp + ", Type: " + type + ", Hit%: "
                 + (hitratio) + ", Effect: " + effectIndex;

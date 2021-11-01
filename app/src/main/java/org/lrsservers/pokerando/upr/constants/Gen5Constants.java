@@ -93,7 +93,7 @@ public class Gen5Constants {
     public static final List<Integer> bw2RequiredFieldTMs = Arrays.asList(1, 2, 3, 5, 6, 12, 13, 19,
             22, 26, 28, 29, 30, 36, 39, 41, 46, 47, 50, 52, 53, 56, 58, 61, 63, 65, 66, 67, 69, 71, 80, 81, 84, 85, 86,
             90, 91, 92, 93);
-    public static final List<Integer> bw1EarlyRequiredHMMoves = Arrays.asList(15);
+    public static final List<Integer> bw1EarlyRequiredHMMoves = Collections.singletonList(15);
     @SuppressWarnings("unchecked")
     public static final List<Integer> bw2EarlyRequiredHMMoves = Collections.EMPTY_LIST;
     public static final List<Integer> fieldMoves = Arrays.asList(15, 19, 57, 70, 148, 91, 100, 127, 230, 291);
