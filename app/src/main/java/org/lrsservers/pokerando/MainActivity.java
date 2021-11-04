@@ -1,6 +1,5 @@
 package org.lrsservers.pokerando;
 
-import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -17,25 +16,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.Group;
-import androidx.core.app.ActivityCompat;
 
-import com.anggrayudi.storage.SimpleStorage;
 import com.anggrayudi.storage.SimpleStorageHelper;
 import com.anggrayudi.storage.file.DocumentFileUtils;
-import com.anggrayudi.storage.permission.ActivityPermissionRequest;
-import com.anggrayudi.storage.permission.PermissionCallback;
-import com.anggrayudi.storage.permission.PermissionReport;
-import com.anggrayudi.storage.permission.PermissionResult;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.jetbrains.annotations.NotNull;
+import org.lrsservers.pokerando.upr.FileFunctions;
 import org.lrsservers.pokerando.upr.RandomSource;
 import org.lrsservers.pokerando.upr.Utils;
 import org.lrsservers.pokerando.upr.pokemon.GenRestrictions;
@@ -47,7 +39,7 @@ import org.lrsservers.pokerando.upr.romhandlers.Gen5RomHandler;
 import org.lrsservers.pokerando.upr.romhandlers.RomHandler;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,7 +47,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private final SimpleStorageHelper storageHelper = new SimpleStorageHelper(MainActivity.this);
     private final int SAVE_ROM = 10, LOAD_ROM = 15;
-
+    List<String> extensions = new ArrayList<String>(Arrays.asList("gb", "sgb", "gbc", "gba", "nds"));
     private GenRestrictions genRestrictions;
     private ImageButton ibLoadRom, ibSaveRom;
     private RomHandler romHandler = null;
@@ -211,24 +203,24 @@ public class MainActivity extends AppCompatActivity {
                         return null;
                 }
             }
-
+            boolean loadSuccess = false;
             for (RomHandler.Factory factory : factories) {
                 if (factory.isLoadable(DocumentFileUtils.getAbsolutePath(files.get(0), getApplicationContext()).trim())) {
                     this.romHandler = factory.create(RandomSource.instance());
-                    this.romFile.setText(DocumentFileUtils.getBaseName(files.get(0)));
-                    this.romName.setText(this.romHandler.getROMName());
-                    this.romCode.setText(this.romHandler.getROMCode());
-                    this.supportStat.setText(this.romHandler.getSupportLevel());
-                    setBoxArt(this.romHandler.getROMCode());
-                    newRomUI();
+                    loadSuccess = true;
 
-                } else {
-                    Snackbar.make(MainActivity.this, findViewById(R.id.topLayout),
-                            getString(R.string.unsupported_game), Snackbar.LENGTH_SHORT).show();
-                }
+                }}
+            if (loadSuccess) {
+                this.romHandler.loadRom(DocumentFileUtils.getAbsolutePath(files.get(0), getApplicationContext()).trim());
+                this.romFile.setText(DocumentFileUtils.getBaseName(files.get(0)));
+                this.romName.setText(this.romHandler.getROMName());
+                this.romCode.setText(this.romHandler.getROMCode());
+                this.supportStat.setText(this.romHandler.getSupportLevel());
+                setBoxArt(this.romHandler.getROMCode());
+                newRomUI();
+            } else {
+                Toast.makeText(MainActivity.this, R.string.unknown_file, Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(MainActivity.this, DocumentFileUtils.getBaseName(files.get(0)),
-                    Toast.LENGTH_SHORT).show();
 
             return null;
         });
@@ -276,15 +268,23 @@ public class MainActivity extends AppCompatActivity {
         boxArt.setBackgroundColor(Color.TRANSPARENT);
         switch (romCode) {
             case "POKEMON RED":
+            case "POKEMON RED (0/1)":
+            case "POKEMON RED (1/1)":
                 boxArt.setImageResource(R.drawable.red);
                 break;
             case "POKEMON BLUE":
+            case "POKEMON BLUE (0/1)":
+            case "POKEMON BLUE (1/1)":
                 boxArt.setImageResource(R.drawable.blue);
                 break;
             case "POKEMON YELLOW":
+            case "POKEMON YELLOW (0/1)":
+            case "POKEMON YELLOW (1/1)":
                 boxArt.setImageResource(R.drawable.yellow);
                 break;
             case "POKEMON GREEN":
+            case "POKEMON GREEN (0/1)":
+            case "POKEMON GREEN (1/1)":
                 boxArt.setImageResource(R.drawable.green);
                 break;
             case "AAUE":

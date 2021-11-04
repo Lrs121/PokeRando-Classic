@@ -83,7 +83,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
         super(random, logStream);
     }
 
-    private class RomEntry {
+    private static class RomEntry {
         private String name;
         private String romCode;
         private int romType;
@@ -111,12 +111,12 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
 
     private static List<RomEntry> roms;
 
-    {
+    static {
             loadROMInfo();
 
     }
 
-    private void loadROMInfo(){
+    private static void loadROMInfo(){
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
         Scanner sc = new Scanner(ResourceFunctions.getRes().openRawResource(R.raw.gen4_offsets), "UTF-8");

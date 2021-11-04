@@ -67,7 +67,7 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
 
     private static List<RomEntry> roms;
 
-    {
+    static {
     loadROMInfo();
 
     }
@@ -91,7 +91,7 @@ public class Gen2RomHandler extends AbstractGBCRomHandler {
         super(random, logStream);
     }
 
-    private void loadROMInfo(){
+    private static void loadROMInfo(){
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
         Scanner sc = new Scanner(ResourceFunctions.getRes().openRawResource(R.raw.gen2_offsets), "UTF-8");
