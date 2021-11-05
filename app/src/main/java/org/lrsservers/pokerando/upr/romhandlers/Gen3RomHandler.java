@@ -65,7 +65,7 @@ import java.util.zip.CRC32;
 public class Gen3RomHandler extends AbstractGBRomHandler {
     private static List<RomEntry> roms;
 
-    {
+    static {
         loadROMInfo();
 
     }
@@ -98,7 +98,7 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
         super(random, logStream);
     }
 
-    private void loadROMInfo(){
+    private static void loadROMInfo(){
         roms = new ArrayList<RomEntry>();
         RomEntry current = null;
 

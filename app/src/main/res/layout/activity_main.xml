@@ -126,6 +126,9 @@
                     android:layout_margin="8dp"
                     android:text="@string/none"
                     android:textSize="17sp"
+                    android:maxWidth="200dp"
+                    android:maxLines="1"
+                    android:ellipsize="middle"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/txtRomHeader" />
 
@@ -704,7 +707,7 @@
                     android:id="@+id/gpMoveData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="swMoveDataRandPwr,swMoveDataRandPP,swMoveDataRandTypes,txtMoveData,swMoveDataRandAcc" />
+                    app:constraint_referenced_ids="swMoveDataRandPwr,swMoveDataRandPP,swMoveDataRandTypes,txtMoveData,swMoveDataRandAcc,swMoveDataUpdate, swMoveDataUpdateLegacy" />
 
                 <TextView
                     android:id="@+id/txtMoveData"
@@ -761,6 +764,28 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/swMoveDataRandPP" />
 
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:id="@+id/swMoveDataUpdate"
+                    android:text="@string/move_update"
+                    app:layout_constraintTop_toBottomOf="@id/swMoveDataRandTypes"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:id="@+id/swMoveDataUpdateLegacy"
+                    android:text="@string/move_update_legacy"
+                    app:layout_constraintTop_toBottomOf="@id/swMoveDataUpdate"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+
                 <View
                     android:id="@+id/div8"
                     android:layout_width="match_parent"
@@ -770,7 +795,7 @@
                     android:background="?android:attr/listDivider"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swMoveDataRandTypes" />
+                    app:layout_constraintTop_toBottomOf="@id/swMoveDataUpdateLegacy" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/gpMoveSets"
@@ -867,6 +892,9 @@
                     android:value="0.0"
                     android:valueFrom="0.0"
                     android:valueTo="100.0"
+                    android:stepSize="1"
+                    app:tickVisible="true"
+                    app:tickColor="@color/design_default_color_primary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swMoveSetGoodDmgPct" />
@@ -1023,9 +1051,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:minHeight="48dp"
-                    android:value="0.0"
-                    android:valueFrom="0.0"
-                    android:valueTo="65.0"
+                    android:value="30"
+                    android:valueFrom="30"
+                    android:valueTo="65"
+                    android:stepSize="1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swTrainerForceFullEvo" />
@@ -1047,9 +1076,11 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:minHeight="48dp"
-                    android:value="0.0"
-                    android:valueFrom="-50.0"
-                    android:valueTo="50.0"
+                    android:value="0"
+                    android:valueFrom="-50"
+                    android:valueTo="50"
+                    android:stepSize="2"
+                    app:tickVisible="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swTrainerLevelModifier" />
@@ -1228,6 +1259,53 @@
                     app:layout_constraintStart_toEndOf="@id/swWildsHeldItem"
                     app:layout_constraintTop_toBottomOf="@id/slideWildsCatchRate" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gpStaticPoke"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="txtStaticPoke,rgStaticPoke" />
+
+                <TextView
+                    android:id="@+id/txtStaticPoke"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/static_poke_header"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swWildsBanItem" />
+
+                <RadioGroup
+                    android:id="@+id/rgStaticPoke"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtStaticPoke">
+
+                    <RadioButton
+                        android:id="@+id/rbStaticUnchanged"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/unchanged"
+                        android:checked="true"/>
+
+                    <RadioButton
+                        android:id="@+id/rbStaticRandSame"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/random_same_type" />
+
+                    <RadioButton
+                        android:id="@+id/rbStaticRandComplete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/random_complete" />
+                </RadioGroup>
+
                 <View
                     android:id="@+id/div11"
                     android:layout_width="match_parent"
@@ -1237,7 +1315,7 @@
                     android:background="?android:attr/listDivider"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swWildsBanItem" />
+                    app:layout_constraintTop_toBottomOf="@id/rgStaticPoke" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/gpTMHM"
@@ -1328,6 +1406,7 @@
                         android:layout_height="wrap_content"
                         android:minHeight="48dp"
                         android:value="0.0"
+                        android:stepSize="5"
                         android:valueFrom="0.0"
                         android:valueTo="100.0" />
                 </RadioGroup>
@@ -1467,7 +1546,8 @@
                         android:minHeight="48dp"
                         android:value="0.0"
                         android:valueFrom="0.0"
-                        android:valueTo="100.0" />
+                        android:valueTo="100.0"
+                        android:stepSize="5"/>
                 </RadioGroup>
 
                 <RadioGroup

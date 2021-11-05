@@ -12,6 +12,9 @@ on [UPRzx.](https://github.com/Ajarmar/universal-pokemon-randomizer-zx)
 It Does NOTHING!
 Development in progress
 
+## Limitations
+- Loading Roms over 64ish MB fails
+
 ## Current Version
 
 ### skunkwerks1:
@@ -26,9 +29,13 @@ Development in progress
 - [] save non-random file with new name
 - [*] verify file is rom
 - [] Pokemon names array
-- [] Dynamic Box Art Loading 
+- [*] Dynamic Box Art Loading 
+- [] full gen 1 support
+
+### skunkwerks3
 - [] add select pokemon fragment (only lists pokemon names)
-- [] full gen 1 support?(ambitious)
+- [] Fix rom size limitation
+- [] expand support for gens higher then the first
 
 ## FUTURE:
 

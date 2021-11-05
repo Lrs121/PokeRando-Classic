@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="pokemon_array">
-        <item>--------</item>
+        <item>---------</item>
         <item>Bulbasaur</item>
         <item>Ivysaur</item>
         <item>Venusaur</item>
