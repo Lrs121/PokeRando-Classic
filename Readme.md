@@ -14,6 +14,10 @@ Development in progress
 
 ## Limitations
 - Loading Roms over 64ish MB fails
+    - seems to be an issue in Gen5Romhandler
+    - related to getting/parsing strings
+    - logcat shows issue with PPTxtHandler
+    - tested roms Black and Black 2
 
 ## Current Version
 
@@ -34,8 +38,11 @@ Development in progress
 
 ### skunkwerks3
 - [] add select pokemon fragment (only lists pokemon names)
-- [] Fix rom size limitation
-- [] expand support for gens higher then the first
+- [] Fix Gen 5 rom loading
+- [] Full gen 2 support
+- [] New Tabbed UI?
+
+### 
 
 ## FUTURE:
 
