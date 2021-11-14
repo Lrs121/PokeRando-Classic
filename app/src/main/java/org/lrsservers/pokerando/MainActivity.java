@@ -77,7 +77,10 @@ public class MainActivity extends AppCompatActivity {
             swTrainerPctLevel, swWildLegendaries, swWildBanBadItems, swTMLevelMoveSanity, swTMKeepFieldMove,
             swTMPctGoodMove, swTutorMoveLevelSanity, swTutorKeepField, swTutorPctGoodMoves, swTradeNicknames,
             swTradeRandOT, swTradeRandIV, swTradeRandItem, swFieldBadItem, swGeneralLimitPkmn,
-            swStarterHeldItem, swMoveDataUpdate, swWildMinCatch, swWildTimeEncount, swWildRandItem;
+            swStarterHeldItem, swMoveDataUpdate, swWildMinCatch, swWildTimeEncount, swWildRandItem,
+    swMiscBWExp, swMiscRunInside, swMiscUpdateTypeEffect, swMiscBanLuckyEgg, swMiscNerfXAcc,
+    swMiscRandPCPotion, swMiscRandHiddenHallows, swMiscFixCrit, swMiscPikaEvo, swMiscLowerPokeName,
+    swMiscFastText, swMiscStartNationDex, swMiscRandCatchTut;
     private Slider slideMoveSetPct, slideTrainerFullEvo, slideTrainerLevelPct, slideWildCatchRate,
             slideTMMovePct, slideTutorPctMoves;
 
@@ -94,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         //begin personal code
         initVariables();
         setupSimpleStorage(savedInstanceState);
-        setupBtnAction();
         initialState();
 
     }
@@ -660,6 +662,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void initialState() {
         for (Group group : this.groups) {
             for (int i = 0; i < Arrays.stream(group.getReferencedIds()).count(); i++) {
@@ -672,7 +675,7 @@ public class MainActivity extends AppCompatActivity {
                 radioGroup.getChildAt(i).setEnabled(false);
             }
         }
-
+        setupBtnAction();
 
     }
 
@@ -896,7 +899,7 @@ public class MainActivity extends AppCompatActivity {
             case "POKEMON RED":
             case "POKEMON RED (0/1)":
             case "POKEMON RED (1/1)":
-
+                swMiscBWExp.setEnabled(true);
                 break;
             case "POKEMON BLUE":
             case "POKEMON BLUE (0/1)":
@@ -1153,7 +1156,7 @@ public class MainActivity extends AppCompatActivity {
         spStarterSecond = findViewById(R.id.spStarterSecond);
         spStarterThird = findViewById(R.id.spStarterThird);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(MainActivity.this,
-                R.array.pokemon_array, android.R.layout.simple_spinner_item);
+                R.array.national_pokedex, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spStarterFirst.setAdapter(adapter);
         spStarterSecond.setAdapter(adapter);
@@ -1212,6 +1215,19 @@ public class MainActivity extends AppCompatActivity {
         swWildMinCatch = findViewById(R.id.swWildsMinCatch);
         swWildTimeEncount = findViewById(R.id.swWildsTimeEncounters);
         swWildRandItem = findViewById(R.id.swWildsHeldItem);
+        swMiscBWExp = findViewById(R.id.swMiscBWExpPatch);
+        swMiscRunInside = findViewById(R.id.swMiscRunIndoors);
+        swMiscUpdateTypeEffect = findViewById(R.id.swMiscTypeEffective);
+        swMiscBanLuckyEgg = findViewById(R.id.swMiscBanLuckyEgg);
+        swMiscNerfXAcc = findViewById(R.id.swMiscNerfXAcc);
+        swMiscRandPCPotion = findViewById(R.id.swMiscRandPCPotion);
+        swMiscRandHiddenHallows = findViewById(R.id.swMiscRandHiddenHallows);
+        swMiscFixCrit = findViewById(R.id.swMiscFixCrit);
+        swMiscPikaEvo = findViewById(R.id.swMiscPikaEvolve);
+        swMiscPikaEvo = findViewById(R.id.swMiscLowerCase);
+        swMiscFastText = findViewById(R.id.swMiscFastestText);
+        swMiscStartNationDex = findViewById(R.id.swMiscNationDex);
+        swMiscRandCatchTut = findViewById(R.id.swMiscRandCatchTut);
 
         //sliders
         slideMoveSetPct = findViewById(R.id.slideGoodMovePct);
